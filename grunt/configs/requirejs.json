@@ -1,0 +1,15 @@
+{
+  "core": {
+    "options": {
+      "baseUrl": "public",
+      "include": [
+        "core"
+      ],
+      "optimize": "none",
+      "useSourceUrl": false,
+      "preserveLicenseComments": false,
+      "logLevel": 3,
+      "out": "../dist/wunderbits.core.js"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "options": {
+    "jshintrc": "public/.jshintrc"
+  },
+  "public": "public"
+}
