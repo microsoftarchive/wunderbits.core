@@ -1,0 +1,26 @@
+{
+  "name": "wunderbits-core",
+  "version": "0.1.0",
+  "description": "Core components of Wunderbits",
+  "main": "src/core.js",
+  "scripts": {
+    "test": "make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wunderlist/wunderbits-core.git"
+  },
+  "author": "NetRoY <aditya@netroy.in> (http://netroy.in/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wunderlist/wunderbits-core/issues"
+  },
+  "homepage": "https://github.com/wunderlist/wunderbits-core",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-complexity": "~0.1.3",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-requirejs": "~0.4.1"
+  }
+}
