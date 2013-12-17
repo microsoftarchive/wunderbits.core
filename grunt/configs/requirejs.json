@@ -1,15 +1,19 @@
 {
   "core": {
     "options": {
-      "baseUrl": "public",
+      "packages": [{
+        "name": "wunderbits/core",
+        "location": "public",
+        "main": "core"
+      }],
       "include": [
-        "core"
+        "wunderbits/core/WBClass"
       ],
       "optimize": "none",
       "useSourceUrl": false,
       "preserveLicenseComments": false,
       "logLevel": 3,
-      "out": "../dist/wunderbits.core.js"
+      "out": "dist/wunderbits.core.js"
     }
   }
 }
