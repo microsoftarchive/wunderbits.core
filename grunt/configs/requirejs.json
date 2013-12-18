@@ -3,8 +3,7 @@
     "options": {
       "packages": [{
         "name": "wunderbits/core",
-        "location": "public",
-        "main": "core"
+        "location": "public"
       }],
       "include": [
         "wunderbits/core/WBClass",
