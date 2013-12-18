@@ -10,7 +10,8 @@ define([
   var eventSplitter = /\s+/;
 
   var validationErrors = {
-    'events': 'Cannot bind/unbind without event name(s)',
+    'trigger': 'Cannot trigger event(s) without event name(s)',
+    'events': 'Cannot bind/unbind without valid event name(s)',
     'callback': 'Cannot bind/unbind to an event without valid callback'
   };
 
@@ -39,15 +40,17 @@ define([
         this._events = {};
         return this;
       }
-      names = name ? [name] : _.keys(this._events);
+      names = name ? [name] : Object.keys(this._events);
       for (i = 0, l = names.length; i < l; i++) {
         name = names[i];
-        if (events = this._events[name]) {
+        events = this._events[name];
+        if (events) {
           this._events[name] = retain = [];
           if (callback || context) {
             for (j = 0, k = events.length; j < k; j++) {
               ev = events[j];
-              if ((callback && callback !== ev.callback && callback !== ev.callback._callback) ||
+              if ((callback && callback !== ev.callback &&
+                   callback !== ev.callback._callback) ||
                   (context && context !== ev.context)) {
                 retain.push(ev);
               }
@@ -66,7 +69,7 @@ define([
     // receive the true name of the event as the first argument).
     trigger: function(name) {
       if (!this._events) return this;
-      var args = slice.call(arguments, 1);
+      var args = [].slice.call(arguments, 1);
       if (!eventsApi(this, 'trigger', name, args)) return this;
       var events = this._events[name];
       var allEvents = this._events.all;
@@ -143,7 +146,7 @@ define([
 
     'trigger': function (events) {
 
-      assert.string(events, 'Cannot trigger event(s) without event name(s)');
+      assert.string(events, validationErrors.trigger);
 
       var self = this;
       var params = toArray(arguments);
@@ -153,6 +156,7 @@ define([
 
     'triggerEvent': function (eventName, params) {
 
+      var self = this;
       var channelName = '';
       var queue = [];
       var storedFragments;
@@ -169,7 +173,8 @@ define([
         }
         channelName += part;
 
-        storedFragments = _.rest(storedFragments || channelFragments);
+        fragments = storedFragments || channelFragments;
+        storedFragments = fragments.slice(1);
         message.fragments = storedFragments;
         message.channel = channelName;
 
@@ -198,7 +203,7 @@ define([
         Events.trigger.apply(self, fragments);
       }
 
-      var args = [eventName].concat(_.rest(params));
+      var args = [eventName].concat(params.slice(1));
       self.triggered && self.triggered.apply(self, args);
     },
 
@@ -206,7 +211,7 @@ define([
 
       var self = this;
 
-      assert.string(events, validationErrors.events);
+      events && assert.string(events, validationErrors.events);
 
       // backbone has a funny way of unbinding events, looping
       // the whole list and then applying #on on the events that
@@ -275,19 +280,19 @@ define([
 
       var self = this;
       self._eventArgsMap = {};
-
       return self;
     },
 
     'iterateOverEvents': function (events, callback) {
 
+      var self = this;
       var eventsArray = events.split(eventSplitter);
       var args = toArray(arguments, 2);
       args.unshift(null);
 
       while (eventsArray.length) {
         args[0] = eventsArray.shift();
-        callback.call(null, args);
+        callback.apply(self, args);
       }
     }
   };

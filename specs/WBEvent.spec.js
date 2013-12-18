@@ -1,4 +1,4 @@
-describe('WBEventsMixin', function () {
+describe('WBEvents', function () {
 
   'use strict';
 
@@ -13,6 +13,12 @@ describe('WBEventsMixin', function () {
     });
   });
 
+  var validationErrors = {
+    'trigger': 'Cannot trigger event(s) without event name(s)',
+    'events': 'Cannot bind/unbind without valid event name(s)',
+    'callback': 'Cannot bind/unbind to an event without valid callback'
+  };
+
   describe('#on', function () {
 
     it('should throw error if called without event name(s)', function () {
@@ -21,7 +27,7 @@ describe('WBEventsMixin', function () {
         topic.on();
       };
 
-      fn.should.throw('Cannot bind callback without event name(s)');
+      fn.should.throw(validationErrors.events);
     });
 
     it('should throw error if called without callback', function () {
@@ -30,7 +36,7 @@ describe('WBEventsMixin', function () {
         topic.on('event');
       };
 
-      fn.should.throw('Cannot bind callback to event without valid callback');
+      fn.should.throw(validationErrors.callback);
     });
 
     it('should subscribe callback to single event', function () {
@@ -143,8 +149,8 @@ describe('WBEventsMixin', function () {
         topic.off([]);
       };
 
-      fn1.should.throw('Cannot unsubscribe event(s) with invalid event name(s)');
-      fn2.should.throw('Cannot unsubscribe event(s) with invalid event name(s)');
+      fn1.should.throw(validationErrors.events);
+      fn2.should.throw(validationErrors.events);
     });
 
     it('should be chainable', function () {
@@ -221,7 +227,7 @@ describe('WBEventsMixin', function () {
         topic.trigger();
       };
 
-      fn.should.throw('Cannot trigger event(s) without event name(s)');
+      fn.should.throw(validationErrors.trigger);
     });
 
     it('should trigger callback', function () {
@@ -377,7 +383,7 @@ describe('WBEventsMixin', function () {
         topic.publish();
       };
 
-      fn.should.throw('Cannot publish event(s) without event name(s)');
+      fn.should.throw(validationErrors.events);
     });
 
     it('should trigger event and pass arguments, like #trigger', function () {
@@ -435,7 +441,7 @@ describe('WBEventsMixin', function () {
         topic.unpublish();
       };
 
-      fn.should.throw('Cannot unpublish event(s) without event name(s)');
+      fn.should.throw(validationErrors.events);
     });
 
     it('should unpublish arguments', function () {
