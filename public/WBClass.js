@@ -9,7 +9,7 @@ define([
   'use strict';
 
   // Shared empty constructor function to aid in prototype-chain creation.
-  var Ctor = function () {};
+  var Constructor = function () {};
 
   // Helper function to correctly set up the prototype chain, for subclasses.
   // Similar to `goog.inherits`, but uses a hash of prototype properties and
@@ -25,7 +25,9 @@ define([
       child = protoProps.constructor;
     }
     else {
-      child = function () { return parent.apply(this, arguments); };
+      child = function () {
+        return parent.apply(this, arguments);
+      };
     }
 
     // Inherit class (static) properties from parent.
@@ -33,18 +35,18 @@ define([
 
     // Set the prototype chain to inherit from `parent`, without calling
     // `parent`'s constructor function.
-    Ctor.prototype = parent.prototype;
-    child.prototype = new Ctor();
+    Constructor.prototype = parent.prototype;
+    child.prototype = new Constructor();
 
     // Add prototype properties (instance properties) to the subclass,
     // if supplied.
-    protoProps && extend(child.prototype, protoProps);
-
-    // Add static properties to the constructor function, if supplied.
-    staticProps && extend(child, staticProps);
+    extend(child.prototype, protoProps);
 
     // Correctly set child's `prototype.constructor`.
     child.prototype.constructor = child;
+
+    // Add static properties to the constructor function, if supplied.
+    extend(child, staticProps);
 
     // Set a convenience property
     // in case the parent's prototype is needed later.

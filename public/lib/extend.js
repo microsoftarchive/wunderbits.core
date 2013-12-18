@@ -5,7 +5,7 @@ define([
 
   'use strict';
 
-  return function () {
+  return function extend () {
 
     // convert the argument list into an array
     var args = [].slice.call(arguments);
@@ -19,5 +19,7 @@ define([
     while (args.length) {
       merge(object, args.shift());
     }
+
+    return object;
   };
 });

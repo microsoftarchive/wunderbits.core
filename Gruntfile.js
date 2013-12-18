@@ -26,4 +26,8 @@ module.exports = function (grunt) {
     'kaapi/node': config('kaapi'),
     'kaapi/phantom': config('kaapi')
   });
+
+  grunt.registerTask('lint', ['jshint', 'complexity']);
+  grunt.registerTask('kaapi', ['kaapi/node', 'kaapi/phantom']);
+  grunt.registerTask('build', ['lint', 'kaapi', 'requirejs', 'uglify']);
 };

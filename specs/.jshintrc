@@ -1,11 +1,15 @@
 {
   "predef": [
-    "define"
+    "requirejs",
+    "describe",
+    "beforeEach",
+    "it",
+    "sinon",
+    "expect"
   ],
 
   "asi": false,
   "boss": false,
-  "browser": true,
   "camelcase": false,
   "curly": false,
   "eqeqeq": true,
@@ -16,11 +20,7 @@
   "indent": 2,
   "jquery": false,
   "laxcomma": false,
-  "maxcomplexity": 6,
-  "maxlen": 80,
-  "maxstatements": 15,
   "newcap": true,
-  "node": true,
   "quotmark": "single",
   "strict": true,
   "trailing": false,

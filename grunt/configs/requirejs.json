@@ -7,7 +7,9 @@
         "main": "core"
       }],
       "include": [
-        "wunderbits/core/WBClass"
+        "wunderbits/core/WBClass",
+        "wunderbits/core/WBSingleton",
+        "wunderbits/core/WBMixin"
       ],
       "optimize": "none",
       "useSourceUrl": false,

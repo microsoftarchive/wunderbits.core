@@ -1,3 +1,16 @@
 {
-
+  "options": {
+    "mangle": true,
+    "beautify": {
+      "indent_start": 0,
+      "indent_level": 0
+    }
+  },
+  "core": {
+    "files": {
+      "dist/wunderbits.core.min.js": [
+        "dist/wunderbits.core.js"
+      ]
+    }
+  }
 }

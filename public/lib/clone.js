@@ -2,7 +2,9 @@ define(function () {
 
   'use strict';
 
-  return function merge (object, source) {
+  function clone (source) {
+
+    var object = {};
 
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
@@ -11,5 +13,8 @@ define(function () {
     }
 
     return object;
-  };
+  }
+
+  return clone;
+
 });
