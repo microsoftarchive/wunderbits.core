@@ -309,7 +309,7 @@ describe('WBEvents', function () {
       topic.trigger('pass:data', data1, data2, data3);
     });
 
-    it('should use trailing channel fragment as argument when triggering event on parent', function (done) {
+    xit('should use trailing channel fragment as argument when triggering event on parent', function (done) {
 
       var data1 = { foo: 'bar' };
       var data2 = { foo: 'baz' };

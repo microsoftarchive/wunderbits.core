@@ -2,5 +2,11 @@
   "options": {
     "jshintrc": "public/.jshintrc"
   },
-  "public": "public"
+  "public": {
+    "src": [
+      "Gruntfile.js",
+      "public/**/*.js",
+      "!public/WBEvents.js"
+    ]
+  }
 }

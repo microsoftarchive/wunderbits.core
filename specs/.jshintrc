@@ -2,8 +2,10 @@
   "predef": [
     "requirejs",
     "describe",
+    "xdescribe",
     "beforeEach",
     "it",
+    "xit",
     "sinon",
     "expect"
   ],

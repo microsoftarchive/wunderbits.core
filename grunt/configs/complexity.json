@@ -1,14 +1,15 @@
 {
   "options": {
-    "cyclomatic": 15,
-    "halstead": 25,
+    "cyclomatic": 6,
+    "halstead": 20,
     "maintainability": 100,
     "errorsOnly": false
   },
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js"
+      "public/**/*.js",
+      "!public/WBEvents.js"
     ]
   }
 }
