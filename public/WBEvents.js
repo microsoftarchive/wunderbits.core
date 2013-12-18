@@ -32,7 +32,7 @@ define([
     // callbacks with that function. If `callback` is null, removes all
     // callbacks for the event. If `name` is null, removes all bound
     // callbacks for all events.
-    off: function(name, callback, context) {
+    'off': function(name, callback, context) {
       var retain, ev, events, names, i, l, j, k;
       var handler = eventsApi(this, 'off', name, [callback, context]);
       if (!this._events || !handler) return this;
@@ -108,14 +108,33 @@ define([
   // A difficult-to-believe, but optimized internal dispatch function for
   // triggering events. Tries to keep the usual cases speedy (most internal
   // Backbone events have 3 arguments).
-  var triggerEvents = function(events, args) {
+  var triggerEvents = function (events, args) {
     var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
     switch (args.length) {
-      case 0: while (++i < l) (ev = events[i]).callback.call(ev.ctx); return;
-      case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1); return;
-      case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2); return;
-      case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); return;
-      default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+      case 0:
+        while (++i < l) {
+          (ev = events[i]).callback.call(ev.ctx);
+        }
+        break;
+      case 1:
+        while (++i < l) {
+          (ev = events[i]).callback.call(ev.ctx, a1);
+        }
+        break;
+      case 2:
+        while (++i < l) {
+          (ev = events[i]).callback.call(ev.ctx, a1, a2);
+        }
+        break;
+      case 3:
+        while (++i < l) {
+          (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+        }
+        break;
+      default:
+        while (++i < l) {
+          (ev = events[i]).callback.apply(ev.ctx, args);
+        }
     }
   };
 
