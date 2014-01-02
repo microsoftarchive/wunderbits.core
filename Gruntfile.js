@@ -29,7 +29,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('lint', ['jshint', 'complexity']);
   grunt.registerTask('specs', ['kaapi/node', 'kaapi/phantom']);
-  grunt.registerTask('build', ['lint', 'specs', 'requirejs', 'uglify']);
+  grunt.registerTask('build', ['requirejs', 'uglify']);
 
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['lint', 'specs', 'build']);
 };
