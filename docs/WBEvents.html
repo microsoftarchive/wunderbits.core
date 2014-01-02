@@ -110,9 +110,22 @@
 
   <span class="string">'use strict'</span>;
 
-  <span class="keyword">var</span> eventSplitter = <span class="regexp">/\s+/</span>;
+  <span class="keyword">var</span> eventSplitter = <span class="regexp">/\s+/</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>blah blah</p>
 
-  <span class="keyword">var</span> validationErrors = {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> validationErrors = {
     <span class="string">'trigger'</span>: <span class="string">'Cannot trigger event(s) without event name(s)'</span>,
     <span class="string">'events'</span>: <span class="string">'Cannot bind/unbind without valid event name(s)'</span>,
     <span class="string">'callback'</span>: <span class="string">'Cannot bind/unbind to an event without valid callback'</span>
@@ -123,11 +136,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Bind an event to a <code>callback</code> function. Passing <code>&quot;all&quot;</code> will bind
 the callback to all events fired.</p>
@@ -146,11 +159,11 @@ the callback to all events fired.</p>
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Remove one or many callbacks. If <code>context</code> is null, removes all
 callbacks with that function. If <code>callback</code> is null, removes all
@@ -193,11 +206,11 @@ callbacks for all events.</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Trigger one or many events, firing all bound callbacks. Callbacks are
 passed the same arguments as <code>trigger</code> is, apart from the event name
@@ -221,11 +234,11 @@ receive the true name of the event as the first argument).</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Implement fancy features of the Events API such as multiple event
 names <code>&quot;change blur&quot;</code> and jQuery-style event maps <code>{change: action}</code>
@@ -239,11 +252,11 @@ in terms of the existing API.</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Handle event maps.</p>
 
@@ -259,11 +272,11 @@ in terms of the existing API.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Handle space separated event names.</p>
 
@@ -283,11 +296,11 @@ in terms of the existing API.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>A difficult-to-believe, but optimized internal dispatch function for
 triggering events. Tries to keep the usual cases speedy (most internal
@@ -328,11 +341,11 @@ Backbone events have 3 arguments).</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Aliases for backwards compatibility.</p>
 
@@ -383,11 +396,11 @@ Backbone events have 3 arguments).</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Iterate the parts of the eventName to create
 a queue of all channels to trigger event on</p>
@@ -414,11 +427,11 @@ a queue of all channels to trigger event on</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Reverse the queue, to make sure &quot;bubbling&quot;
 occurs from inside out, up to the parent channel</p>
@@ -433,11 +446,11 @@ occurs from inside out, up to the parent channel</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Always send the current channel name
 as the first argument, to be triggered</p>
@@ -449,11 +462,11 @@ as the first argument, to be triggered</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Put the arguments back together with
 the fragment as the second argument
@@ -483,11 +496,11 @@ pushing the fragments onto the arguments</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>backbone has a funny way of unbinding events, looping
 the whole list and then applying #on on the events that
