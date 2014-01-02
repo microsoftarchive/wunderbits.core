@@ -1,5 +1,7 @@
 describe('WBClass/mixins', function () {
 
+  'use strict';
+
   var ExtendedClass, Mixin, applySpy, MixinInit;
 
   beforeEach(function (done) {

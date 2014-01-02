@@ -1,5 +1,7 @@
 describe('WBClass', function () {
 
+  'use strict';
+
   var Topic;
 
   beforeEach(function (done) {

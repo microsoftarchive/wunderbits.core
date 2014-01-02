@@ -4,6 +4,7 @@
     "describe",
     "xdescribe",
     "beforeEach",
+    "afterEach",
     "it",
     "xit",
     "sinon",
