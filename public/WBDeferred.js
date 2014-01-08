@@ -54,7 +54,6 @@ define([
           (flipflop.type === 'fail' && state === states.rejected);
 
         really && flipflop.fn.apply(context, args);
-
       });
     },
 
@@ -83,7 +82,7 @@ define([
         'args': args
       });
 
-      // if the defered is nt pending anymore, call the callbacks
+      // if the defered is not pending anymore, call the callbacks
       self.check();
 
       return self;

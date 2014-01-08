@@ -154,6 +154,17 @@ describe('WBDeferred', function () {
       spy.should.not.have.been.called;
     });
 
+    it('should call the #then callback with the correct context', function (done) {
+
+      var overriddenContext = {'a': 'b'};
+      var promise = defer.resolveWith(context, [2]);
+      promise.done(function(value) {
+        expect(this).to.deep.equal(overriddenContext);
+        expect(value).to.equal(2);
+        done();
+      }, overriddenContext);
+    });
+
     describe('should resolve or reject the expected values and call done in correct order', function () {
 
       var fn1, fn2, fn3;
@@ -185,17 +196,6 @@ describe('WBDeferred', function () {
         expect(fn3).to.not.have.been.called;
         expect(fn2).to.have.been.calledAfter(fn1);
       });
-    });
-
-    it('should call the #then callback with the correct context', function (done) {
-
-      var overriddenContext = {'a': 'b'};
-      var promise = defer.resolveWith(context, [2]);
-      promise.done(function(value) {
-        expect(this).to.deep.equal(overriddenContext);
-        expect(value).to.equal(2);
-        done();
-      }, overriddenContext);
     });
   });
 });
