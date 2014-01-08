@@ -42,18 +42,19 @@ define([
         return;
       }
 
-      self.handlers.forEach(function (flipflop) {
+
+      self.handlers.forEach(function (deferredResponse) {
+      console.log(withContext)
 
         var state = self._state;
-        var context = flipflop.context || withContext || self;
-        var args = flipflop.args;
+        var context = deferredResponse.context || withContext || self;
+        var args = deferredResponse.args;
         args = args.concat.apply(args, self._args);
+        var really = (deferredResponse.type === 'then') ||
+          (deferredResponse.type === 'done' && state === states.resolved) ||
+          (deferredResponse.type === 'fail' && state === states.rejected);
 
-        var really = (flipflop.type === 'then') ||
-          (flipflop.type === 'done' && state === states.resolved) ||
-          (flipflop.type === 'fail' && state === states.rejected);
-
-        really && flipflop.fn.apply(context, args);
+        really && deferredResponse.fn.apply(context, args);
       });
     },
 
@@ -70,8 +71,7 @@ define([
 
       var self = this;
 
-      // store references to zeug
-      // TODO: leave a better comment
+      // store references to the context, callbacks, and arbitrary arguments
       var args = arrayRef.slice.call(arguments);
       var fn = args.shift();
       var context = args.shift();

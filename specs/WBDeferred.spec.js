@@ -165,6 +165,16 @@ describe('WBDeferred', function () {
       }, overriddenContext);
     });
 
+    it('should use the resolveWith context if there is no overridden context', function (done) {
+
+      var promise = defer.resolveWith(context, [2]);
+      promise.done(function(value) {
+        expect(this).to.deep.equal(context);
+        expect(value).to.equal(2);
+        done();
+      });
+    });
+
     describe('should resolve or reject the expected values and call done in correct order', function () {
 
       var fn1, fn2, fn3;
