@@ -132,6 +132,35 @@ describe('When', function () {
       done();
     });
 
+    it('should allow more than 1 when function', function (done) {
+
+      var deferred1 = new WBDeferred();
+      var deferred2 = new WBDeferred();
+      var deferred3 = new WBDeferred();
+      var thenSpy = sinon.spy();
+      var doneSpy = sinon.spy();
+      var failSpy = sinon.spy();
+
+      var thenSpy2 = sinon.spy();
+      var doneSpy2 = sinon.spy();
+      var failSpy2 = sinon.spy();
+
+      when(deferred1).then(thenSpy).done(doneSpy).fail(failSpy);
+      when(deferred2, deferred3).then(thenSpy2).done(doneSpy2).fail(failSpy2);
+
+      deferred1.resolve();
+
+      thenSpy.should.have.been.called;
+      doneSpy.should.have.been.called;
+
+      deferred2.resolve();
+      deferred3.resolve();
+      thenSpy2.should.have.been.called;
+      doneSpy2.should.have.been.called;
+
+      done();
+    });
+
     it('should only fire a callback when all the arguments have been completed', function (done) {
 
       var deferred = new WBDeferred();
