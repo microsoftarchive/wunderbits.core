@@ -27,10 +27,9 @@ define([
           thisDeferred.done(function () {
 
             var args = arrayRef.slice.call(arguments);
-            var context = args.shift();
             --remaining;
             if (!remaining) {
-              deferred.resolveWith(this, context);
+              deferred.resolveWith(this, args);
             }
           });
 
