@@ -155,7 +155,7 @@ describe('WBDeferred', function () {
       var promise = defer.resolveWith(context, [2]);
       promise.done(function(value) {
         expect(this).to.deep.equal(overriddenContext);
-        expect(value).to.equal(2);
+        expect(value).to.deep.equal([2]);
         done();
       }, overriddenContext);
     });
@@ -164,7 +164,7 @@ describe('WBDeferred', function () {
 
       defer.done(function(value) {
         expect(this).to.deep.equal(context);
-        expect(value).to.equal(2);
+        expect(value).to.deep.equal([2]);
       });
 
       defer.resolveWith(context, [2]);

@@ -11,37 +11,37 @@ define([
 
     'when': function() {
 
-      var resolvedCount = 0;
-      // the deferred that must be completed to satisfy the promise
-      var requirements = arrayRef.slice.call(arguments);
-      var remaining = requirements.length;
-      // the main deferred
-      var deferred = new WBDeferred();
-      for(; resolvedCount < remaining; resolvedCount++) {
+      var main = new WBDeferred();
+      var deferreds = arrayRef.slice.call(arguments);
 
-        var thisDeferred = requirements[resolvedCount];
-        if (thisDeferred && typeof thisDeferred.promise === 'function') {
+      var count = deferreds.length;
+      var args = new Array(count);
 
-          thisDeferred.done(function () {
-            var args = arrayRef.slice.call(arguments);
-            --remaining;
-            if (!remaining) {
-              deferred.resolveWith(this, args);
-            }
-          });
+      function Fail () {
+        main.rejectWith(this);
+      }
 
-          thisDeferred.fail(deferred.reject, deferred);
-        }
-        else {
-          --remaining;
+      function Done () {
+        var index = count - deferreds.length - 1;
+        args[index] = arrayRef.slice.call(arguments);
+
+        if (deferreds.length) {
+          var next = deferreds.shift();
+          next.done(Done).fail(Fail);
+        } else {
+          args.unshift(this);
+          main.resolveWith.apply(main, args);
         }
       }
 
-      if (!remaining) {
-        deferred.resolve();
+      if (deferreds.length) {
+        var current = deferreds.shift();
+        current.done(Done).fail(Fail);
+      } else {
+        main.resolve();
       }
 
-      return deferred.promise();
+      return main.promise();
     }
   });
 

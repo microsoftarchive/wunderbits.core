@@ -54,7 +54,12 @@ define([
       var state = self._state;
       var context = deferredResponse.context || withContext || self;
       var args = deferredResponse.args;
-      args = args.concat.apply(args, self._args);
+
+      self._args.forEach(function (arg) {
+        // send single arguments as the item, otherwise send it as an array
+        args.push(arg);
+      });
+
       var isCompleted = (deferredResponse.type === 'then') ||
         (deferredResponse.type === 'done' && state === states.resolved) ||
         (deferredResponse.type === 'fail' && state === states.rejected);

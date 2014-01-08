@@ -59,10 +59,10 @@ describe('When', function () {
       when(deferred).done(function(value) {
 
         expect(this).to.equal(context);
-        expect(value).to.equal(2);
+        expect(value).to.deep.equal([2]);
       });
 
-      deferred.resolveWith(context, [2]);
+      deferred.resolveWith(context, 2);
       done();
     });
 
@@ -75,10 +75,10 @@ describe('When', function () {
       when(deferred).done(function(value) {
 
         expect(this).to.equal(overriddenContext);
-        expect(value).to.equal(2);
+        expect(value).to.deep.equal([2]);
       }, overriddenContext);
 
-      deferred.resolveWith(context, [2]);
+      deferred.resolveWith(context, 2);
       done();
     });
 
@@ -178,6 +178,51 @@ describe('When', function () {
       doneSpy.should.not.have.been.called;
 
       done();
+    });
+
+    it('should ensure correct order of returned values on multiple deferreds', function (done) {
+
+      var deferred1 = new WBDeferred();
+      var deferred2 = new WBDeferred();
+      var deferred3 = new WBDeferred();
+
+      when(deferred1, deferred2, deferred3).then(function (a, b, c) {
+
+        expect(a).to.deep.equal([2, 3]);
+        expect(b).to.deep.equal(['a', 'b']);
+        expect(c).to.deep.equal([true, null, false]);
+        done();
+      });
+
+      deferred3.resolve(true, null, false);
+      deferred1.resolve(2, 3);
+      deferred2.resolve('a', 'b');
+    });
+
+    it('should return an array of parameters when the deferred is resolved with multiple items', function (done) {
+
+      var deferred = new WBDeferred();
+
+      when(deferred).done(function (param) {
+
+        expect(param).to.be.instanceof(Array);
+        done();
+      });
+
+      deferred.resolve(1, 2, 3);
+    });
+
+    it('should return an array when the deferred is resolved with one item', function (done) {
+
+      var deferred = new WBDeferred();
+
+      when(deferred).done(function (param) {
+
+        expect(param).to.be.instanceof(Array);
+        done();
+      });
+
+      deferred.resolve(1);
     });
   });
 });
