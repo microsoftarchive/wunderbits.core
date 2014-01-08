@@ -35,27 +35,31 @@ define([
     },
 
     // TODO: fucking rename this function
-    'check': function (withContext) {
+    'checkDeferredStatus': function (withContext) {
 
       var self = this;
       if (self._state === states.pending) {
         return;
       }
 
+      var handlers = self.handlers;
+      while (handlers.length) {
+        self.blahblah(handlers.shift(), withContext);
+      }
+    },
 
-      self.handlers.forEach(function (deferredResponse) {
-      console.log(withContext)
+    'blahblah': function (deferredResponse, withContext) {
 
-        var state = self._state;
-        var context = deferredResponse.context || withContext || self;
-        var args = deferredResponse.args;
-        args = args.concat.apply(args, self._args);
-        var really = (deferredResponse.type === 'then') ||
-          (deferredResponse.type === 'done' && state === states.resolved) ||
-          (deferredResponse.type === 'fail' && state === states.rejected);
+      var self = this;
+      var state = self._state;
+      var context = deferredResponse.context || withContext || self;
+      var args = deferredResponse.args;
+      args = args.concat.apply(args, self._args);
+      var isCompleted = (deferredResponse.type === 'then') ||
+        (deferredResponse.type === 'done' && state === states.resolved) ||
+        (deferredResponse.type === 'fail' && state === states.rejected);
 
-        really && deferredResponse.fn.apply(context, args);
-      });
+      isCompleted && deferredResponse.fn.apply(context, args);
     },
 
     'promise': function () {
@@ -83,7 +87,7 @@ define([
       });
 
       // if the defered is not pending anymore, call the callbacks
-      self.check();
+      self.checkDeferredStatus();
 
       return self;
     };
@@ -98,7 +102,7 @@ define([
       var self = this;
       self._state = state;
       self._args = arrayRef.slice.call(arguments);
-      self.check();
+      self.checkDeferredStatus();
       return self;
     };
 
@@ -107,14 +111,10 @@ define([
       self._args = arrayRef.slice.call(arguments);
       var context = self._args.shift();
       self._state = state;
-      self.check(context);
+      self.checkDeferredStatus(context);
       return self;
     };
   });
 
-  return WBClass.extend(proto, {
-    'when': function () {
-
-    }
-  });
+  return WBClass.extend(proto);
 });

@@ -16,32 +16,27 @@ define([
       // the deferred that must be completed to satisfy the promise
       var requirements = arrayRef.slice.call(arguments);
       var remaining = requirements.length;
-
       // the main deferred
       var deferred = new WBDeferred();
 
       for(; resolvedCount < remaining; resolvedCount++) {
 
         var thisDeferred = requirements[resolvedCount];
-        var state = thisDeferred.state();
-
         if (thisDeferred && typeof thisDeferred.promise === 'function') {
 
           thisDeferred.done(function () {
+
+            var args = arrayRef.slice.call(arguments);
+            var context = args.shift();
             --remaining;
             if (!remaining) {
-              deferred.resolve();
+              deferred.resolveWith(this, context);
             }
           });
-          if (state === 'pending') {
 
-          } else if (state === 'rejected') {
+          thisDeferred.fail(function () {
             deferred.reject();
-            --remaining;
-          } else if (state === 'resolved') {
-            deferred.resolveWith(self, thisDeferred);
-            --remaining;
-          }
+          });
         }
         else {
           --remaining;
@@ -49,7 +44,6 @@ define([
       }
 
       if (!remaining) {
-
         deferred.resolveWith(self);
       }
 

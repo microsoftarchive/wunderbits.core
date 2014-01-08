@@ -38,11 +38,7 @@ describe('WBDeferred', function () {
 
       defer.resolve().done(function() {
         expect(this.state()).to.be.equal('resolved');
-      }).fail(function() {
-        spy1();
-      }).always(function() {
-        spy2();
-      });
+      }).fail(spy1).always(spy2);
 
       spy1.should.not.have.been.called;
       spy2.should.have.been.called;
@@ -56,9 +52,8 @@ describe('WBDeferred', function () {
       defer.reject().done(function() {
         spy1();
       }).fail(function() {
-        expect(this.state()).to.be.equal('rejected');
-      }).always(function() {
         spy2();
+        expect(this.state()).to.be.equal('rejected');
       });
 
       spy1.should.not.have.been.called;
@@ -167,12 +162,13 @@ describe('WBDeferred', function () {
 
     it('should use the resolveWith context if there is no overridden context', function (done) {
 
-      var promise = defer.resolveWith(context, [2]);
-      promise.done(function(value) {
+      defer.done(function(value) {
         expect(this).to.deep.equal(context);
         expect(value).to.equal(2);
-        done();
       });
+
+      defer.resolveWith(context, [2]);
+      done();
     });
 
     describe('should resolve or reject the expected values and call done in correct order', function () {

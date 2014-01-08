@@ -22,6 +22,7 @@ describe('When', function () {
     beforeEach(function () {
 
       when = WBWhen.when;
+
     });
 
     it('should chain deferred methods', function (done) {
@@ -45,101 +46,109 @@ describe('When', function () {
       when().done(function(resolveValue) {
         expect(this).to.equal(context);
         expect(resolveValue).to.equal(undefined);
-      }, context).promise;
+      }, context).promise();
 
       done();
     });
 
-    it('should pass the context', function(done) {
+    it('should pass the context when resolveWith is called', function (done) {
 
       var context = {};
-      var defer = new WBDeferred();
+      var deferred = new WBDeferred();
 
-      when(defer).done(function() {
-        console.log(this, context)
+      when(deferred).done(function(value) {
+
         expect(this).to.equal(context);
+        expect(value).to.equal(2);
       });
 
-      defer.resolveWith(context);
+      deferred.resolveWith(context, [2]);
+      done();
+    });
+
+    it('should resolve with the correct context if it is overwritten', function (done) {
+
+      var context = {};
+      var overriddenContext = {'a': 'b'};
+      var deferred = new WBDeferred();
+
+      when(deferred).done(function(value) {
+
+        expect(this).to.equal(overriddenContext);
+        expect(value).to.equal(2);
+      }, overriddenContext);
+
+      deferred.resolveWith(context, [2]);
+      done();
+    });
+
+    it('should call #then when the deferred is resolved or rejected', function (done) {
+
+      var deferred = new WBDeferred();
+      var thenSpy = sinon.spy();
+      var doneSpy = sinon.spy();
+      var failSpy = sinon.spy();
+
+      when(deferred).then(thenSpy).done(doneSpy).fail(failSpy);
+
+      deferred.resolve();
+
+      thenSpy.should.have.been.called.once;
+      doneSpy.should.have.been.called.once;
+      failSpy.should.not.have.been.called;
 
       done();
     });
 
+    it('should call #done when the deferred is resolved', function (done) {
 
-    // it('should call #then when the deferred is resolved or rejected', function (done) {
+      var deferred = new WBDeferred();
+      var doneSpy = sinon.spy();
+      var failSpy = sinon.spy();
 
-    //   var deferred = new WBDeferred();
-    //   var thenSpy = sinon.spy();
-    //   var doneSpy = sinon.spy();
-    //   var failSpy = sinon.spy();
+      when(deferred).done(doneSpy).fail(failSpy);
 
-    //   when(deferred).then(thenSpy).done(doneSpy).fail(failSpy);
+      deferred.resolve();
 
-    //   deferred.resolve();
+      doneSpy.should.have.been.called.once;
+      failSpy.should.not.have.been.called;
 
-    //   thenSpy.should.have.been.called.once;
-    //   doneSpy.should.have.been.called.once;
-    //   failSpy.should.not.have.been.called;
+      done();
+    });
 
-    //   done();
-    // });
+    it('should call #fail when the deferred is rejected', function (done) {
 
-    // it('should call #done when the deferred is resolved', function (done) {
+      var deferred = new WBDeferred();
+      var thenSpy = sinon.spy();
+      var doneSpy = sinon.spy();
+      var failSpy = sinon.spy();
 
-    //   var deferred = new WBDeferred();
-    //   var doneSpy = sinon.spy();
-    //   var failSpy = sinon.spy();
+      when(deferred).then(thenSpy).done(doneSpy).fail(failSpy);
+      deferred.reject();
+      thenSpy.should.have.been.called.once;
+      failSpy.should.have.been.called.once;
+      doneSpy.should.not.have.been.called;
 
-    //   when(deferred).done(doneSpy).fail(failSpy);
+      done();
+    });
 
-    //   deferred.resolve();
+    it('should only fire a callback when all the arguments have been completed', function (done) {
 
-    //   doneSpy.should.have.been.called.once;
-    //   failSpy.should.not.have.been.called;
+      var deferred = new WBDeferred();
+      var deferred2 = new WBDeferred();
+      var thenSpy = sinon.spy();
+      var doneSpy = sinon.spy();
+      var failSpy = sinon.spy();
 
-    //   done();
-    // });
+      when(deferred, deferred2).then(thenSpy).done(doneSpy).fail(failSpy);
 
-    // it('should call #fail when the deferred is rejected', function (done) {
+      deferred.reject();
 
-    //   var deferred = new WBDeferred();
-    //   var thenSpy = sinon.spy();
-    //   var doneSpy = sinon.spy();
-    //   var failSpy = sinon.spy();
+      thenSpy.should.have.been.called;
+      failSpy.should.have.been.called;
+      doneSpy.should.not.have.been.called;
 
-    //   when(deferred).then(thenSpy).done(doneSpy).fail(failSpy);
-
-    //   deferred.reject();
-
-    //   thenSpy.should.have.been.called.once;
-    //   failSpy.should.have.been.called.once;
-    //   doneSpy.should.not.have.been.called;
-
-    //   done();
-    // });
-
-    // it('should only fire a callback when all the arguments have been completed', function (done) {
-
-    //   var deferred = new WBDeferred();
-    //   var deferred2 = new WBDeferred();
-    //   var thenSpy = sinon.spy();
-    //   var doneSpy = sinon.spy();
-    //   var failSpy = sinon.spy();
-
-    //   when(deferred, deferred2).then(thenSpy).done(doneSpy).fail(failSpy);
-
-    //   deferred.reject();
-
-    //   thenSpy.should.not.have.been.called;
-    //   failSpy.should.not.have.been.called;
-    //   doneSpy.should.not.have.been.called;
-
-    //   deferred2.resolve();
-    //   thenSpy.should.have.been.called;
-    //   failSpy.should.have.been.called;
-    //   doneSpy.should.have.been.called;
-
-    //   done();
-    // });
+      done();
+    });
   });
 });
