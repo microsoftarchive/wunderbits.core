@@ -34,7 +34,6 @@ define([
       return stateNames[self._state][0];
     },
 
-    // TODO: fucking rename this function
     'checkDeferredStatus': function (withContext) {
 
       var self = this;
@@ -42,13 +41,14 @@ define([
         return;
       }
 
-      var handlers = self.handlers;
+      var handlers = self.handlers, handle;
       while (handlers.length) {
-        self.blahblah(handlers.shift(), withContext);
+        handle = handlers.shift();
+        self.invoke(handle, withContext);
       }
     },
 
-    'blahblah': function (deferredResponse, withContext) {
+    'invoke': function (deferredResponse, withContext) {
 
       var self = this;
       var state = self._state;
