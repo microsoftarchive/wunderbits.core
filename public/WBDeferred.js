@@ -105,6 +105,10 @@ define([
     var fnName = stateNames[state][1];
     proto[fnName] = function () {
       var self = this;
+      if (self._state !== states.pending) {
+        return self;
+      }
+
       self._state = state;
       self._args = arrayRef.slice.call(arguments);
       self.checkDeferredStatus();
@@ -113,6 +117,10 @@ define([
 
     proto[fnName + 'With'] = function () {
       var self = this;
+      if (self._state !== states.pending) {
+        return self;
+      }
+
       self._args = arrayRef.slice.call(arguments);
       var context = self._args.shift();
       self._state = state;
