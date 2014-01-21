@@ -14,7 +14,7 @@ watch:
 
 coverage:
 	@mkdir -p coverage
-	#@kaapi --coverage
+	@kaapi --coverage
 
 site: clean build coverage
 	@git clone .git build
@@ -24,7 +24,7 @@ site: clean build coverage
 	@cp dist/*.js build/dist/
 
 	# Copying coverage reports
-	#cp -rf coverage/* build/coverage/
+	cp -rf coverage/* build/coverage/
 
 	# Updating gh-pages
 	@cd build && git add . && git commit -am "update-$(shell date -u | tr ' ' '_')"
@@ -34,4 +34,4 @@ site: clean build coverage
 clean:
 	@rm -rf build coverage
 
-.PHONY: build
+.PHONY: build coverage lint
