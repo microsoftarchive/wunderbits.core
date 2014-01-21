@@ -198,7 +198,7 @@ describe('WBDeferred', function () {
 
     it('should be called only once, if pending', function () {
 
-      var spy = sinon.spy(defer, '_trigger');
+      var spy = sinon.spy(defer, 'trigger');
       defer.resolve();
       expect(spy).to.have.been.called;
       spy.restore();
@@ -207,7 +207,7 @@ describe('WBDeferred', function () {
     it('should not be called, if resolved/rejected already', function () {
 
       defer.reject();
-      var spy = sinon.spy(defer, '_trigger');
+      var spy = sinon.spy(defer, 'trigger');
       defer.resolve();
       expect(spy).to.not.have.been.called;
       spy.restore();
