@@ -76,9 +76,7 @@ define([
     var mixin;
     while (mixins.length) {
       mixin = mixins.shift();
-      if (typeof mixin.applyToClass === 'function') {
-        mixin.applyToClass(child);
-      }
+      (typeof mixin.applyToClass === 'function') && mixin.applyToClass(child);
     }
 
     // make the child class extensible
@@ -125,9 +123,7 @@ define([
       var initializer;
       while (initializers.length) {
         initializer = initializers.shift();
-        if (typeof initializer === 'function') {
-          initializer.apply(self, arguments);
-        }
+        (typeof initializer === 'function') && initializer.apply(self, arguments);
       }
     }
   });
