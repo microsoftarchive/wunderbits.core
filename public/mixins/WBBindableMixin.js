@@ -1,20 +1,14 @@
-// Based on Marionette's EventBinder
-// https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.js
-
 define([
 
-  'wunderbits/lib/dependencies',
-  'wunderbits/WBMixin',
-  'wunderbits/lib/createUID'
+  '../WBMixin',
+  '../lib/createUID',
+  '../lib/assert'
 
-], function (dependencies, WBMixin, createUID) {
+], function (WBMixin, createUID, assert) {
 
   'use strict';
 
-  var _ = dependencies._;
-
   function _initBindings (self) {
-
     if (!self._bindings) {
       self._bindings = {};
       self._namedEvents = {};
@@ -29,13 +23,16 @@ define([
       _initBindings(self);
       self.checkBindingArgs.apply(self, arguments);
 
-      // check for same callback on the same target instance, return the event binding
+      // check for same callback on the same target instance,
+      // return the event binding
       var events = self._namedEvents[event];
       if (events) {
         for (var i = 0, max = events.length; i < max; i++) {
-          // TODO all of our classes should have a cid or uid, and we need to pick one and mixin to all base classes
+          // TODO: all of our classes should have a cid or uid,
+          // and we need to pick one and mixin to all base classes
           // for now let targets without uid/cid rebind
-          var targetBound = target.cid ? target.cid === events[i].target.cid : target.uid ? target.uid === events[i].target.uid : false;
+          var targetBound = target.cid ? target.cid === events[i].target.cid :
+                      target.uid ? target.uid === events[i].target.uid : false;
           if (events[i].callback === callback && targetBound) {
             return events[i];
           }
@@ -93,8 +90,9 @@ define([
       var self = this;
       _initBindings(self);
 
-      if (!binding || !_.isString(binding.uid)) {
-        throw new Error('Cannot unbind from undefined or invalid binding');
+      if (!binding) {
+        assert.string(binding.uid,
+          'Cannot unbind from undefined or invalid binding');
       }
 
       // a binding object with only uid, i.e. a destroyed/unbound
@@ -117,10 +115,9 @@ define([
 
       delete self._bindings[binding.uid];
 
-      self._namedEvents[event] = _.filter(self._namedEvents[event], function (_binding) {
-        if (_binding.cid === binding.cid) {
-          return false;
-        }
+      var namedEvents = self._namedEvents;
+      namedEvents[event] = namedEvents[event].filter(function (b) {
+        return (b.cid !== binding.cid);
       });
 
       return undefined;
@@ -131,8 +128,9 @@ define([
       var self = this;
       _initBindings(self);
 
-      if (!target || !_.isFunction(target.on)) {
-        throw new Error('Cannot unbind from undefined or invalid binding target');
+      if (!target) {
+        assert.function(target.on,
+          'Cannot unbind from undefined or invalid binding target');
       }
 
       var binding;
@@ -158,17 +156,12 @@ define([
 
     'checkBindingArgs': function (target, event, callback) {
 
-      if (!target || !_.isFunction(target.on)) {
-        throw new Error('Cannot bind to undefined target or target without #on method');
-      }
-
-      if (!event || !_.isString(event)) {
-        throw new Error('Cannot bind to target event without event name');
-      }
-
-      if (!callback || !_.isFunction(callback)) {
-        throw new Error('Cannot bind to target event without a function as callback');
-      }
+      assert.function(target && target.on,
+          'Cannot bind to undefined target or target without #on method');
+      assert.string(event,
+        'Cannot bind to target event without event name');
+      assert.function(callback,
+        'Cannot bind to target event without a function as callback');
     }
   });
 });
