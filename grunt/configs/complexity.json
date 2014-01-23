@@ -8,8 +8,7 @@
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js",
-      "!public/lib/events.js"
+      "public/**/*.js"
     ]
   }
 }
