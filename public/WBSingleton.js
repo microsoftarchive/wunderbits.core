@@ -1,19 +1,11 @@
 define([
 
   './lib/extend',
-  './lib/createUID',
-  './WBEvents',
-  './WBClass'
+  './lib/createUID'
 
-], function (extend, createUID, WBEvents, WBClass, undefined) {
+], function (extend, createUID, undefined) {
 
   'use strict';
-
-  var WBSingleton = WBClass.extend({
-    'initialize': function () {
-      throw new Error('Cannot create instance of singleton class');
-    }
-  });
 
   function applyMixins (mixins, instance) {
     var mixin;
@@ -24,16 +16,17 @@ define([
     }
   }
 
-  WBSingleton.extend = function (staticProps) {
+  function extendSelf (staticProps) {
+    /* jshint validthis:true */
 
     staticProps = staticProps || {};
 
-    // create a new instance
-    var singleton = new WBClass();
-
     // extend from the base singleton
     var BaseSingleton = this || WBSingleton;
-    extend(singleton, BaseSingleton);
+
+    // create a new instance
+    Ctor.prototype = BaseSingleton;
+    var singleton = new Ctor();
 
     // extract mixins
     var mixins = staticProps.mixins || [];
@@ -42,19 +35,25 @@ define([
     // apply mixins to the instance
     applyMixins(mixins, singleton);
 
-    // make the singleton an EventEmitter
-    extend(singleton, WBEvents, staticProps);
+    // append the static properties to the singleton
+    extend(singleton, staticProps);
 
     // make the singleton extendable
     // Do this after applying mixins,
     // to ensure that no mixin can override `extend` method
-    singleton.extend = WBSingleton.extend;
+    singleton.extend = extendSelf;
 
     // every signleton gets a UID
     singleton.uid = createUID();
 
     return singleton;
+  }
+
+  var Ctor = function () {};
+  Ctor.prototype = {
+    'extend': extendSelf
   };
 
+  var WBSingleton = new Ctor();
   return WBSingleton;
 });

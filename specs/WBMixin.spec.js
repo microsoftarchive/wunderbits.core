@@ -2,17 +2,13 @@ describe('WBMixin', function () {
 
   'use strict';
 
-  var Topic, WBClass, WBDeferred;
+  var Topic;
 
   beforeEach(function (done) {
     requirejs([
-      'WBClass',
-      'WBMixin',
-      'WBDeferred'
-    ], function (Klass, Mixin, Deferred) {
+      'WBMixin'
+    ], function (Mixin) {
       Topic = Mixin;
-      WBClass = Klass;
-      WBDeferred = Deferred;
       done();
     });
   });
@@ -28,7 +24,6 @@ describe('WBMixin', function () {
       BehaviorMixin.should.not.be.a('function');
       BehaviorMixin.extend.should.be.a('function');
       BehaviorMixin.applyTo.should.be.a('function');
-      BehaviorMixin.should.be.an.instanceOf(WBClass);
 
       BehaviorMixin.Behavior.foo.should.equal('bar');
     });
@@ -42,7 +37,6 @@ describe('WBMixin', function () {
       StaticMixin.should.not.be.a('function');
       StaticMixin.extend.should.be.a('function');
       StaticMixin.applyTo.should.be.a('function');
-      StaticMixin.should.be.an.instanceOf(WBClass);
 
       StaticMixin.staticFoo.should.equal('bar');
     });
@@ -162,7 +156,7 @@ describe('WBMixin', function () {
           expect(function () {
             Mixin.applyToClass(types[type]);
           }).to.throw(Error);
-        })
+        });
       });
     });
 
@@ -215,6 +209,41 @@ describe('WBMixin', function () {
         Mixin1.Behavior.initialize,
         Mixin3.Behavior.initialize
       ]);
+    });
+  });
+
+  describe('derived mixins', function () {
+
+    it('should be able to override & call super methods', function () {
+
+      var spy1 = sinon.spy();
+      var spy2 = sinon.spy();
+      var spy3 = sinon.spy();
+
+      var BaseMixin = Topic.extend({
+        'foo': spy1,
+        'bar': spy2
+      });
+
+      var _super = BaseMixin.Behavior;
+      var DerivedMixin = BaseMixin.extend({
+        'foo': function () {
+          return _super.foo.apply(this, arguments);
+        },
+        'bar': spy3
+      });
+
+      var instance = {};
+      DerivedMixin.applyTo(instance);
+
+      var spy4 = sinon.spy(instance, 'foo');
+      instance.foo();
+      expect(spy4).to.have.been.calledOnce;
+      expect(spy1).to.have.been.calledOnce;
+      expect(spy1).to.have.been.calledAfter(spy4);
+      instance.bar();
+      expect(spy2).to.not.have.been.called;
+      expect(spy3).to.have.been.calledOnce;
     });
   });
 });
