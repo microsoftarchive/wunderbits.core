@@ -1,10 +1,9 @@
 define([
 
   './lib/extend',
-  './lib/createUID',
-  './WBEvents'
+  './lib/createUID'
 
-], function (extend, createUID, WBEvents, undefined) {
+], function (extend, createUID, undefined) {
 
   'use strict';
 
@@ -36,8 +35,8 @@ define([
     // apply mixins to the instance
     applyMixins(mixins, singleton);
 
-    // make the singleton an EventEmitter
-    extend(singleton, WBEvents, staticProps);
+    // append the static properties to the singleton
+    extend(singleton, staticProps);
 
     // make the singleton extendable
     // Do this after applying mixins,
