@@ -35,7 +35,7 @@ define([
     'applyToClass': function (klass) {
 
       var proto = klass.prototype;
-      if (!proto || !proto.constructor) {
+      if (!proto || proto.constructor !== klass) {
         throw new Error('applyToClass expects a class');
       }
 

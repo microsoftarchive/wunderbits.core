@@ -2,63 +2,46 @@ describe('WBDeferred', function () {
 
   'use strict';
 
-  var WBDeferred;
+  var defer, WBDeferred;
 
   beforeEach(function (done) {
     requirejs([
       'WBDeferred'
-    ], function (deferred) {
+    ], function (klass) {
 
-      WBDeferred = deferred;
+      WBDeferred = klass;
+      defer = new WBDeferred();
 
       done();
     });
   });
 
-  describe('Deferred state', function () {
-
-    var defer;
-    beforeEach(function () {
-      defer = new WBDeferred();
-    });
-
-    function createDeferred(fn) {
-
-      return new WBDeferred(fn);
-    }
-
+  describe('instance', function () {
     it('should be an instance of WBDeferred', function () {
       defer.should.be.an.instanceof(WBDeferred);
     });
+  });
 
-    it('should change it\'s state to "resolved" when the done function is called', function () {
+  describe('Deferred state', function () {
 
-      var spy1 = sinon.spy();
-      var spy2 = sinon.spy();
+    function createDeferred(fn) {
+      return new WBDeferred(fn);
+    }
 
-      defer.resolve().done(function() {
-        expect(this.state()).to.be.equal('resolved');
-      }).fail(spy1).always(spy2);
-
-      spy1.should.not.have.been.called;
-      spy2.should.have.been.called;
-    });
-
-    it('should change it\'s state to "rejected" when fail is called', function () {
-
-      var spy1 = sinon.spy();
-      var spy2 = sinon.spy();
-
-      defer.reject().done(function() {
-        spy1();
-      }).fail(function() {
-        spy2();
-        expect(this.state()).to.be.equal('rejected');
+    describe('should change it\'s state to', function () {
+      it('"resolved" when the done function is called', function () {
+        defer.resolve().then(function() {
+          expect(defer.state()).to.be.equal('resolved');
+        });
       });
 
-      spy1.should.not.have.been.called;
-      spy2.should.have.been.called;
+      it('"rejected" when fail is called', function () {
+        defer.reject().then(function() {
+          expect(defer.state()).to.be.equal('rejected');
+        });
+      });
     });
+
 
     it('should pass the parameter from #resolve to the done callback', function () {
 
@@ -93,60 +76,66 @@ describe('WBDeferred', function () {
     });
   });
 
-  describe('chaining methods', function () {
+  describe('should be chainable', function () {
 
-    it('should be chainable', function () {
+    var apiVerbs = [
+      'resolve',
+      'reject',
+      'resolveWith',
+      'rejectWith',
+      'done',
+      'fail',
+      'always',
+      'then'
+    ];
 
-      var defer = new WBDeferred();
-      var apiVerbs = ['resolve', 'reject', 'notify', 'resolveWith', 'rejectWith', 'notifyWith', 'done', 'fail', 'progress', 'always'];
-      var method;
+    apiVerbs.forEach(function (name) {
+      it('for #' + name, function () {
 
-      for(var i=0;i<apiVerbs.length;i++) {
-        method = apiVerbs[i];
-        var object = {
-          'm': defer[method]
-        };
-        expect(object.m).to.equal(defer[method]);
-      }
+        var method = defer[name];
+        expect(method).to.be.a('function', name);
+        var self = method.call(defer);
+        expect(self).to.equal(defer);
+      });
+    });
+
+    it('not for #promise', function () {
+      var self = defer.promise();
+      expect(self).to.not.equal(defer);
     });
   });
 
   describe('#then', function () {
 
-    var defer,context;
+    var context;
     beforeEach(function () {
-      defer = new WBDeferred();
       context = {'a':'b'};
     });
 
-    it('should call then if the deferred is resolved or rejected', function () {
+    describe('should be called if the deferred is', function () {
 
-      var value1, value2, value3;
-      var spy = sinon.spy();
+      var spy;
+      beforeEach(function () {
+        spy = sinon.spy();
+        defer.then(spy);
+      });
 
-      defer.then(function(a, b) {
-        value3 = a * b;
-      }, this);
+      function check (done) {
+        setTimeout(function () {
+          expect(spy).to.have.been.called;
+          done();
+        });
+      }
 
-      defer.done(function(a, b) {
-        value1 = a;
-        value2 = b;
-      }, this);
+      it('resolved', function (done) {
+        defer.resolve();
+        check(done);
+      });
 
-      defer.resolve(2, 3);
-      expect(value1).to.equal(2);
-      expect(value2).to.equal(3);
-      expect(value3).to.equal(6);
-
-      defer.reject(function() {
-        spy();
-      }, this);
-
-      defer.resolve().then(function () {}).done(function(value) {
-        expect(value).to.equal(undefined);
-      }, this);
-
-      spy.should.not.have.been.called;
+      it('rejected', function (done) {
+        defer.reject();
+        check(done);
+      });
     });
 
     it('should call the #then callback with the correct context', function (done) {
@@ -202,6 +191,26 @@ describe('WBDeferred', function () {
         expect(fn3).to.not.have.been.called;
         expect(fn2).to.have.been.calledAfter(fn1);
       });
+    });
+  });
+
+  describe('#trigger', function () {
+
+    it('should be called only once, if pending', function () {
+
+      var spy = sinon.spy(defer, 'trigger');
+      defer.resolve();
+      expect(spy).to.have.been.called;
+      spy.restore();
+    });
+
+    it('should not be called, if resolved/rejected already', function () {
+
+      defer.reject();
+      var spy = sinon.spy(defer, 'trigger');
+      defer.resolve();
+      expect(spy).to.not.have.been.called;
+      spy.restore();
     });
   });
 });

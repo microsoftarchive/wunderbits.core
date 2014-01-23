@@ -137,9 +137,33 @@ describe('WBMixin', function () {
       Klass = function () {};
     });
 
-    it('should throw for a non class', function () {
-      var Mixin = Topic.extend();
-      expect(Mixin.applyToClass.bind(null, {})).to.throw;
+    describe('should throw for a non class', function () {
+
+      var types = {
+        'object': {},
+        'fakeClass1': {
+          'prototype': {
+          }
+        },
+        'fakeClass2': {
+          'prototype': {
+            'constructor': function () {}
+          }
+        }
+      };
+
+      var Mixin;
+      beforeEach(function () {
+        Mixin = Topic.extend();
+      });
+
+      Object.keys(types).forEach(function (type) {
+        it(type, function () {
+          expect(function () {
+            Mixin.applyToClass(types[type]);
+          }).to.throw(Error);
+        })
+      });
     });
 
     it('should apply mixin behavior to a class', function () {

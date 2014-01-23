@@ -19,9 +19,8 @@ define([
     var mixin;
     while (mixins.length) {
       mixin = mixins.shift();
-      if (typeof mixin.applyTo === 'function') {
+      (typeof mixin.applyTo === 'function') &&
         mixin.applyTo(instance);
-      }
     }
   }
 

@@ -128,4 +128,50 @@ describe('WBClass', function () {
     });
   });
 
+  describe('mixins', function () {
+
+    var Mixin, spy;
+    beforeEach(function (done) {
+      requirejs([
+        'WBMixin'
+      ], function (WBMixin) {
+
+        spy = sinon.spy();
+
+        Mixin = WBMixin.extend({
+          'initialize': spy,
+          'foo': function () {}
+        });
+
+        done();
+      })
+    });
+
+    it('should be auto-applied, if any', function () {
+
+      var Klass = Topic.extend({
+        'mixins': [
+          Mixin
+        ]
+      });
+
+      var instance = new Klass();
+      expect(instance.foo).to.be.a('function');
+      expect(instance.initialize).to.not.equal(spy);
+      expect(spy).to.have.been.called;
+    });
+
+    it('should not do anything, if none', function () {
+
+      var Klass = Topic.extend({
+        'mixins': []
+      });
+
+      var instance = new Klass();
+      expect(instance.foo).to.equal(undefined);
+      expect(instance.initialize).to.not.equal(spy);
+      expect(spy).to.not.have.been.called;
+    });
+  });
+
 });
