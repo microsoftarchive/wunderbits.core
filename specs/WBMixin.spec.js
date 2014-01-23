@@ -2,17 +2,13 @@ describe('WBMixin', function () {
 
   'use strict';
 
-  var Topic, WBClass, WBDeferred;
+  var Topic;
 
   beforeEach(function (done) {
     requirejs([
-      'WBClass',
-      'WBMixin',
-      'WBDeferred'
-    ], function (Klass, Mixin, Deferred) {
+      'WBMixin'
+    ], function (Mixin) {
       Topic = Mixin;
-      WBClass = Klass;
-      WBDeferred = Deferred;
       done();
     });
   });
@@ -28,7 +24,6 @@ describe('WBMixin', function () {
       BehaviorMixin.should.not.be.a('function');
       BehaviorMixin.extend.should.be.a('function');
       BehaviorMixin.applyTo.should.be.a('function');
-      BehaviorMixin.should.be.an.instanceOf(WBClass);
 
       BehaviorMixin.Behavior.foo.should.equal('bar');
     });
@@ -42,7 +37,6 @@ describe('WBMixin', function () {
       StaticMixin.should.not.be.a('function');
       StaticMixin.extend.should.be.a('function');
       StaticMixin.applyTo.should.be.a('function');
-      StaticMixin.should.be.an.instanceOf(WBClass);
 
       StaticMixin.staticFoo.should.equal('bar');
     });
@@ -162,7 +156,7 @@ describe('WBMixin', function () {
           expect(function () {
             Mixin.applyToClass(types[type]);
           }).to.throw(Error);
-        })
+        });
       });
     });
 
