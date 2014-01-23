@@ -22,7 +22,6 @@ define([
   var proto = {
 
     'constructor': function () {
-
       var self = this;
       self._state = states.pending;
       self._args = [];
@@ -34,7 +33,7 @@ define([
       return stateNames[self._state][0];
     },
 
-    'checkDeferredStatus': function (withContext) {
+    'trigger': function (withContext) {
 
       var self = this;
       if (self._state === states.pending) {
@@ -60,15 +59,15 @@ define([
         args.push(arg);
       });
 
-      var isCompleted = (deferredResponse.type === 'then') ||
-        (deferredResponse.type === 'done' && state === states.resolved) ||
-        (deferredResponse.type === 'fail' && state === states.rejected);
+      var type = deferredResponse.type;
+      var isCompleted = (type === 'then') ||
+        (type === 'done' && state === states.resolved) ||
+        (type === 'fail' && state === states.rejected);
 
       isCompleted && deferredResponse.fn.apply(context, args);
     },
 
     'promise': function () {
-
       var self = this;
       self._promise = self._promise || new WBPromise(this);
       return self._promise;
@@ -92,7 +91,7 @@ define([
       });
 
       // if the defered is not pending anymore, call the callbacks
-      self.checkDeferredStatus();
+      self.trigger();
 
       return self;
     };
@@ -101,33 +100,36 @@ define([
   // Alias `always` to `then` on Deferred's prototype
   proto.always = proto.then;
 
+  function resolver (state, isWith, fnName) {
+    return function complete () {
+
+      var self = this;
+
+      if (!(self instanceof WBDeferred)) {
+        throw new Error(fnName + ' invoked with wrong context');
+      }
+
+      // can't change state once resolved or rejected
+      if (self._state !== states.pending) {
+        return self;
+      }
+
+      self._args = arrayRef.slice.call(arguments);
+      var context = isWith ? self._args.shift() : undefined;
+
+      self._state = state;
+      self.trigger(context);
+
+      return self;
+    };
+  }
+
   [states.resolved, states.rejected].forEach(function (state) {
     var fnName = stateNames[state][1];
-    proto[fnName] = function () {
-      var self = this;
-      if (self._state !== states.pending) {
-        return self;
-      }
-
-      self._state = state;
-      self._args = arrayRef.slice.call(arguments);
-      self.checkDeferredStatus();
-      return self;
-    };
-
-    proto[fnName + 'With'] = function () {
-      var self = this;
-      if (self._state !== states.pending) {
-        return self;
-      }
-
-      self._args = arrayRef.slice.call(arguments);
-      var context = self._args.shift();
-      self._state = state;
-      self.checkDeferredStatus(context);
-      return self;
-    };
+    proto[fnName] = resolver(state, false, fnName);
+    proto[fnName + 'With'] = resolver(state, true, fnName);
   });
 
-  return WBClass.extend(proto);
+  var WBDeferred = WBClass.extend(proto);
+  return WBDeferred;
 });
