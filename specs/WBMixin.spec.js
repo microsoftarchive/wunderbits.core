@@ -211,4 +211,39 @@ describe('WBMixin', function () {
       ]);
     });
   });
+
+  describe('derived mixins', function () {
+
+    it('should be able to override & call super methods', function () {
+
+      var spy1 = sinon.spy();
+      var spy2 = sinon.spy();
+      var spy3 = sinon.spy();
+
+      var BaseMixin = Topic.extend({
+        'foo': spy1,
+        'bar': spy2
+      });
+
+      var _super = BaseMixin.Behavior;
+      var DerivedMixin = BaseMixin.extend({
+        'foo': function () {
+          return _super.foo.apply(this, arguments);
+        },
+        'bar': spy3
+      });
+
+      var instance = {};
+      DerivedMixin.applyTo(instance);
+
+      var spy4 = sinon.spy(instance, 'foo');
+      instance.foo();
+      expect(spy4).to.have.been.calledOnce;
+      expect(spy1).to.have.been.calledOnce;
+      expect(spy1).to.have.been.calledAfter(spy4);
+      instance.bar();
+      expect(spy2).to.not.have.been.called;
+      expect(spy3).to.have.been.calledOnce;
+    });
+  });
 });
