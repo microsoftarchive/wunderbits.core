@@ -1,4 +1,4 @@
-describe('WBEvents', function () {
+describe('lib/events', function () {
 
   'use strict';
 
@@ -6,9 +6,9 @@ describe('WBEvents', function () {
   beforeEach(function (done) {
     requirejs([
       'lib/extend',
-      'WBEvents'
-    ], function (extend, WBEvents) {
-      topic = extend({}, WBEvents);
+      'lib/events'
+    ], function (extend, events) {
+      topic = extend({}, events);
       done();
     });
   });

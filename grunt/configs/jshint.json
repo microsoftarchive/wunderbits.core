@@ -6,7 +6,7 @@
     "src": [
       "Gruntfile.js",
       "public/**/*.js",
-      "!public/WBEvents.js"
+      "!public/lib/events.js"
     ]
   }
 }

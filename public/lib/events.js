@@ -1,7 +1,7 @@
 define([
 
-  './lib/assert',
-  './lib/toArray'
+  './assert',
+  './toArray'
 
 ], function (assert, toArray) {
 
