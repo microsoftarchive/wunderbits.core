@@ -199,16 +199,16 @@
     <h1>Code coverage report for <span class="entity">public/lib/clone.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">86.67% <small>(13 / 15)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">100% <small>(22 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">50% <small>(2 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">90% <small>(9 / 10)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">75% <small>(3 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(5 / 5)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">86.67% <small>(13 / 15)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(22 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -247,33 +247,55 @@
 29
 30
 31
-32</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">28</span>
-<span class="cline-any cline-yes">28</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">80</span>
+<span class="cline-any cline-yes">80</span>
+<span class="cline-any cline-yes">551</span>
+<span class="cline-any cline-yes">551</span>
+<span class="cline-any cline-yes">551</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">550</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">547</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">80</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">91</span>
+<span class="cline-any cline-yes">11</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28</span>
+<span class="cline-any cline-yes">80</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -284,15 +306,26 @@
 &nbsp;
   var nativeIsArray = Array.isArray;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  function cloneArray (arr) {</span>
-<span class="cstat-no" title="statement not covered" >    return arr.slice();</span>
+  function cloneArray (arr) {
+    return arr.slice();
+  }
+&nbsp;
+  function cloneDate (date) {
+    return new Date(date);
   }
 &nbsp;
   function cloneObject (source) {
     var object = {};
     for (var key in source) {
       <span class="missing-if-branch" title="else path not taken" >E</span>if (source.hasOwnProperty(key)) {
-        object[key] = source[key];
+        var value = source[key];
+        if (value instanceof Date) {
+          object[key] = cloneDate(value);
+        } else if (typeof value === 'object' &amp;&amp; value !== null) {
+          object[key] = clone(value);
+        } else {
+          object[key] = value;
+        }
       }
     }
     return object;
@@ -300,8 +333,8 @@
 &nbsp;
   function clone (obj) {
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (nativeIsArray(obj)) {
-<span class="cstat-no" title="statement not covered" >      return cloneArray(obj);</span>
+    if (nativeIsArray(obj)) {
+      return cloneArray(obj);
     }
 &nbsp;
     return cloneObject(obj);
@@ -314,7 +347,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 02 2014 22:37:11 GMT+0100 (CET)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 24 2014 12:42:59 GMT+0100 (CET)</div>
 </div>
 
 <script src="../../prettify.js"></script>

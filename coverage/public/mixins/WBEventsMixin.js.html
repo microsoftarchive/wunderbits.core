@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for public/lib/createUID.js</title>
+    <title>Code coverage report for public/mixins/WBEventsMixin.js</title>
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="../../prettify.css">
@@ -196,23 +196,23 @@
 </head>
 <body>
 <div class="header high">
-    <h1>Code coverage report for <span class="entity">public/lib/createUID.js</span></h1>
+    <h1>Code coverage report for <span class="entity">public/mixins/WBEventsMixin.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">100% <small>(7 / 7)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">100% <small>(3 / 3)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(1 / 1)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">100% <small>(7 / 7)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
-    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">public/lib/</a> &#187; createUID.js</div>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">public/mixins/</a> &#187; WBEventsMixin.js</div>
 </div>
 <div class="body">
 <pre><table class="coverage">
@@ -226,35 +226,26 @@
 8
 9
 10
-11
-12
-13
-14</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+11</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">16647</span>
-<span class="cline-any cline-yes">16647</span>
-<span class="cline-any cline-yes">16647</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">537</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">define(function () {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">define([
+&nbsp;
+  '../WBMixin',
+  '../lib/events'
+&nbsp;
+], function (WBMixin, events, undefined) {
 &nbsp;
   'use strict';
 &nbsp;
-  function replacer (match) {
-    var r = Math.random() * 16 | 0;
-    var v = (match === 'x') ? r : (r &amp; 0x3 | 0x8);
-    return v.toString(16);
-  }
-&nbsp;
-  return function createUID () {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, replacer);
-  };
+  return WBMixin.extend(events);
 });</pre></td></tr>
 </table></pre>
 
