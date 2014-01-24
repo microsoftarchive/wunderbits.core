@@ -8,8 +8,7 @@
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js",
-      "!public/WBEvents.js"
+      "public/**/*.js"
     ]
   }
 }

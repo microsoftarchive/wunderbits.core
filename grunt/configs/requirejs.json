@@ -8,7 +8,10 @@
       "include": [
         "wunderbits/core/WBClass",
         "wunderbits/core/WBSingleton",
-        "wunderbits/core/WBMixin"
+        "wunderbits/core/WBMixin",
+        "wunderbits/core/WBDeferred",
+        "wunderbits/core/When",
+        "wunderbits/core/mixins/WBEventsMixin"
       ],
       "optimize": "none",
       "useSourceUrl": false,
