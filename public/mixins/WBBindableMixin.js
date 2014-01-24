@@ -64,17 +64,17 @@ define([
 
       var callbackFunc, args;
 
-      if (self.instanceOfBackbone(target)) {
-        // Backbone accepts context when binding, simply pass it on
-        callbackFunc = _.isString(callback) ? context[callback] : callback;
-        args = [event, callbackFunc, context];
-      }
-      else {
+      // if a jquery object
+      if (target.constructor && target.constructor.fn && target.constructor.fn.on === target.on) {
         // jquery does not take context in .on()
         // cannot assume on takes context as a param for bindable object
         // create a callback which will apply the original callback in the correct context
         callbackFunc = _callbackFactory(callback, context);
         args = [event, callbackFunc];
+      } else {
+        // Backbone accepts context when binding, simply pass it on
+        callbackFunc = (typeof callback === 'string') ? context[callback] : callback;
+        args = [event, callbackFunc, context];
       }
 
       // create binding on target
@@ -243,14 +243,6 @@ define([
       }
 
       return false;
-    },
-
-    'instanceOfBackbone': function (target) {
-
-      var B = Backbone;
-      var t = target;
-
-      return t instanceof B.Model || t instanceof B.View || t instanceof B.Collection || t instanceof B.Router;
     },
 
     'addToNamedBindings': function (event, binding) {
