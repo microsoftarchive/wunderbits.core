@@ -6,7 +6,7 @@ define([
 
 ], function (WBMixin, assert, createUID) {
 
-  /* jshint maxcomplexity:12, maxstatements:50, maxlen:200 */
+  /* jshint maxcomplexity:11, maxstatements:20, maxlen:110 */
 
   'use strict';
 
@@ -166,7 +166,7 @@ define([
       if (events) {
         var cloned = events && events.slice(0);
         for (var i = events.length - 1; i >= 0; i--) {
-          if (events[i].cid === binding.cid) {
+          if (events[i].uid === binding.uid) {
             cloned.splice(i, 1);
           }
         }
@@ -236,14 +236,12 @@ define([
       if (events) {
         for (var i = 0, max = events.length; i < max; i++) {
 
-          // TODO all of our classes should have a cid or uid
-          // and we need to pick one and mixin to all base classes
-          // for now let targets without uid/cid rebind
           var boundTarget = events[i].target;
           if (!boundTarget) {
             return false;
           }
-          var targetBound = target.cid ? target.cid === boundTarget.cid : target.uid ? target.uid === boundTarget.uid : false;
+
+          var targetBound = target.uid ? target.uid === boundTarget.uid : false;
           if (events[i].originalCallback === callback && targetBound) {
             return events[i];
           }

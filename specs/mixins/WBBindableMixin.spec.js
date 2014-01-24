@@ -300,7 +300,7 @@ describe('WBBindableMixin', function () {
       var exists = false;
       var events = topic._namedEvents.asdas;
       events.forEach(function (_binding) {
-        if (_binding.cid === binding.cid) {
+        if (_binding.uid === binding.uid) {
           exists = true;
         }
       });
