@@ -1,13 +1,10 @@
 define([
 
-  '../lib/dependencies',
   '../WBMixin',
+  '../lib/assert',
   '../lib/createUID'
 
-], function (dependencies, WBMixin, createUID) {
-
-  var _ = dependencies._;
-  var Backbone = dependencies.Backbone;
+], function (WBMixin, assert, createUID) {
 
   /* jshint maxcomplexity:10, maxstatements:50, maxlen:200 */
 
