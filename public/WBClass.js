@@ -119,7 +119,7 @@ define([
 
       var self = this;
 
-      var initializers = self.initializers || [];
+      var initializers = (self.initializers || []).slice(0);
 
       var initializer;
       while (initializers.length) {
