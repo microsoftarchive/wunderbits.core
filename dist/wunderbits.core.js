@@ -172,9 +172,8 @@ define('wunderbits/core/WBClass',[
     var mixin;
     while (mixins.length) {
       mixin = mixins.shift();
-      if (typeof mixin.applyToClass === 'function') {
+      (typeof mixin.applyToClass === 'function') &&
         mixin.applyToClass(child);
-      }
     }
 
     // make the child class extensible
@@ -221,9 +220,8 @@ define('wunderbits/core/WBClass',[
       var initializer;
       while (initializers.length) {
         initializer = initializers.shift();
-        if (typeof initializer === 'function') {
+        (typeof initializer === 'function') &&
           initializer.apply(self, arguments);
-        }
       }
     }
   });
@@ -232,369 +230,35 @@ define('wunderbits/core/WBClass',[
 
   return WBClass;
 });
-define('wunderbits/core/lib/toArray',[],function () {
-
-  
-
-  return function (obj, skip) {
-    return [].slice.call(obj, skip || 0);
-  };
-});
-define('wunderbits/core/WBEvents',[
-
-  './lib/assert',
-  './lib/toArray'
-
-], function (assert, toArray) {
-
-  
-
-  var eventSplitter = /\s+/;
-
-  var validationErrors = {
-    'trigger': 'Cannot trigger event(s) without event name(s)',
-    'events': 'Cannot bind/unbind without valid event name(s)',
-    'callback': 'Cannot bind/unbind to an event without valid callback'
-  };
-
-  var Events = {
-
-    // Bind an event to a `callback` function. Passing `"all"` will bind
-    // the callback to all events fired.
-    on: function(name, callback, context) {
-      var handler = eventsApi(this, 'on', name, [callback, context]);
-      if (!handler || !callback) return this;
-      this._events || (this._events = {});
-      var events = this._events[name] || (this._events[name] = []);
-      events.push({callback: callback, context: context, ctx: context || this});
-      return this;
-    },
-
-    // Remove one or many callbacks. If `context` is null, removes all
-    // callbacks with that function. If `callback` is null, removes all
-    // callbacks for the event. If `name` is null, removes all bound
-    // callbacks for all events.
-    'off': function(name, callback, context) {
-      var retain, ev, events, names, i, l, j, k;
-      var handler = eventsApi(this, 'off', name, [callback, context]);
-      if (!this._events || !handler) return this;
-      if (!name && !callback && !context) {
-        this._events = {};
-        return this;
-      }
-      names = name ? [name] : Object.keys(this._events);
-      for (i = 0, l = names.length; i < l; i++) {
-        name = names[i];
-        events = this._events[name];
-        if (events) {
-          this._events[name] = retain = [];
-          if (callback || context) {
-            for (j = 0, k = events.length; j < k; j++) {
-              ev = events[j];
-              if ((callback && callback !== ev.callback &&
-                   callback !== ev.callback._callback) ||
-                  (context && context !== ev.context)) {
-                retain.push(ev);
-              }
-            }
-          }
-          if (!retain.length) delete this._events[name];
-        }
-      }
-
-      return this;
-    },
-
-    // Trigger one or many events, firing all bound callbacks. Callbacks are
-    // passed the same arguments as `trigger` is, apart from the event name
-    // (unless you're listening on `"all"`, which will cause your callback to
-    // receive the true name of the event as the first argument).
-    trigger: function(name) {
-      if (!this._events) return this;
-      var args = [].slice.call(arguments, 1);
-      if (!eventsApi(this, 'trigger', name, args)) return this;
-      var events = this._events[name];
-      var allEvents = this._events.all;
-      if (events) triggerEvents(events, args);
-      if (allEvents) triggerEvents(allEvents, arguments);
-      return this;
-    }
-  };
-
-  // Implement fancy features of the Events API such as multiple event
-  // names `"change blur"` and jQuery-style event maps `{change: action}`
-  // in terms of the existing API.
-  var eventsApi = function(obj, action, name, rest) {
-    if (!name) return true;
-
-    // Handle event maps.
-    if (typeof name === 'object') {
-      for (var key in name) {
-        obj[action].apply(obj, [key, name[key]].concat(rest));
-      }
-      return false;
-    }
-
-    // Handle space separated event names.
-    if (eventSplitter.test(name)) {
-      var names = name.split(eventSplitter);
-      for (var i = 0, l = names.length; i < l; i++) {
-        obj[action].apply(obj, [names[i]].concat(rest));
-      }
-      return false;
-    }
-
-    return true;
-  };
-
-  // A difficult-to-believe, but optimized internal dispatch function for
-  // triggering events. Tries to keep the usual cases speedy (most internal
-  // Backbone events have 3 arguments).
-  var triggerEvents = function (events, args) {
-    var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
-    switch (args.length) {
-      case 0:
-        while (++i < l) {
-          (ev = events[i]).callback.call(ev.ctx);
-        }
-        break;
-      case 1:
-        while (++i < l) {
-          (ev = events[i]).callback.call(ev.ctx, a1);
-        }
-        break;
-      case 2:
-        while (++i < l) {
-          (ev = events[i]).callback.call(ev.ctx, a1, a2);
-        }
-        break;
-      case 3:
-        while (++i < l) {
-          (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-        }
-        break;
-      default:
-        while (++i < l) {
-          (ev = events[i]).callback.apply(ev.ctx, args);
-        }
-    }
-  };
-
-  // Aliases for backwards compatibility.
-  Events.bind   = Events.on;
-  Events.unbind = Events.off;
-
-  return {
-
-    '_eventArgsMap': {},
-
-    'on': function (events, callback, context) {
-
-      var self = this;
-
-      assert.string(events, validationErrors.events);
-      assert.function(callback, validationErrors.callback);
-
-      self.iterateOverEvents(events, function (event) {
-        var args = self._eventArgsMap[event];
-        args && callback.apply(context || self, args);
-      });
-
-      Events.on.apply(this, arguments);
-
-      return self;
-    },
-
-    'trigger': function (events) {
-
-      assert.string(events, validationErrors.trigger);
-
-      var self = this;
-      var params = toArray(arguments);
-      self.iterateOverEvents(events, self.triggerEvent, params);
-      return self;
-    },
-
-    'triggerEvent': function (eventName, params) {
-
-      var self = this;
-      var channelName = '';
-      var queue = [];
-      var storedFragments;
-      var message, part, fragments;
-
-      // Iterate the parts of the eventName to create
-      // a queue of all channels to trigger event on
-      var channelFragments = eventName.split(':');
-      while (channelFragments.length) {
-        part = channelFragments.shift();
-        message = {};
-        if (channelName) {
-          channelName += ':';
-        }
-        channelName += part;
-
-        fragments = storedFragments || channelFragments;
-        storedFragments = fragments.slice(1);
-        message.fragments = storedFragments;
-        message.channel = channelName;
-
-        queue.push(message);
-      }
-
-      // Reverse the queue, to make sure "bubbling"
-      // occurs from inside out, up to the parent channel
-      queue.reverse();
-      while (queue.length) {
-
-        message = queue.shift();
-        // Always send the current channel name
-        // as the first argument, to be triggered
-        fragments = [message.channel];
-
-        // Put the arguments back together with
-        // the fragment as the second argument
-        // This will work recursively,
-        // pushing the fragments onto the arguments
-        if (message.fragments.length) {
-          fragments.push(message.fragments);
-        }
-        fragments.push.apply(fragments, params.slice(1));
-
-        Events.trigger.apply(self, fragments);
-      }
-
-      var args = [eventName].concat(params.slice(1));
-      self.triggered && self.triggered.apply(self, args);
-    },
-
-    'off': function (events) {
-
-      var self = this;
-
-      events && assert.string(events, validationErrors.events);
-
-      // backbone has a funny way of unbinding events, looping
-      // the whole list and then applying #on on the events that
-      // shouldn't be unbound - so, we have to temporarily replace
-      // self's #on, since the on method will re-trigger any
-      // published event...
-      var _on = self.on;
-      self.on = Events.on;
-      Events.off.apply(self, arguments);
-      self.on = _on;
-
-      return self;
-    },
-
-    'once': function () {
-
-      var self = this;
-      var args = toArray(arguments);
-      var callback = args[1];
-
-      if (typeof callback === 'function') {
-        args[1] = function () {
-          Events.off.apply(self, args);
-          callback.apply(args[2] || self, arguments);
-        };
-      }
-
-      self.on.apply(self, args);
-
-      return self;
-    },
-
-    'publish': function (events) {
-
-      var self = this;
-      var args = Array.prototype.slice.call(arguments, 1);
-
-      assert.string(events, validationErrors.events);
-
-      self.iterateOverEvents(events, function (event) {
-
-        if (!self._eventArgsMap[event]) {
-          self._eventArgsMap[event] = args;
-          var payload = [event].concat(args);
-          Events.trigger.apply(self, payload);
-        }
-      });
-
-      return self;
-    },
-
-    'unpublish': function (events) {
-
-      var self = this;
-
-      assert.string(events, validationErrors.events);
-
-      self.iterateOverEvents(events, function (event) {
-        delete self._eventArgsMap[event];
-      });
-
-      return self;
-    },
-
-    'unpublishAll': function () {
-
-      var self = this;
-      self._eventArgsMap = {};
-      return self;
-    },
-
-    'iterateOverEvents': function (events, callback) {
-
-      var self = this;
-      var eventsArray = events.split(eventSplitter);
-      var args = toArray(arguments, 2);
-      args.unshift(null);
-
-      while (eventsArray.length) {
-        args[0] = eventsArray.shift();
-        callback.apply(self, args);
-      }
-    }
-  };
-});
 define('wunderbits/core/WBSingleton',[
 
   './lib/extend',
-  './lib/createUID',
-  './WBEvents',
-  './WBClass'
+  './lib/createUID'
 
-], function (extend, createUID, WBEvents, WBClass, undefined) {
+], function (extend, createUID, undefined) {
 
   
-
-  var WBSingleton = WBClass.extend({
-    'initialize': function () {
-      throw new Error('Cannot create instance of singleton class');
-    }
-  });
 
   function applyMixins (mixins, instance) {
     var mixin;
     while (mixins.length) {
       mixin = mixins.shift();
-      if (typeof mixin.applyTo === 'function') {
+      (typeof mixin.applyTo === 'function') &&
         mixin.applyTo(instance);
-      }
     }
   }
 
-  WBSingleton.extend = function (staticProps) {
+  function extendSelf (staticProps) {
+    /* jshint validthis:true */
 
     staticProps = staticProps || {};
 
-    // create a new instance
-    var singleton = new WBClass();
-
     // extend from the base singleton
     var BaseSingleton = this || WBSingleton;
-    extend(singleton, BaseSingleton);
+
+    // create a new instance
+    Ctor.prototype = BaseSingleton;
+    var singleton = new Ctor();
 
     // extract mixins
     var mixins = staticProps.mixins || [];
@@ -603,20 +267,26 @@ define('wunderbits/core/WBSingleton',[
     // apply mixins to the instance
     applyMixins(mixins, singleton);
 
-    // make the singleton an EventEmitter
-    extend(singleton, WBEvents, staticProps);
+    // append the static properties to the singleton
+    extend(singleton, staticProps);
 
     // make the singleton extendable
     // Do this after applying mixins,
     // to ensure that no mixin can override `extend` method
-    singleton.extend = WBSingleton.extend;
+    singleton.extend = extendSelf;
 
     // every signleton gets a UID
     singleton.uid = createUID();
 
     return singleton;
+  }
+
+  var Ctor = function () {};
+  Ctor.prototype = {
+    'extend': extendSelf
   };
 
+  var WBSingleton = new Ctor();
   return WBSingleton;
 });
 define('wunderbits/core/lib/clone',[],function () {
@@ -629,11 +299,22 @@ define('wunderbits/core/lib/clone',[],function () {
     return arr.slice();
   }
 
+  function cloneDate (date) {
+    return new Date(date);
+  }
+
   function cloneObject (source) {
     var object = {};
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
-        object[key] = source[key];
+        var value = source[key];
+        if (value instanceof Date) {
+          object[key] = cloneDate(value);
+        } else if (typeof value === 'object' && value !== null) {
+          object[key] = clone(value);
+        } else {
+          object[key] = value;
+        }
       }
     }
     return object;
@@ -688,7 +369,7 @@ define('wunderbits/core/WBMixin',[
     'applyToClass': function (klass) {
 
       var proto = klass.prototype;
-      if (!proto || !proto.constructor) {
+      if (!proto || proto.constructor !== klass) {
         throw new Error('applyToClass expects a class');
       }
 
@@ -728,4 +409,489 @@ define('wunderbits/core/WBMixin',[
   };
 
   return WBMixin;
+});
+define('wunderbits/core/WBPromise',[
+  './WBClass'
+], function (WBClass) {
+
+  
+
+  function proxy (name) {
+    return function () {
+      var deferred = this.deferred;
+      return deferred[name].apply(deferred, arguments);
+    };
+  }
+
+  var proto = {
+    'constructor': function (deferred) {
+      this.deferred = deferred;
+    }
+  };
+
+  [
+    'state',
+    'done',
+    'fail',
+    'then',
+    'promise'
+  ].forEach(function (name) {
+    proto[name] = proxy(name);
+  });
+
+  proto.always = proto.then;
+
+  return WBClass.extend(proto);
+
+});
+define('wunderbits/core/WBDeferred',[
+  './WBClass',
+  './WBPromise'
+], function (WBClass, WBPromise) {
+
+  
+
+  var arrayRef = [];
+
+  var states = {
+    'pending': 0,
+    'resolved': 2,
+    'rejected': 4
+  };
+
+  var stateNames = {
+    0: ['pending'],
+    2: ['resolved', 'resolve'],
+    4: ['rejected', 'reject']
+  };
+
+  var proto = {
+
+    'constructor': function () {
+      var self = this;
+      self._state = states.pending;
+      self._args = [];
+      self.handlers = [];
+    },
+
+    'state': function () {
+      var self = this;
+      return stateNames[self._state][0];
+    },
+
+    'trigger': function (withContext) {
+
+      var self = this;
+      if (self._state === states.pending) {
+        return;
+      }
+
+      var handlers = self.handlers, handle;
+      while (handlers.length) {
+        handle = handlers.shift();
+        self.invoke(handle, withContext);
+      }
+    },
+
+    'invoke': function (deferredResponse, withContext) {
+
+      var self = this;
+      var state = self._state;
+      var context = deferredResponse.context || withContext || self;
+      var args = deferredResponse.args;
+
+      self._args.forEach(function (arg) {
+        // send single arguments as the item, otherwise send it as an array
+        args.push(arg);
+      });
+
+      var type = deferredResponse.type;
+      var isCompleted = (type === 'then') ||
+        (type === 'done' && state === states.resolved) ||
+        (type === 'fail' && state === states.rejected);
+
+      isCompleted && deferredResponse.fn.apply(context, args);
+    },
+
+    'promise': function () {
+      var self = this;
+      self._promise = self._promise || new WBPromise(this);
+      return self._promise;
+    }
+  };
+
+  ['then', 'done', 'fail'].forEach(function (method) {
+    proto[method] = function () {
+
+      var self = this;
+
+      // store references to the context, callbacks, and arbitrary arguments
+      var args = arrayRef.slice.call(arguments);
+      var fn = args.shift();
+      var context = args.shift();
+      self.handlers.push({
+        'type': method,
+        'context': context,
+        'fn': fn,
+        'args': args
+      });
+
+      // if the defered is not pending anymore, call the callbacks
+      self.trigger();
+
+      return self;
+    };
+  });
+
+  // Alias `always` to `then` on Deferred's prototype
+  proto.always = proto.then;
+
+  function resolver (state, isWith, fnName) {
+    return function complete () {
+
+      var self = this;
+
+      if (!(self instanceof WBDeferred)) {
+        throw new Error(fnName + ' invoked with wrong context');
+      }
+
+      // can't change state once resolved or rejected
+      if (self._state !== states.pending) {
+        return self;
+      }
+
+      self._args = arrayRef.slice.call(arguments);
+      var context = isWith ? self._args.shift() : undefined;
+
+      self._state = state;
+      self.trigger(context);
+
+      return self;
+    };
+  }
+
+  [states.resolved, states.rejected].forEach(function (state) {
+    var fnName = stateNames[state][1];
+    proto[fnName] = resolver(state, false, fnName);
+    proto[fnName + 'With'] = resolver(state, true, fnName);
+  });
+
+  var WBDeferred = WBClass.extend(proto);
+  return WBDeferred;
+});
+define('wunderbits/core/When',[
+  './WBSingleton',
+  './WBDeferred'
+], function (WBSingleton, WBDeferred) {
+
+  
+
+  var arrayRef = [];
+
+  var self = WBSingleton.extend({
+
+    'when': function () {
+
+      var context = this;
+      var main = new WBDeferred(context);
+      var deferreds = arrayRef.slice.call(arguments);
+
+      var count = deferreds.length;
+      var args = new Array(count);
+
+      function Fail () {
+        main.rejectWith(this);
+      }
+
+      function Done () {
+
+        if (main.state() === 'rejected') {
+          return;
+        }
+
+        var index = count - deferreds.length - 1;
+        args[index] = arrayRef.slice.call(arguments);
+
+        if (deferreds.length) {
+          var next = deferreds.shift();
+          next.done(Done);
+        } else {
+          args.unshift(this);
+          main.resolveWith.apply(main, args);
+        }
+      }
+
+      if (deferreds.length) {
+
+        deferreds.forEach(function (deferred) {
+          deferred.fail(Fail);
+        });
+
+        var current = deferreds.shift();
+        current.done(Done);
+      } else {
+        main.resolve();
+      }
+
+      return main.promise();
+    }
+  });
+
+  return self;
+});
+define('wunderbits/core/lib/toArray',[],function () {
+
+  
+
+  return function (obj, skip) {
+    return [].slice.call(obj, skip || 0);
+  };
+});
+define('wunderbits/core/lib/events',[
+  './assert',
+  './toArray',
+  './clone'
+], function (assert, toArray, clone) {
+
+  
+
+  var eventSplitter = /\s+/;
+
+  var validationErrors = {
+    'trigger': 'Cannot trigger event(s) without event name(s)',
+    'events': 'Cannot bind/unbind without valid event name(s)',
+    'callback': 'Cannot bind/unbind to an event without valid callback function'
+  };
+
+  var events = {
+
+    'initialize': function () {
+      var self = this;
+      self._events = {};
+      self._cache = {};
+    },
+
+    'on': function (events, callback, context) {
+
+      var self = this;
+
+      // validate arguments
+      assert.string(events, validationErrors.events);
+      assert.function(callback, validationErrors.callback);
+
+      // loop through the events & bind them
+      self.iterate(events, function (name) {
+        // keep the binding
+        self.bind(name, callback, context);
+
+        // if this was a published event, do an immediate trigger
+        var cache = self._cache;
+        if (cache[name]) {
+          callback.apply(context || self, cache[name]);
+        }
+      });
+
+      return self;
+    },
+
+    'off': function (events, callback, context) {
+
+      var self = this;
+
+      // validate events only if a truthy value is passed
+      events && assert.string(events, validationErrors.events);
+
+      // if no arguments were passed, unbind everything
+      if (!events && !callback && !context) {
+        self._events = {};
+        return self;
+      }
+
+      // if no events are passed, unbind all events with this callback
+      events = events || Object.keys(self._events);
+
+      // loop through the events & bind them
+      self.iterate(events, function (name) {
+        self.unbind(name, callback, context);
+      });
+
+      return self;
+    },
+
+    'once': function (events, callback, context) {
+
+      var self = this;
+      var args = toArray(arguments);
+
+      // create a one time binding
+      args[1] = function () {
+        self.off.apply(self, args);
+        callback.apply(context || self, arguments);
+      };
+
+      self.on.apply(self, args);
+
+      return self;
+    },
+
+    'publish': function (events) {
+
+      var self = this;
+      var args = toArray(arguments);
+
+      // validate events
+      assert.string(events, validationErrors.events);
+
+      self.iterate(events, function (name) {
+        var cache = self._cache;
+        if (!cache[name]) {
+          cache[name] = args.slice(1);
+          args[0] = name;
+          self.trigger.apply(self, args);
+        }
+      });
+
+      return self;
+    },
+
+    'unpublish': function (events) {
+
+      var self = this;
+
+      // validate events
+      assert.string(events, validationErrors.events);
+
+      // remove the cache for the events
+      self.iterate(events, function (name) {
+        self._cache[name] = undefined;
+      });
+
+      return self;
+    },
+
+    'unpublishAll': function () {
+      var self = this;
+      self._cache = {};
+      return self;
+    },
+
+    'trigger': function (events) {
+
+      var self = this;
+
+      // validate arguments
+      assert.string(events, validationErrors.trigger);
+
+      // loop through the events & trigger them
+      var params = toArray(arguments, 1);
+      self.iterate(events, function (name) {
+        self.triggerEvent(name, params);
+      });
+
+      return self;
+    },
+
+    'triggerEvent': function (name, params) {
+
+      var self = this;
+      var events = self._events;
+
+      // call sub-event handlers
+      var current = [];
+      var fragments = name.split(':');
+      while (fragments.length) {
+        current.push(fragments.shift());
+        name = current.join(':');
+        if (name in events) {
+          self.triggerSection(name, fragments, params);
+        }
+      }
+    },
+
+    'triggerSection': function (name, fragments, params) {
+
+      var self = this;
+      var events = self._events;
+      var bucket = events[name] || [];
+
+      bucket.forEach(function (item) {
+        var args;
+        if (fragments.length) {
+          args = clone(params);
+          args.unshift(fragments);
+        }
+        item.callback.apply(item.context || self, args || params);
+      });
+    },
+
+    'iterate': function (events, iterator) {
+
+      var self = this;
+
+      if (typeof events === 'string') {
+        events = events.split(eventSplitter);
+      } else {
+        assert.array(events);
+      }
+
+      while (events.length) {
+        iterator.call(self, events.shift());
+      }
+    },
+
+    'bind': function (name, callback, context) {
+
+      var self = this;
+
+      // store the reference to the callback + context
+      var events = self._events;
+      var bucket = events[name] || (events[name] = []);
+      bucket.push({
+        'callback': callback,
+        'context': context
+      });
+
+      return self;
+    },
+
+    'unbind': function (name, callback, context) {
+
+      var self = this;
+
+      // lookup the reference to handler & remove it
+      var events = self._events;
+      var bucket = events[name] || [];
+      var retain = [];
+
+      // loop through the handlers
+      var i = -1, l = bucket.length, item;
+      while (++i < l) {
+        item = bucket[i];
+        if ((callback && callback !== item.callback) ||
+            (context && context !== item.context)) {
+          retain.push(item);
+        }
+      }
+
+      // flush out detached handlers
+      events[name] = retain;
+
+      return self;
+    }
+  };
+
+  return events;
+
+});
+
+define('wunderbits/core/mixins/WBEventsMixin',[
+
+  '../WBMixin',
+  '../lib/events'
+
+], function (WBMixin, events, undefined) {
+
+  
+
+  return WBMixin.extend(events);
 });
