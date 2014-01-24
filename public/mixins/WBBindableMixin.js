@@ -111,12 +111,11 @@ define([
       // this is a wrapper
       var onceBinding = function () {
 
-        (_.isString(callback) ? context[callback] : callback).apply(context, arguments);
+        ((typeof callback === 'string') ? context[callback] : callback).apply(context, arguments);
         self.unbindFrom.call(self, binding);
       };
 
       var binding = {
-
         'uid': createUID(),
         'target': target,
         'event': event,
@@ -137,7 +136,7 @@ define([
 
       var self = this;
 
-      if (!binding || !_.isString(binding.uid)) {
+      if (!binding || (typeof binding.uid !== 'string')) {
         throw new Error('Cannot unbind from undefined or invalid binding');
       }
 
@@ -174,7 +173,7 @@ define([
 
       var self = this;
 
-      if (!target || !_.isFunction(target.on)) {
+      if (!target || (typeof target.on !== 'function')) {
         throw new Error('Cannot unbind from undefined or invalid binding target');
       }
 
@@ -203,19 +202,19 @@ define([
       context = context || this;
 
       // do not change these messages without updating the specs
-      if (!target || !_.isFunction(target.on)) {
+      if (!target || (typeof target.on !== 'function')) {
         throw new Error('Cannot bind to undefined target or target without #on method');
       }
 
-      if (!event || !_.isString(event)) {
+      if (!event || (typeof event !== 'string')) {
         throw new Error('Cannot bind to target event without event name');
       }
 
-      if (!callback || (!_.isFunction(callback) && !_.isString(callback))) {
+      if (!callback || ((typeof callback !== 'function') && (typeof callback !== 'string'))) {
         throw new Error('Cannot bind to target event without a function or method name as callback');
       }
 
-      if (_.isString(callback) && !context[callback]) {
+      if ((typeof callback === 'string') && !context[callback]) {
         throw new Error('Cannot bind to target using a method name that does not exist for the context');
       }
     },
