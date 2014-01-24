@@ -6,12 +6,12 @@ define([
 
 ], function (dependencies, WBMixin, createUID) {
 
-  'use strict';
-
   var _ = dependencies._;
   var Backbone = dependencies.Backbone;
 
+  /* jshint maxcomplexity:10, maxstatements:50, maxlen:200 */
 
+  'use strict';
 
   // keeps callback closure in own execution context with
   // only callback and context
