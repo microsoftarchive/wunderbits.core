@@ -243,7 +243,7 @@ describe('WBEventsMixin', function () {
       expect(callback).to.have.been.calledOn(topic);
     });
 
-    xit('should trigger callback of subscribed parent event', function () {
+    it('should trigger callback of subscribed parent event', function () {
 
       var callback1 = sinon.spy();
       var callback2 = sinon.spy();
@@ -269,7 +269,7 @@ describe('WBEventsMixin', function () {
       expect(callback2).to.have.been.called;
     });
 
-    xit('should trigger multiple events up the chain if multiple eventNames are passed', function () {
+    it('should trigger multiple events up the chain if multiple eventNames are passed', function () {
 
       var callback1 = sinon.spy();
       var callback2 = sinon.spy();
@@ -301,7 +301,7 @@ describe('WBEventsMixin', function () {
       topic.trigger('pass:data', data1, data2, data3);
     });
 
-    xit('should use trailing channel fragment as argument when triggering event on parent', function (done) {
+    it('should use trailing channel fragment as argument when triggering event on parent', function (done) {
 
       var data1 = { foo: 'bar' };
       var data2 = { foo: 'baz' };

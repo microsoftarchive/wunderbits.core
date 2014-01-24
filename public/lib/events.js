@@ -1,7 +1,8 @@
 define([
   './assert',
-  './toArray'
-], function (assert, toArray) {
+  './toArray',
+  './clone'
+], function (assert, toArray, clone) {
 
   'use strict';
 
@@ -145,11 +146,32 @@ define([
 
       var self = this;
       var events = self._events;
-      var bucket = events[name] || (events[name] = []);
 
-      var i = -1, l = bucket.length, item;
-      while (++i < l) {
-        (item = bucket[i]).callback.apply(item.context || self, params);
+      // call sub-event handlers
+      var current = [];
+      var fragments = name.split(':');
+      while (fragments.length) {
+        current.push(fragments.shift());
+        name = current.join(':');
+        if (name in events) {
+          self.triggerSection(name, fragments, params);
+        }
+      }
+    },
+
+    'triggerSection': function (name, fragments, params) {
+
+      var self = this;
+      var events = self._events;
+      var bucket = events[name] || [];
+      var args, item;
+
+      for (var i = -1, l = bucket.length; ++i < l;) {
+        if (fragments.length) {
+          args = clone(params);
+          args.unshift(fragments);
+        }
+        (item = bucket[i]).callback.apply(item.context || self, args || params);
       }
     },
 
