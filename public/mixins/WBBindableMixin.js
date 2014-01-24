@@ -11,13 +11,7 @@ define([
   var _ = dependencies._;
   var Backbone = dependencies.Backbone;
 
-  function _initBindings (self) {
 
-    if (!self._bindings) {
-      self._bindings = {};
-      self._namedEvents = {};
-    }
-  }
 
   // keeps callback closure in own execution context with
   // only callback and context
@@ -48,10 +42,18 @@ define([
 
   return WBMixin.extend({
 
+    'initialize': function () {
+
+      var self = this;
+      if (!self._bindings) {
+        self._bindings = {};
+        self._namedEvents = {};
+      }
+    },
+
     'bindTo': function (target, event, callback, context) {
 
       var self = this;
-      _initBindings(self);
       self.checkBindingArgs.apply(self, arguments);
 
       // if this binding already made, return it
@@ -99,7 +101,6 @@ define([
     'bindOnceTo': function (target, event, callback, context) {
 
       var self = this;
-      _initBindings(self);
       self.checkBindingArgs.apply(self, arguments);
 
       // if this binding already made, return it
@@ -138,7 +139,6 @@ define([
     'unbindFrom': function (binding) {
 
       var self = this;
-      _initBindings(self);
 
       if (!binding || !_.isString(binding.uid)) {
         throw new Error('Cannot unbind from undefined or invalid binding');
@@ -176,7 +176,6 @@ define([
     'unbindFromTarget': function (target) {
 
       var self = this;
-      _initBindings(self);
 
       if (!target || !_.isFunction(target.on)) {
         throw new Error('Cannot unbind from undefined or invalid binding target');
@@ -194,7 +193,6 @@ define([
     'unbindAll': function () {
 
       var self = this;
-      _initBindings(self);
 
       var binding;
       for (var key in self._bindings) {
