@@ -6,7 +6,8 @@ git:
   depth: 1
 
 before_install:
-  - npm install -g --quiet --production --registry http://registry.npmjs.eu/ grunt-cli
+  # - npm install -g --quiet --production --registry http://registry.npmjs.eu/ grunt-cli
+  - npm install -g --quiet --production grunt-cli
 
 install:
   - npm install --loglevel error --development
