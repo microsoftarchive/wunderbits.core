@@ -8,7 +8,8 @@
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js"
+      "public/**/*.js",
+      "!public/mixins/WBBindableMixin.js"
     ]
   }
 }
