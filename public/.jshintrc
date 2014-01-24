@@ -16,7 +16,7 @@
   "indent": 2,
   "jquery": false,
   "laxcomma": false,
-  "maxcomplexity": 6,
+  "maxcomplexity": 5,
   "maxlen": 80,
   "maxstatements": 15,
   "newcap": true,

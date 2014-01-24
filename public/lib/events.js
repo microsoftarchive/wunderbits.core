@@ -164,15 +164,15 @@ define([
       var self = this;
       var events = self._events;
       var bucket = events[name] || [];
-      var args, item;
 
-      for (var i = -1, l = bucket.length; ++i < l;) {
+      bucket.forEach(function (item) {
+        var args;
         if (fragments.length) {
           args = clone(params);
           args.unshift(fragments);
         }
-        (item = bucket[i]).callback.apply(item.context || self, args || params);
-      }
+        item.callback.apply(item.context || self, args || params);
+      });
     },
 
     'iterate': function (events, iterator) {
