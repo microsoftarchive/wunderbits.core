@@ -6,7 +6,7 @@ define([
 
 ], function (WBMixin, assert, createUID) {
 
-  /* jshint maxcomplexity:10, maxstatements:50, maxlen:200 */
+  /* jshint maxcomplexity:12, maxstatements:50, maxlen:200 */
 
   'use strict';
 
@@ -160,13 +160,21 @@ define([
 
       delete self._bindings[binding.uid];
 
-      self._namedEvents[event] = _.filter(self._namedEvents[event], function (_binding) {
-        if (_binding.cid === binding.cid) {
-          return false;
-        }
-      });
+      var namedEvents = self._namedEvents;
+      var events = namedEvents[event];
 
-      return undefined;
+      if (events) {
+        var cloned = events && events.slice(0);
+        for (var i = events.length - 1; i >= 0; i--) {
+          if (events[i].cid === binding.cid) {
+            cloned.splice(i, 1);
+          }
+        }
+
+        namedEvents[event] = cloned;
+      }
+
+      return;
     },
 
     'unbindFromTarget': function (target) {
