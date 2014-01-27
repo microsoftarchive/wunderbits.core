@@ -35,14 +35,8 @@ define([
       // apply the initializer, if any
       initializer && initializer.apply(instance);
 
-      for (var key in properties) {
-        if (properties.hasOwnProperty(key)) {
-          if (instance[key]) {
-            throw new Error('"' + key + '" already exists on the instance');
-          }
-          instance[key] = clone(properties[key]);
-        }
-      }
+      // augment proerties to the instance
+      extend(instance, properties);
 
       return instance;
     },
@@ -65,20 +59,15 @@ define([
         delete behavior.initialize;
       }
 
-      // cache the properties, to be applied later
-      var props = proto.properties = proto.properties || {};
-      var properties = behavior.properties || {};
-      for (var key in properties) {
-        if (properties.hasOwnProperty(key)) {
-          if (proto[key]) {
-            throw new Error('"' + key + '" already exists on the prototype');
-          }
-          props[key] = clone(properties[key]);
-        }
-      }
+      var properties = behavior.properties;
+      delete behavior.properties;
 
       // extend the prototype
       extend(proto, behavior);
+
+      // cache the properties, to be applied later
+      var props = proto.properties = proto.properties || {};
+      extend(props, properties);
 
       return klass;
     }
