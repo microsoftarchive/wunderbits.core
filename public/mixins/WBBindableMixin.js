@@ -39,13 +39,9 @@ define([
 
   return WBMixin.extend({
 
-    'initialize': function () {
-
-      var self = this;
-      if (!self._bindings) {
-        self._bindings = {};
-        self._namedEvents = {};
-      }
+    'properties': {
+      '_bindings': {},
+      '_namedEvents': {}
     },
 
     'bindTo': function (target, event, callback, context) {

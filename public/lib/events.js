@@ -16,10 +16,9 @@ define([
 
   var events = {
 
-    'initialize': function () {
-      var self = this;
-      self._events = {};
-      self._cache = {};
+    'properties': {
+      '_events': {},
+      '_cache': {}
     },
 
     'on': function (events, callback, context) {

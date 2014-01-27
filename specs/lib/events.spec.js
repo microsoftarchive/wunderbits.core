@@ -5,11 +5,10 @@ describe('lib/events', function () {
   var topic;
   beforeEach(function (done) {
     requirejs([
-      'lib/extend',
+      'WBClass',
       'lib/events'
-    ], function (extend, events) {
-      topic = extend({}, events);
-      topic.initialize();
+    ], function (WBClass, events) {
+      topic = new (WBClass.extend(events))();
       done();
     });
   });
