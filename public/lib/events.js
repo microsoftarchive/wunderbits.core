@@ -144,7 +144,7 @@ define([
     'triggerEvent': function (name, params) {
 
       var self = this;
-      var events = self._events;
+      var events = self._events || {};
 
       // call sub-event handlers
       var current = [];
@@ -161,7 +161,7 @@ define([
     'triggerSection': function (name, fragments, params) {
 
       var self = this;
-      var events = self._events;
+      var events = self._events || {};
       var bucket = events[name] || [];
 
       bucket.forEach(function (item) {
@@ -194,7 +194,7 @@ define([
       var self = this;
 
       // store the reference to the callback + context
-      var events = self._events;
+      var events = self._events || {};
       var bucket = events[name] || (events[name] = []);
       bucket.push({
         'callback': callback,
