@@ -132,6 +132,7 @@ define([
       }
     },
 
+    // If any proerties were defined in the mixins, augment them to the instance
     'augmentProperties': function () {
 
       var self = this;
