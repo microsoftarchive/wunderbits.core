@@ -2,9 +2,15 @@ define([
 
   './lib/extend',
   './lib/clone',
+  './lib/assert',
+
   './WBSingleton'
 
-], function (extend, clone, WBSingleton, undefined) {
+], function (
+  extend, clone, assert,
+  WBSingleton,
+  undefined
+) {
 
   'use strict';
 
@@ -22,11 +28,18 @@ define([
         delete behavior.initialize;
       }
 
+      // augment mixin's properties object into the instance
+      var properties = behavior.properties;
+      delete behavior.properties;
+
       // mixin the behavior
       extend(instance, behavior);
 
       // apply the initializer, if any
       initializer && initializer.apply(instance);
+
+      // augment proerties to the instance
+      properties && extend(instance, properties);
 
       return instance;
     },
@@ -34,11 +47,10 @@ define([
     // Apply the mixin to the class directly
     'applyToClass': function (klass) {
 
-      var proto = klass.prototype;
-      if (!proto || proto.constructor !== klass) {
-        throw new Error('applyToClass expects a class');
-      }
+      // validate class
+      assert.class(klass, 'applyToClass expects a class');
 
+      var proto = klass.prototype;
       var behavior = clone(this.Behavior);
 
       // cache the mixin's initializer, to be applied later
@@ -49,8 +61,15 @@ define([
         delete behavior.initialize;
       }
 
+      var properties = behavior.properties;
+      delete behavior.properties;
+
       // extend the prototype
       extend(proto, behavior);
+
+      // cache the properties, to be applied later
+      var props = proto.properties = proto.properties || {};
+      properties && extend(props, properties);
 
       return klass;
     }

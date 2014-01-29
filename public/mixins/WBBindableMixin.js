@@ -39,13 +39,9 @@ define([
 
   return WBMixin.extend({
 
-    'initialize': function () {
-
-      var self = this;
-      if (!self._bindings) {
-        self._bindings = {};
-        self._namedEvents = {};
-      }
+    'properties': {
+      '_bindings': {},
+      '_namedEvents': {}
     },
 
     'bindTo': function (target, event, callback, context) {
@@ -236,14 +232,15 @@ define([
       if (events) {
         for (var i = 0, max = events.length; i < max; i++) {
 
-          var boundTarget = events[i].target;
+          var current = events[i] || {};
+          var boundTarget = current.target;
           if (!boundTarget) {
             return false;
           }
 
           var targetBound = target.uid ? target.uid === boundTarget.uid : false;
-          if (events[i].originalCallback === callback && targetBound) {
-            return events[i];
+          if (current.originalCallback === callback && targetBound) {
+            return current;
           }
         }
       }

@@ -2,9 +2,10 @@
 define([
 
   './lib/extend',
+  './lib/clone',
   './lib/createUID'
 
-], function (extend, createUID, undefined) {
+], function (extend, clone, createUID, undefined) {
 
   'use strict';
 
@@ -95,6 +96,9 @@ define([
     // save options, make sure it's at least an empty object
     self.options = options || self.options;
 
+    // augment properties from mixins
+    self.augmentProperties();
+
     // initialize the instance
     self.initialize.apply(self, arguments);
 
@@ -118,7 +122,6 @@ define([
     'initMixins': function () {
 
       var self = this;
-
       var initializers = (self.initializers || []).slice(0);
 
       var initializer;
@@ -126,6 +129,17 @@ define([
         initializer = initializers.shift();
         (typeof initializer === 'function') &&
           initializer.apply(self, arguments);
+      }
+    },
+
+    // If any proerties were defined in the mixins, augment them to the instance
+    'augmentProperties': function () {
+
+      var self = this;
+      var properties = (self.properties || {});
+
+      for (var key in properties) {
+        self[key] = clone(properties[key]);
       }
     }
   });

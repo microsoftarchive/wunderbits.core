@@ -18,6 +18,11 @@ define(function () {
     assert(nativeIsArray(array), message);
   };
 
+  assert.class = function (klass, message) {
+    var proto = klass.prototype;
+    assert(proto && proto.constructor === klass, message);
+  };
+
   var types = [
     'undefined',
     'boolean',
