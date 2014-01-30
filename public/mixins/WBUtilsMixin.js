@@ -4,19 +4,18 @@ define([
   '../WBDeferred',
   '../When',
 
+  '../lib/toArray',
   '../lib/forEach',
   '../lib/delay',
   '../lib/defer'
 
 ], function (
   WBMixin, WBDeferred, When,
-  forEach, delay, defer,
+  toArray, forEach, delay, defer,
   undefined
 ) {
 
   'use strict';
-
-  var arrRef = [];
 
   return WBMixin.extend({
 
@@ -30,23 +29,31 @@ define([
       return When.when.apply(self, arguments);
     },
 
-    'defer': function () {
-      var args = arrRef.slice.call(arguments);
+    'defer': function (fn) {
+      var self = this;
+      var args = toArray(arguments);
+      // default context to self
       args[1] = args[1] || this;
+      // support string names of functions on self
+      (typeof fn === 'string') && (args[0] = self[fn]);
       return defer.apply(null, args);
     },
 
-    'delay': function () {
-      var args = arrRef.slice.call(arguments);
-      var context = (args[2] = args[2] || this);
-      var fn = args[0];
-      (typeof fn === 'string') && (args[0] = context[fn]);
+    'delay': function (fn) {
+      var self = this;
+      var args = toArray(arguments);
+      // default context to self
+      args[2] = args[2] || self;
+      // support string names of functions on self
+      (typeof fn === 'string') && (args[0] = self[fn]);
       return delay.apply(null, args);
     },
 
     'forEach': function (collection, fn, context) {
       var self = this;
+      // default context to self
       context = context || self;
+      // support string names of functions on self
       (typeof fn === 'string') && (fn = self[fn]);
       forEach(collection, fn, context);
     }
