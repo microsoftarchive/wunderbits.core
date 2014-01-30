@@ -1,11 +1,12 @@
 define([
   '../lib/clone',
   '../lib/merge',
+  '../lib/extend',
   '../lib/isEqual',
 
   '../WBMixin'
 ], function (
-  clone, merge, isEqual,
+  clone, merge, extend, isEqual,
   WBMixin,
   undefined
 ) {
@@ -20,9 +21,14 @@ define([
     'initialize': function (attributes, options) {
 
       var self = this;
-      self.attributes = attributes || {};
+      self.attributes = extend({}, self.defaults, attributes);
       self.options = options || {};
       self.changed = {};
+    },
+
+    'get': function (key) {
+      console.warn('getters are deprecated');
+      return this.attributes[key];
     },
 
     'set': function (key, val, options) {
@@ -54,6 +60,17 @@ define([
         var changes = self.changes(attrs, options);
         self._trigger(attrs, changes, options);
       }
+
+      return self;
+    },
+
+    'unset': function (attr, options) {
+      return this.set(attr, undefined, extend({}, options, { 'unset': true }));
+    },
+
+    'clear': function (options) {
+      var self = this;
+      return self.set(self.defaults, options);
     },
 
     'changes': function (attrs, options) {
@@ -77,8 +94,9 @@ define([
           delete self.changed[key];
         }
 
-        options.unset ? delete current[key] : current[key] = val;
+        current[key] = options.unset ? undefined : val;
       }
+
       return changes;
     },
 
