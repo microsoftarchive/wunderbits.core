@@ -146,4 +146,16 @@ describe('WBDeferrableMixin', function () {
       });
     });
   });
+
+  describe('#delay', function () {
+    it('should execute the function after the said delay');
+    it('should resolve a function name string to the function on self');
+    it('should default to self for context, if no context is passed');
+  });
+
+  describe('#defer', function () {
+    it('should execute the function in the next event loop');
+    it('should resolve a function name string to the function on self');
+    it('should default to self for context, if no context is passed');
+  });
 });
