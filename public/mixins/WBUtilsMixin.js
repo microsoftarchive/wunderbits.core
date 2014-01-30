@@ -7,11 +7,12 @@ define([
   '../lib/toArray',
   '../lib/forEach',
   '../lib/delay',
-  '../lib/defer'
+  '../lib/defer',
+  '../lib/functions'
 
 ], function (
   WBMixin, WBDeferred, When,
-  toArray, forEach, delay, defer,
+  toArray, forEach, delay, defer, functions,
   undefined
 ) {
 
@@ -56,6 +57,11 @@ define([
       // support string names of functions on self
       (typeof fn === 'string') && (fn = self[fn]);
       forEach(collection, fn, context);
+    },
+
+    'functions': function (obj) {
+      return functions(obj || this);
     }
   });
+
 });
