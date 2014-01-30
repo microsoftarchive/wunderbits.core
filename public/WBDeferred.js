@@ -21,8 +21,9 @@ define([
 
   var proto = {
 
-    'constructor': function () {
+    'constructor': function (context) {
       var self = this;
+      self._context = context;
       self._state = states.pending;
       self._args = [];
       self.handlers = [];
@@ -43,7 +44,7 @@ define([
       var handlers = self.handlers, handle;
       while (handlers.length) {
         handle = handlers.shift();
-        self.invoke(handle, withContext);
+        self.invoke(handle, withContext || self._context);
       }
     },
 
