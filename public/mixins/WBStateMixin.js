@@ -79,7 +79,7 @@ define([
       var key, val;
       var changes = [];
 
-      var prev = clone(self.attributes);
+      var prev = clone(self.attributes, true);
       var current = self.attributes;
       self.changed = {};
 

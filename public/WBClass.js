@@ -139,7 +139,7 @@ define([
       var properties = (self.properties || {});
 
       for (var key in properties) {
-        self[key] = clone(properties[key]);
+        self[key] = clone(properties[key], true);
       }
     }
   });

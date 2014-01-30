@@ -19,7 +19,7 @@ define([
     // Apply the mixin to an instance of a class
     'applyTo': function (instance) {
 
-      var behavior = clone(this.Behavior);
+      var behavior = clone(this.Behavior, true);
 
       // apply mixin's initialize & remove it from the instance
       var initializer;
@@ -51,7 +51,7 @@ define([
       assert.class(klass, 'applyToClass expects a class');
 
       var proto = klass.prototype;
-      var behavior = clone(this.Behavior);
+      var behavior = clone(this.Behavior, true);
 
       // cache the mixin's initializer, to be applied later
       var initialize = behavior.initialize;
@@ -84,7 +84,7 @@ define([
     mixinProps || (mixinProps = {});
     staticProps || (staticProps = {});
 
-    var current = clone(this.Behavior);
+    var current = clone(this.Behavior, true);
     staticProps.Behavior = extend(current, mixinProps);
     var mixin = WBSingleton.extend.call(this, staticProps);
 
