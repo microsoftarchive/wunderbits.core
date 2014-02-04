@@ -27,7 +27,7 @@ define([
 
     'when': function () {
       var self = this;
-      return When.when.apply(self, arguments);
+      return When.apply(self, arguments);
     },
 
     'defer': function (fn) {
