@@ -65,7 +65,8 @@ define([
         (type === 'done' && state === states.resolved) ||
         (type === 'fail' && state === states.rejected);
 
-      isCompleted && deferredResponse.fn.apply(context, args);
+      var hasFn = deferredResponse.fn;
+      isCompleted && hasFn && deferredResponse.fn.apply(context, args);
     },
 
     'promise': function () {
