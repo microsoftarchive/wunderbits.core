@@ -138,8 +138,14 @@ define([
       var self = this;
       var properties = (self.properties || {});
 
-      for (var key in properties) {
-        self[key] = clone(properties[key], true);
+      var key, value;
+      for (key in properties) {
+        value = properties[key];
+        if (typeof value === 'function') {
+          self[key] = value.call(self);
+        } else {
+          self[key] = clone(value, true);
+        }
       }
     }
   });
