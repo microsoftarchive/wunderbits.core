@@ -1,23 +1,24 @@
 {
+  "options": {
+    "compress": true,
+    "twoFiles": true,
+    "useSourceUrl": false,
+    "logLevel": 3,
+    "baseUrl": "public",
+    "buildDir": "dist"
+  },
+
   "core": {
     "options": {
       "packages": [{
         "name": "wunderbits/core",
-        "location": "public"
+        "location": "."
       }],
       "include": [
         "wunderbits/core/WBClass",
-        "wunderbits/core/WBSingleton",
-        "wunderbits/core/WBMixin",
-        "wunderbits/core/WBDeferred",
-        "wunderbits/core/When",
-        "wunderbits/core/mixins/WBEventsMixin"
-      ],
-      "optimize": "none",
-      "useSourceUrl": false,
-      "preserveLicenseComments": false,
-      "logLevel": 3,
-      "out": "dist/wunderbits.core.js"
+        "wunderbits/core/WBEventEmitter",
+        "wunderbits/core/WBDeferred"
+      ]
     }
   }
 }

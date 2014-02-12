@@ -18,8 +18,7 @@
     "grunt": "~0.4.2",
     "grunt-complexity": "~0.1.4",
     "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-requirejs": "~0.4.1",
+    "bilder-requirejs": "0.1.2",
     "kaapi": "~0.1.5",
     "kaapi.coverage": "0.0.2"
   }

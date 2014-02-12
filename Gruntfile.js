@@ -4,8 +4,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-complexity');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('bilder-requirejs');
   grunt.loadNpmTasks('kaapi');
 
   function config (name) {
@@ -20,7 +19,6 @@ module.exports = function (grunt) {
 
     // JS Build
     'requirejs': config('requirejs'),
-    'uglify': config('uglify'),
 
     // Specs
     'kaapi/node': config('kaapi'),
@@ -29,7 +27,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('lint', ['jshint', 'complexity']);
   grunt.registerTask('specs', ['kaapi/node', 'kaapi/phantom']);
-  grunt.registerTask('build', ['requirejs', 'uglify']);
+  grunt.registerTask('build', ['requirejs']);
 
   grunt.registerTask('default', ['lint', 'specs', 'build']);
 };
