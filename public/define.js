@@ -45,9 +45,15 @@
   }
 
   function fakeDefine (name, deps, fn) {
-    deps = deps.map(function (depName) {
-      return (depName[0] === '.') ? resolve(name, depName) : depName;
-    });
+
+    if (typeof deps === 'function' && !fn) {
+      fn = deps;
+      deps = [];
+    } else {
+      deps = deps.map(function (depName) {
+        return (depName[0] === '.') ? resolve(name, depName) : lookup(depName);
+      });
+    }
 
     var path = name.split('/');
     name = path.pop();
