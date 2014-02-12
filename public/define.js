@@ -2,11 +2,11 @@
 
   'use strict';
 
-  var global = window;
-  var define = global.define;
+  var root = (typeof module !== 'undefined') ? module.exports : window;
+  var define = root.define;
 
   function lookup (name) {
-    var node = global;
+    var node = root;
     var sections = name;
     if (typeof name === 'string') {
       sections = name.split('/');
@@ -62,6 +62,6 @@
   }
 
   if (typeof define !== 'function' || !define.amd) {
-    global.define = fakeDefine;
+    global.define = root.define = fakeDefine;
   }
 }).call(this);
