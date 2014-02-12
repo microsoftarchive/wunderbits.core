@@ -4,7 +4,7 @@ define(function () {
 
   function forArray (array, iterator, context) {
     for (var i = 0, l = array.length; i < l; i++) {
-      if (iterator.call(context, array[i], i, array)) {
+      if (iterator.call(context, array[i], i, array) === false) {
         return;
       }
     }
@@ -13,7 +13,7 @@ define(function () {
   function forObject (object, iterator, context) {
     for (var key in object) {
       if (object.hasOwnProperty(key)) {
-        if (iterator.call(context, object[key], key)) {
+        if (iterator.call(context, object[key], key) === false) {
           return;
         }
       }
