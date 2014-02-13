@@ -144,7 +144,7 @@ describe('WBClass', function () {
         });
 
         done();
-      })
+      });
     });
 
     it('should be auto-applied, if any', function () {

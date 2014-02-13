@@ -23,7 +23,7 @@ describe('WBSingleton', function () {
       }).to.throw(Error);
 
       expect(function () {
-        new (Topic.extend());
+        new (Topic.extend())();
       }).to.throw(Error);
     });
   });
