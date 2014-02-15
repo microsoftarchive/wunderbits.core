@@ -97,6 +97,16 @@ describe('WBBindableMixin', function () {
       fn.should.throw('Cannot bind to target event without a function or method name as callback');
     });
 
+    it ('should throw error if called with a method name as callback ' +
+        'and method does not exist for context', function () {
+
+      var fn = function () {
+        topic.bindTo(model, 'event', 'sdflksjdflksdjflskdjflskdfj');
+      };
+
+      fn.should.throw('Cannot bind to target using a method name that does not exist for the context');
+    });
+
     it('should throw error if called with a mothod name as callback does not exist for the context', function () {
 
       var fn = function () {
