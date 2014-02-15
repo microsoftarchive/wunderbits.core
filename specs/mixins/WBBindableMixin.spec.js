@@ -423,6 +423,24 @@ describe('WBBindableMixin', function () {
       binding.should.not.include.keys('target');
       binding.should.not.include.keys('event');
     });
+
+    describe('given the binding object is destoyed', function () {
+
+      it ('should return early', function () {
+
+        var spy = sinon.spy();
+        var binding = {
+          'uid': 'sdlfkjsdflksjdflkj',
+          'target': {
+            'off': spy
+          }
+        };
+
+        topic.unbindFrom(binding);
+
+        spy.should.not.have.been.called;
+      });
+    });
   });
 
   describe('#unbindFromTarget', function () {
