@@ -240,6 +240,29 @@ describe('WBBindableMixin', function () {
         expect(callback).to.have.been.calledTwice;
       });
     });
+
+    describe('given that the target apears to be a jquery object', function () {
+
+      it ('it should use #callbackFactory to generate a wrapped callback that executes', function () {
+
+        var spy = sinon.spy(topic, 'callbackFactory');
+        var on = function () {};
+        var target = {
+          'constructor': {
+            'fn': {
+              'on': on
+            }
+          }
+        };
+        target.on = on;
+
+        topic.bindTo(target, 'foobar', function () {});
+
+        spy.should.have.been.calledOnce;
+
+        topic.callbackFactory.restore();
+      });
+    });
   });
 
   describe('#bindOnceTo', function () {
