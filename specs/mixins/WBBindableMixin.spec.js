@@ -308,6 +308,51 @@ describe('WBBindableMixin', function () {
       topic.unbindFrom.should.have.been.calledOnce;
       topic.unbindFrom.should.have.been.calledWith(binding);
     });
+
+    describe('given that the same callback is bound more than once', function () {
+
+      it('should actually only bind the callback once', function () {
+
+        var callback = sinon.spy();
+
+        topic.bindOnceTo(model, 'justone', callback);
+        topic.bindOnceTo(model, 'justone', callback);
+
+        model.trigger('justone');
+        expect(callback).to.have.been.calledOnce;
+
+        var callback2 = sinon.spy();
+        var obj = {};
+        obj.callback = callback2;
+
+        topic.bindOnceTo(model, 'justonename', 'callback', obj);
+        topic.bindOnceTo(model, 'justonename', 'callback', obj);
+
+        model.trigger('justonename');
+
+        expect(obj.callback).to.have.been.calledOnce;
+
+      });
+
+      it('should return the same binding object', function () {
+
+        var callback = sinon.spy();
+
+        var binding1 = topic.bindOnceTo(model, 'justone', callback);
+        var binding2 = topic.bindOnceTo(model, 'justone', callback);
+
+        expect(binding1.uid).to.equal(binding2.uid);
+
+        var callback2 = sinon.spy();
+        var obj = {};
+        obj.callback = callback2;
+
+        var binding3 = topic.bindOnceTo(model, 'justone', 'callback', obj);
+        var binding4 = topic.bindOnceTo(model, 'justone', 'callback', obj);
+
+        expect(binding3.uid).to.equal(binding4.uid);
+      });
+    });
   });
 
   describe('#unbindFrom', function () {
