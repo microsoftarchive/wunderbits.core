@@ -233,6 +233,10 @@ define([
         for (var i = 0, max = events.length; i < max; i++) {
 
           var current = events[i] || {};
+
+          // the below !boundTarget check seems unreachable
+          // was added in this commit of the web app: c75d5077c0a8629b60cb6dd1cd78d3bc77fcac48
+          // need to ask Adam under what conditions this would be possible
           var boundTarget = current.target;
           if (!boundTarget) {
             return false;

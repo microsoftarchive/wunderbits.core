@@ -541,4 +541,26 @@ describe('WBBindableMixin', function () {
       topic.unbindFrom.should.have.been.calledWith(binding2);
     });
   });
+
+  describe('#isAlreadyBound', function () {
+
+    it ('should return false if target and callback not already bound to event', function () {
+
+      var fn = function () {};
+      topic.bindTo(model, 'event', fn);
+      var isBound = topic.isAlreadyBound(model2, 'event', fn);
+      isBound.should.be.false;
+    });
+
+    it ('should return false early if target was bound, then unbound, and ' +
+        'now being bound again with same event and callback', function () {
+
+      var fn = function () {};
+      var binding = topic.bindTo(model, 'event', fn);
+      topic.unbindFrom(binding);
+
+      var isBound = topic.isAlreadyBound(model, 'event', fn);
+      isBound.should.be.false;
+    });
+  });
 });
