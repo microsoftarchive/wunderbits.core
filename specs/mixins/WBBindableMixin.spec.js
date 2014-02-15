@@ -32,6 +32,42 @@ describe('WBBindableMixin', function () {
     });
   });
 
+  describe('#callbackFactory', function () {
+
+    it ('should take an anonymouse callback function and context and ' +
+        'return a callback that always executes with the correct context', function () {
+
+      var spy = sinon.spy();
+      var obj = {
+        'func': spy
+      };
+
+      var callback = topic.callbackFactory(function () {
+
+        this.func();
+      }, obj);
+      callback();
+
+      spy.should.have.been.calledOnce;
+      spy.should.have.been.calledOn(obj);
+    });
+
+    it ('should take a string as a callback method name on context ' +
+        'and return a callback that executes with the correct context', function () {
+
+      var spy = sinon.spy();
+      var obj = {
+        'func': spy
+      };
+
+      var callback = topic.callbackFactory('func', obj);
+      callback();
+
+      spy.should.have.been.calledOnce;
+      spy.should.have.been.calledOn(obj);
+    });
+  });
+
   describe('#bindTo', function () {
 
     it('should throw error if called without target', function () {

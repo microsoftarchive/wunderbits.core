@@ -10,38 +10,38 @@ define([
 
   'use strict';
 
-  // keeps callback closure in own execution context with
-  // only callback and context
-  function _callbackFactory (callback, context) {
-
-    var bindCallback;
-
-    var forString = function stringCallback () {
-      context[callback].apply(context, arguments);
-    };
-
-    var forFunction = function functionCallback () {
-      callback.apply(context, arguments);
-    };
-
-    if (typeof callback === 'string') {
-      bindCallback = forString;
-      // cancel alternate closure immediately
-      forFunction = null;
-    }
-    else {
-      bindCallback = forFunction;
-      forString = null;
-    }
-
-    return bindCallback;
-  }
-
   return WBMixin.extend({
 
     'properties': {
       '_bindings': {},
       '_namedEvents': {}
+    },
+
+    // keeps callback closure in own execution context with
+    // only callback and context
+    'callbackFactory': function  (callback, context) {
+
+      var bindCallback;
+
+      var forString = function stringCallback () {
+        context[callback].apply(context, arguments);
+      };
+
+      var forFunction = function functionCallback () {
+        callback.apply(context, arguments);
+      };
+
+      if (typeof callback === 'string') {
+        bindCallback = forString;
+        // cancel alternate closure immediately
+        forFunction = null;
+      }
+      else {
+        bindCallback = forFunction;
+        forString = null;
+      }
+
+      return bindCallback;
     },
 
     'bindTo': function (target, event, callback, context) {
@@ -65,7 +65,7 @@ define([
         // jquery does not take context in .on()
         // cannot assume on takes context as a param for bindable object
         // create a callback which will apply the original callback in the correct context
-        callbackFunc = _callbackFactory(callback, context);
+        callbackFunc = self.callbackFactory(callback, context);
         args = [event, callbackFunc];
       } else {
         // Backbone accepts context when binding, simply pass it on
