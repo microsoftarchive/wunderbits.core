@@ -29,7 +29,7 @@ describe('lib/clone', function () {
   });
 
   it('should create an exact copy of an object', function () {
-    var copy = topic(original);
+    var copy = topic(original, true);
 
     expect(copy).to.not.equal(original);
     expect(copy).to.deep.equal(original);

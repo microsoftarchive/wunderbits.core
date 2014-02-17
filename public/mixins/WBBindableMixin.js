@@ -10,42 +10,38 @@ define([
 
   'use strict';
 
-  // keeps callback closure in own execution context with
-  // only callback and context
-  function _callbackFactory (callback, context) {
-
-    var bindCallback;
-
-    var forString = function stringCallback () {
-      context[callback].apply(context, arguments);
-    };
-
-    var forFunction = function functionCallback () {
-      callback.apply(context, arguments);
-    };
-
-    if (typeof callback === 'string') {
-      bindCallback = forString;
-      // cancel alternate closure immediately
-      forFunction = null;
-    }
-    else {
-      bindCallback = forFunction;
-      forString = null;
-    }
-
-    return bindCallback;
-  }
-
   return WBMixin.extend({
 
-    'initialize': function () {
+    'properties': {
+      '_bindings': {},
+      '_namedEvents': {}
+    },
 
-      var self = this;
-      if (!self._bindings) {
-        self._bindings = {};
-        self._namedEvents = {};
+    // keeps callback closure in own execution context with
+    // only callback and context
+    'callbackFactory': function  (callback, context) {
+
+      var bindCallback;
+
+      var forString = function stringCallback () {
+        context[callback].apply(context, arguments);
+      };
+
+      var forFunction = function functionCallback () {
+        callback.apply(context, arguments);
+      };
+
+      if (typeof callback === 'string') {
+        bindCallback = forString;
+        // cancel alternate closure immediately
+        forFunction = null;
       }
+      else {
+        bindCallback = forFunction;
+        forString = null;
+      }
+
+      return bindCallback;
     },
 
     'bindTo': function (target, event, callback, context) {
@@ -69,7 +65,7 @@ define([
         // jquery does not take context in .on()
         // cannot assume on takes context as a param for bindable object
         // create a callback which will apply the original callback in the correct context
-        callbackFunc = _callbackFactory(callback, context);
+        callbackFunc = self.callbackFactory(callback, context);
         args = [event, callbackFunc];
       } else {
         // Backbone accepts context when binding, simply pass it on
@@ -236,14 +232,19 @@ define([
       if (events) {
         for (var i = 0, max = events.length; i < max; i++) {
 
-          var boundTarget = events[i].target;
+          var current = events[i] || {};
+
+          // the below !boundTarget check seems unreachable
+          // was added in this commit of the web app: c75d5077c0a8629b60cb6dd1cd78d3bc77fcac48
+          // need to ask Adam under what conditions this would be possible
+          var boundTarget = current.target;
           if (!boundTarget) {
             return false;
           }
 
           var targetBound = target.uid ? target.uid === boundTarget.uid : false;
-          if (events[i].originalCallback === callback && targetBound) {
-            return events[i];
+          if (current.originalCallback === callback && targetBound) {
+            return current;
           }
         }
       }

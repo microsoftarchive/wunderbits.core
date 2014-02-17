@@ -32,6 +32,42 @@ describe('WBBindableMixin', function () {
     });
   });
 
+  describe('#callbackFactory', function () {
+
+    it ('should take an anonymouse callback function and context and ' +
+        'return a callback that always executes with the correct context', function () {
+
+      var spy = sinon.spy();
+      var obj = {
+        'func': spy
+      };
+
+      var callback = topic.callbackFactory(function () {
+
+        this.func();
+      }, obj);
+      callback();
+
+      spy.should.have.been.calledOnce;
+      spy.should.have.been.calledOn(obj);
+    });
+
+    it ('should take a string as a callback method name on context ' +
+        'and return a callback that executes with the correct context', function () {
+
+      var spy = sinon.spy();
+      var obj = {
+        'func': spy
+      };
+
+      var callback = topic.callbackFactory('func', obj);
+      callback();
+
+      spy.should.have.been.calledOnce;
+      spy.should.have.been.calledOn(obj);
+    });
+  });
+
   describe('#bindTo', function () {
 
     it('should throw error if called without target', function () {
@@ -59,6 +95,16 @@ describe('WBBindableMixin', function () {
       };
 
       fn.should.throw('Cannot bind to target event without a function or method name as callback');
+    });
+
+    it ('should throw error if called with a method name as callback ' +
+        'and method does not exist for context', function () {
+
+      var fn = function () {
+        topic.bindTo(model, 'event', 'sdflksjdflksdjflskdjflskdfj');
+      };
+
+      fn.should.throw('Cannot bind to target using a method name that does not exist for the context');
     });
 
     it('should throw error if called with a mothod name as callback does not exist for the context', function () {
@@ -204,6 +250,29 @@ describe('WBBindableMixin', function () {
         expect(callback).to.have.been.calledTwice;
       });
     });
+
+    describe('given that the target apears to be a jquery object', function () {
+
+      it ('it should use #callbackFactory to generate a wrapped callback that executes', function () {
+
+        var spy = sinon.spy(topic, 'callbackFactory');
+        var on = function () {};
+        var target = {
+          'constructor': {
+            'fn': {
+              'on': on
+            }
+          }
+        };
+        target.on = on;
+
+        topic.bindTo(target, 'foobar', function () {});
+
+        spy.should.have.been.calledOnce;
+
+        topic.callbackFactory.restore();
+      });
+    });
   });
 
   describe('#bindOnceTo', function () {
@@ -248,6 +317,51 @@ describe('WBBindableMixin', function () {
 
       topic.unbindFrom.should.have.been.calledOnce;
       topic.unbindFrom.should.have.been.calledWith(binding);
+    });
+
+    describe('given that the same callback is bound more than once', function () {
+
+      it('should actually only bind the callback once', function () {
+
+        var callback = sinon.spy();
+
+        topic.bindOnceTo(model, 'justone', callback);
+        topic.bindOnceTo(model, 'justone', callback);
+
+        model.trigger('justone');
+        expect(callback).to.have.been.calledOnce;
+
+        var callback2 = sinon.spy();
+        var obj = {};
+        obj.callback = callback2;
+
+        topic.bindOnceTo(model, 'justonename', 'callback', obj);
+        topic.bindOnceTo(model, 'justonename', 'callback', obj);
+
+        model.trigger('justonename');
+
+        expect(obj.callback).to.have.been.calledOnce;
+
+      });
+
+      it('should return the same binding object', function () {
+
+        var callback = sinon.spy();
+
+        var binding1 = topic.bindOnceTo(model, 'justone', callback);
+        var binding2 = topic.bindOnceTo(model, 'justone', callback);
+
+        expect(binding1.uid).to.equal(binding2.uid);
+
+        var callback2 = sinon.spy();
+        var obj = {};
+        obj.callback = callback2;
+
+        var binding3 = topic.bindOnceTo(model, 'justone', 'callback', obj);
+        var binding4 = topic.bindOnceTo(model, 'justone', 'callback', obj);
+
+        expect(binding3.uid).to.equal(binding4.uid);
+      });
     });
   });
 
@@ -318,6 +432,24 @@ describe('WBBindableMixin', function () {
       binding.should.not.include.keys('callback');
       binding.should.not.include.keys('target');
       binding.should.not.include.keys('event');
+    });
+
+    describe('given the binding object is destoyed', function () {
+
+      it ('should return early', function () {
+
+        var spy = sinon.spy();
+        var binding = {
+          'uid': 'sdlfkjsdflksjdflkj',
+          'target': {
+            'off': spy
+          }
+        };
+
+        topic.unbindFrom(binding);
+
+        spy.should.not.have.been.called;
+      });
     });
   });
 
@@ -407,6 +539,28 @@ describe('WBBindableMixin', function () {
       topic.unbindFrom.should.have.been.calledTwice;
       topic.unbindFrom.should.have.been.calledWith(binding1);
       topic.unbindFrom.should.have.been.calledWith(binding2);
+    });
+  });
+
+  describe('#isAlreadyBound', function () {
+
+    it ('should return false if target and callback not already bound to event', function () {
+
+      var fn = function () {};
+      topic.bindTo(model, 'event', fn);
+      var isBound = topic.isAlreadyBound(model2, 'event', fn);
+      isBound.should.be.false;
+    });
+
+    it ('should return false early if target was bound, then unbound, and ' +
+        'now being bound again with same event and callback', function () {
+
+      var fn = function () {};
+      var binding = topic.bindTo(model, 'event', fn);
+      topic.unbindFrom(binding);
+
+      var isBound = topic.isAlreadyBound(model, 'event', fn);
+      isBound.should.be.false;
     });
   });
 });

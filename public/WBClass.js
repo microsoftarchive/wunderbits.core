@@ -2,14 +2,12 @@
 define([
 
   './lib/extend',
+  './lib/clone',
   './lib/createUID'
 
-], function (extend, createUID, undefined) {
+], function (extend, clone, createUID, undefined) {
 
   'use strict';
-
-  // Shared empty constructor function to aid in prototype-chain creation.
-  var Constructor = function () {};
 
   // Helper function to correctly set up the prototype chain, for subclasses.
   // Similar to `goog.inherits`, but uses a hash of prototype properties and
@@ -35,8 +33,7 @@ define([
 
     // Set the prototype chain to inherit from `parent`, without calling
     // `parent`'s constructor function.
-    Constructor.prototype = parent.prototype;
-    child.prototype = new Constructor();
+    child.prototype = Object.create(parent.prototype);
 
     // Add prototype properties (instance properties) to the subclass,
     // if supplied.
@@ -95,6 +92,9 @@ define([
     // save options, make sure it's at least an empty object
     self.options = options || self.options;
 
+    // augment properties from mixins
+    self.augmentProperties();
+
     // initialize the instance
     self.initialize.apply(self, arguments);
 
@@ -118,7 +118,6 @@ define([
     'initMixins': function () {
 
       var self = this;
-
       var initializers = (self.initializers || []).slice(0);
 
       var initializer;
@@ -126,6 +125,23 @@ define([
         initializer = initializers.shift();
         (typeof initializer === 'function') &&
           initializer.apply(self, arguments);
+      }
+    },
+
+    // If any proerties were defined in the mixins, augment them to the instance
+    'augmentProperties': function () {
+
+      var self = this;
+      var properties = (self.properties || {});
+
+      var key, value;
+      for (key in properties) {
+        value = properties[key];
+        if (typeof value === 'function') {
+          self[key] = value.call(self);
+        } else {
+          self[key] = clone(value, true);
+        }
       }
     }
   });

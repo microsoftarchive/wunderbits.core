@@ -7,22 +7,29 @@ define([
   function proxy (name) {
     return function () {
       var deferred = this.deferred;
-      return deferred[name].apply(deferred, arguments);
+      deferred[name].apply(deferred, arguments);
+      return this;
     };
   }
 
   var proto = {
     'constructor': function (deferred) {
       this.deferred = deferred;
+    },
+
+    'promise': function () {
+      return this;
+    },
+
+    'state': function () {
+      return this.deferred.state();
     }
   };
 
   [
-    'state',
     'done',
     'fail',
-    'then',
-    'promise'
+    'then'
   ].forEach(function (name) {
     proto[name] = proxy(name);
   });

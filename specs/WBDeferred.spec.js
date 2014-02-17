@@ -24,8 +24,8 @@ describe('WBDeferred', function () {
 
   describe('Deferred state', function () {
 
-    function createDeferred(fn) {
-      return new WBDeferred(fn);
+    function createDeferred (context) {
+      return new WBDeferred(context);
     }
 
     describe('should change it\'s state to', function () {
@@ -54,11 +54,12 @@ describe('WBDeferred', function () {
 
     it('should create a promise object & it\'s methods', function () {
 
-      createDeferred(function(defer) {
+      createDeferred(function (defer) {
 
         var promise = defer.promise();
         var func = function() {};
         var funcPromise = defer.promise(func);
+
         expect(Object.keys(defer.promise())).to.deep.equal(Object.keys(promise));
         expect(funcPromise).to.equal(func);
 

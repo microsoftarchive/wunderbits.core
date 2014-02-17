@@ -2,11 +2,11 @@
 
   'use strict';
 
-  var global = window;
-  var define = global.define;
+  var root = (typeof module !== 'undefined') ? module.exports : window;
+  var define = root.define;
 
   function lookup (name) {
-    var node = global;
+    var node = root;
     var sections = name;
     if (typeof name === 'string') {
       sections = name.split('/');
@@ -45,9 +45,15 @@
   }
 
   function fakeDefine (name, deps, fn) {
-    deps = deps.map(function (depName) {
-      return (depName[0] === '.') ? resolve(name, depName) : depName;
-    });
+
+    if (typeof deps === 'function' && !fn) {
+      fn = deps;
+      deps = [];
+    } else {
+      deps = deps.map(function (depName) {
+        return (depName[0] === '.') ? resolve(name, depName) : lookup(depName);
+      });
+    }
 
     var path = name.split('/');
     name = path.pop();
@@ -56,6 +62,6 @@
   }
 
   if (typeof define !== 'function' || !define.amd) {
-    global.define = fakeDefine;
+    global.define = root.define = fakeDefine;
   }
 }).call(this);
