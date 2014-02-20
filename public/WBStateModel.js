@@ -43,6 +43,13 @@ define([
 
     'fetch': function (options) {
       var self = this;
+      var success = options.success;
+      var model = this;
+      options.success = function (resp) {
+        if (!model.set(resp, options)) return false;
+        if (success) success(model, resp, options);
+        model.trigger('sync', model, resp, options);
+      };
       return self.sync('read', self, options);
     },
 
