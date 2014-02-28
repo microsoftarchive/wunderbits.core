@@ -48,7 +48,7 @@ define([
 
       var self = this;
       self.checkBindingArgs.apply(self, arguments);
-      
+
       // default to self if context not provided
       context = context || self;
 
@@ -239,7 +239,7 @@ define([
           if (!boundTarget) {
             return false;
           }
-          
+
           var targetBound = target.uid ? target.uid === boundTarget.uid : false;
           if (current.originalCallback === callback && current.context === context && targetBound) {
             return current;
