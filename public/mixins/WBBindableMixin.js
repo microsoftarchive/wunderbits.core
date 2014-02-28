@@ -143,7 +143,7 @@ define([
       }
 
       var event = binding.event;
-      binding.target.off(event, binding.callback);
+      binding.target.off(event, binding.callback, binding.context);
 
       // clean up binding object, but keep uid to
       // make sure old bindings, that have already been
