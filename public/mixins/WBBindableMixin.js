@@ -48,15 +48,16 @@ define([
 
       var self = this;
       self.checkBindingArgs.apply(self, arguments);
+      
+      // default to self if context not provided
+      context = context || self;
 
       // if this binding already made, return it
-      var bound = self.isAlreadyBound(target, event, callback);
+      var bound = self.isAlreadyBound(target, event, callback, context);
       if (bound) {
         return bound;
       }
 
-      // default to self if context not provided
-      context = context || self;
 
       var callbackFunc, args;
 
@@ -96,19 +97,20 @@ define([
       var self = this;
       self.checkBindingArgs.apply(self, arguments);
 
+      context = context || self;
+
       // if this binding already made, return it
-      var bound = self.isAlreadyBound(target, event, callback);
+      var bound = self.isAlreadyBound(target, event, callback, context);
       if (bound) {
         return bound;
       }
 
-      context = context || self;
 
       // this is a wrapper
       var onceBinding = function () {
 
         ((typeof callback === 'string') ? context[callback] : callback).apply(context, arguments);
-        self.unbindFrom.call(self, binding);
+        self.unbindFrom(binding);
       };
 
       var binding = {
@@ -120,7 +122,7 @@ define([
         'context': context
       };
 
-      target.on(event, onceBinding);
+      target.on(event, onceBinding, context);
 
       self._bindings[binding.uid] = binding;
       self.addToNamedBindings(event, binding);
@@ -223,7 +225,7 @@ define([
       }
     },
 
-    'isAlreadyBound': function (target, event, callback) {
+    'isAlreadyBound': function (target, event, callback, context) {
 
       var self = this;
       // check for same callback on the same target instance
@@ -237,9 +239,9 @@ define([
           if (!boundTarget) {
             return false;
           }
-
+          
           var targetBound = target.uid ? target.uid === boundTarget.uid : false;
-          if (current.originalCallback === callback && targetBound) {
+          if (current.originalCallback === callback && current.context === context && targetBound) {
             return current;
           }
         }
