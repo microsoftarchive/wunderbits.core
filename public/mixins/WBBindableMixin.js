@@ -6,7 +6,7 @@ define([
 
 ], function (WBMixin, assert, createUID) {
 
-  /* jshint maxcomplexity:11, maxstatements:20, maxlen:110 */
+  /* jshint maxcomplexity:12, maxstatements:24, maxlen:110 */
 
   'use strict';
 
@@ -49,14 +49,15 @@ define([
       var self = this;
       self.checkBindingArgs.apply(self, arguments);
 
+      // default to self if context not provided
+      context = context || self;
+
       // if this binding already made, return it
-      var bound = self.isAlreadyBound(target, event, callback);
+      var bound = self.isAlreadyBound(target, event, callback, context);
       if (bound) {
         return bound;
       }
 
-      // default to self if context not provided
-      context = context || self;
 
       var callbackFunc, args;
 
@@ -96,19 +97,20 @@ define([
       var self = this;
       self.checkBindingArgs.apply(self, arguments);
 
+      context = context || self;
+
       // if this binding already made, return it
-      var bound = self.isAlreadyBound(target, event, callback);
+      var bound = self.isAlreadyBound(target, event, callback, context);
       if (bound) {
         return bound;
       }
 
-      context = context || self;
 
       // this is a wrapper
       var onceBinding = function () {
 
         ((typeof callback === 'string') ? context[callback] : callback).apply(context, arguments);
-        self.unbindFrom.call(self, binding);
+        self.unbindFrom(binding);
       };
 
       var binding = {
@@ -120,7 +122,7 @@ define([
         'context': context
       };
 
-      target.on(event, onceBinding);
+      target.on(event, onceBinding, context);
 
       self._bindings[binding.uid] = binding;
       self.addToNamedBindings(event, binding);
@@ -132,18 +134,23 @@ define([
 
       var self = this;
 
-      if (!binding || (typeof binding.uid !== 'string')) {
+      var uid = binding && binding.uid;
+      if (!binding || (typeof uid !== 'string')) {
         throw new Error('Cannot unbind from undefined or invalid binding');
       }
 
+      var event = binding.event;
+      var context = binding.context;
+      var callback = binding.callback;
+      var target = binding.target;
+
       // a binding object with only uid, i.e. a destroyed/unbound
       // binding object has been passed - just do nothing
-      if (!binding.event || !binding.callback || !binding.target) {
+      if (!event || !callback || !target || !context) {
         return;
       }
 
-      var event = binding.event;
-      binding.target.off(event, binding.callback);
+      target.off(event, callback, context);
 
       // clean up binding object, but keep uid to
       // make sure old bindings, that have already been
@@ -154,7 +161,7 @@ define([
         }
       }
 
-      delete self._bindings[binding.uid];
+      delete self._bindings[uid];
 
       var namedEvents = self._namedEvents;
       var events = namedEvents[event];
@@ -162,7 +169,7 @@ define([
       if (events) {
         var cloned = events && events.slice(0);
         for (var i = events.length - 1; i >= 0; i--) {
-          if (events[i].uid === binding.uid) {
+          if (events[i].uid === uid) {
             cloned.splice(i, 1);
           }
         }
@@ -223,7 +230,7 @@ define([
       }
     },
 
-    'isAlreadyBound': function (target, event, callback) {
+    'isAlreadyBound': function (target, event, callback, context) {
 
       var self = this;
       // check for same callback on the same target instance
@@ -243,7 +250,7 @@ define([
           }
 
           var targetBound = target.uid ? target.uid === boundTarget.uid : false;
-          if (current.originalCallback === callback && targetBound) {
+          if (current.originalCallback === callback && current.context === context && targetBound) {
             return current;
           }
         }

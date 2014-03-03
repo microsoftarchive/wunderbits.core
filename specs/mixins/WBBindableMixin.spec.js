@@ -2,7 +2,7 @@ describe('WBBindableMixin', function () {
 
   'use strict';
 
-  var topic, model, model2;
+  var topic, topic2, model, model2;
 
   beforeEach(function (done) {
     requirejs([
@@ -23,10 +23,16 @@ describe('WBBindableMixin', function () {
         'uid': createUID()
       };
 
+      topic2 = {
+        'uid': createUID()
+      };
+
       WBEventsMixin.applyTo(model);
       WBEventsMixin.applyTo(model2);
       WBEventsMixin.applyTo(topic);
+      WBEventsMixin.applyTo(topic2);
       WBBindableMixin.applyTo(topic);
+      WBBindableMixin.applyTo(topic2);
 
       done();
     });
@@ -176,6 +182,29 @@ describe('WBBindableMixin', function () {
       topic._bindings[binding.uid].should.equal(binding);
     });
 
+    it('should not unbind other listeners with the same event name and callback but a different context', function () {
+
+      var callback = function () {
+        var self = this;
+        ++self.counter;
+      };
+
+      topic.counter = 0;
+      topic2.counter = 0;
+
+      topic.bindTo(model, 'someEvent', callback);
+      topic2.bindTo(model, 'someEvent', callback);
+
+      model.trigger('someEvent');
+
+      topic2.unbindAll();
+
+      model.trigger('someEvent');
+
+      expect(topic.counter).to.equal(2);
+      expect(topic2.counter).to.equal(1);
+    });
+
     describe('given that the same callback is bound more than once', function () {
 
       it('should actually only bind the callback once', function () {
@@ -186,6 +215,7 @@ describe('WBBindableMixin', function () {
         topic.bindTo(model, 'justone', callback);
 
         model.trigger('justone');
+
         expect(callback).to.have.been.calledOnce;
 
         var callback2 = sinon.spy();
