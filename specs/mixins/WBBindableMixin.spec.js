@@ -137,19 +137,17 @@ describe('WBBindableMixin', function () {
     });
 
     it('should not unbind other listeners with the same event name and callback but a different context', function () {
-      
+
       var callback = function () {
         var self = this;
         ++self.counter;
       };
 
-      topic.callback = callback;
       topic.counter = 0;
-      topic2.callback = callback;
       topic2.counter = 0;
 
-      topic.bindTo(model, 'someEvent', topic.callback, topic);
-      topic2.bindTo(model, 'someEvent', topic2.callback, topic2);
+      topic.bindTo(model, 'someEvent', callback);
+      topic2.bindTo(model, 'someEvent', callback);
 
       model.trigger('someEvent');
 

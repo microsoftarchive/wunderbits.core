@@ -6,7 +6,7 @@ define([
 
 ], function (WBMixin, assert, createUID) {
 
-  /* jshint maxcomplexity:11, maxstatements:20, maxlen:110 */
+  /* jshint maxcomplexity:12, maxstatements:24, maxlen:110 */
 
   'use strict';
 
@@ -134,18 +134,23 @@ define([
 
       var self = this;
 
-      if (!binding || (typeof binding.uid !== 'string')) {
+      var uid = binding && binding.uid;
+      if (!binding || (typeof uid !== 'string')) {
         throw new Error('Cannot unbind from undefined or invalid binding');
       }
 
+      var event = binding.event;
+      var context = binding.context;
+      var callback = binding.callback;
+      var target = binding.target;
+
       // a binding object with only uid, i.e. a destroyed/unbound
       // binding object has been passed - just do nothing
-      if (!binding.event || !binding.callback || !binding.target) {
+      if (!event || !callback || !target || !context) {
         return;
       }
 
-      var event = binding.event;
-      binding.target.off(event, binding.callback, binding.context);
+      target.off(event, callback, context);
 
       // clean up binding object, but keep uid to
       // make sure old bindings, that have already been
@@ -156,7 +161,7 @@ define([
         }
       }
 
-      delete self._bindings[binding.uid];
+      delete self._bindings[uid];
 
       var namedEvents = self._namedEvents;
       var events = namedEvents[event];
@@ -164,7 +169,7 @@ define([
       if (events) {
         var cloned = events && events.slice(0);
         for (var i = events.length - 1; i >= 0; i--) {
-          if (events[i].uid === binding.uid) {
+          if (events[i].uid === uid) {
             cloned.splice(i, 1);
           }
         }
