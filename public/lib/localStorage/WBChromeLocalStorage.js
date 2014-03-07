@@ -67,6 +67,7 @@ define([
         }
       });
 
+      return deferred.promis();
     },
 
     'clear': function () {
