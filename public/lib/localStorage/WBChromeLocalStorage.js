@@ -11,7 +11,7 @@ define([
   'use strict';
 
   var chrome = global.chrome;
-  var localStorage = chrome.storage && chrome.storage.local;
+  var localStorage = chrome && chrome.storage && chrome.storage.local;
 
   return WBClass.extend({
 
