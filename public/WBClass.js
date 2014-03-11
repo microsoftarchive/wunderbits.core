@@ -3,9 +3,10 @@ define([
 
   './lib/extend',
   './lib/clone',
-  './lib/createUID'
+  './lib/createUID',
+  './lib/fromSuper'
 
-], function (extend, clone, createUID, undefined) {
+], function (extend, clone, createUID, fromSuper, undefined) {
 
   'use strict';
 
@@ -132,7 +133,7 @@ define([
     'augmentProperties': function () {
 
       var self = this;
-      var properties = (self.properties || {});
+      var properties = fromSuper.merge(self, 'properties');
 
       var key, value;
       for (key in properties) {
