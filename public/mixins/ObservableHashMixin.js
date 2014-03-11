@@ -43,8 +43,13 @@ define([
     'resolveTarget': function (key) {
 
       var self = this;
-      var target = self[key];
 
+      // allow observing self
+      if (key === 'self') {
+        return self;
+      }
+
+      var target = self[key];
       if (!target && typeof key === 'string' && key.indexOf('.') > -1) {
         key = key.split('.');
         target = self;
