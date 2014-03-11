@@ -135,13 +135,16 @@ define([
       var self = this;
       var properties = fromSuper.merge(self, 'properties');
 
-      var key, value;
+      var key, value, type;
       for (key in properties) {
         value = properties[key];
-        if (typeof value === 'function') {
+        type = typeof value;
+        if (type === 'function') {
           self[key] = value.call(self);
-        } else {
+        } else if (type === 'object') {
           self[key] = clone(value, true);
+        } else {
+          self[key] = value;
         }
       }
     }
