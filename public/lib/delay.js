@@ -9,7 +9,9 @@ define([
   return function delay (fn, time, context) {
     var args = toArray(arguments, 3);
     return setTimeout(function () {
-      fn.apply(context, args);
+
+      var destroyed = context && context.destroyed;
+      !destroyed && fn.apply(context, args);
     }, time);
   };
 });
