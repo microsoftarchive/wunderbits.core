@@ -26,20 +26,31 @@ define([
 
       self.trigger('destroy');
 
-      for (var key in self) {
-        if (self.hasOwnProperty(key) && key !== 'uid' && key !== 'cid') {
-          // make functions noop
-          if (typeof self[key] === 'function') {
-            self[key] = noop;
-          }
-          // and others undefined
-          else {
-            self[key] = undefined;
-          }
-        }
-      }
+      self.destroyObject(self);
 
       self.destroyed = true;
+    },
+
+    'destroyObject': function (object) {
+
+      var self = this;
+      for (var key in object) {
+        self.destroyKey(key, self);
+      }
+    },
+
+    'destroyKey': function (key, context) {
+
+      if (context.hasOwnProperty(key) && key !== 'uid' && key !== 'cid') {
+        // make functions noop
+        if (typeof context[key] === 'function') {
+          context[key] = noop;
+        }
+        // and others undefined
+        else {
+          context[key] = undefined;
+        }
+      }
     }
   });
 });
