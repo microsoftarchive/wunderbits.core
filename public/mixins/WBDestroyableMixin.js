@@ -35,7 +35,7 @@ define([
 
       var self = this;
       for (var key in object) {
-        self.destroyKey(key, self);
+        self.destroyKey(key, object);
       }
     },
 
