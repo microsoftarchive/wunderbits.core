@@ -18,25 +18,33 @@ define([
 
       var self = this;
 
-      var events, target, handlers;
       var observesHash = fromSuper.merge(self, 'observes');
+      for (var target in observesHash) {
+        self.bindToTarget(self.resolveTarget(target), observesHash[target]);
+      }
+    },
 
-      for (target in observesHash) {
-        events = observesHash[target];
-        target = self.resolveTarget(target);
+    'bindToTarget': function (target, events) {
 
-        for (var key in events) {
-          handlers = events[key];
-          if (typeof handlers === 'string') {
-            handlers = [handlers];
-          } else {
-            handlers = clone(handlers);
-          }
+      var self = this;
 
-          while (handlers.length) {
-            self.bindTo(target, key, handlers.shift());
-          }
-        }
+      for (var eventString in events) {
+        self.bindHandlers(target, eventString, events[eventString]);
+      }
+    },
+
+    'bindHandlers': function (target, eventString, handlers) {
+
+      var self = this;
+
+      if (typeof handlers === 'string') {
+        handlers = [handlers];
+      } else {
+        handlers = clone(handlers);
+      }
+
+      while (handlers.length) {
+        self.bindTo(target, eventString, handlers.shift());
       }
     },
 
