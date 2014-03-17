@@ -19,7 +19,7 @@
     "grunt-complexity": "~0.1.4",
     "grunt-contrib-jshint": "~0.8.0",
     "bilder-requirejs": "0.1.2",
-    "kaapi": "~0.1.5",
+    "kaapi": "~0.1.7",
     "kaapi.coverage": "0.0.2"
   }
 }

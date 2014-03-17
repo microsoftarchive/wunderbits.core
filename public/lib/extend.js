@@ -1,14 +1,15 @@
 define([
+  './toArray',
   './assert',
   './merge'
-], function (assert, merge) {
+], function (toArray, assert, merge) {
 
   'use strict';
 
   return function extend () {
 
     // convert the argument list into an array
-    var args = [].slice.call(arguments);
+    var args = toArray(arguments);
 
     // validate input
     assert(args.length > 0, 'extend expect one or more objects');
