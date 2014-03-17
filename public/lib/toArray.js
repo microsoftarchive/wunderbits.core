@@ -2,7 +2,8 @@ define(function () {
 
   'use strict';
 
-  return function (obj, skip) {
-    return [].slice.call(obj, skip || 0);
+  var slice = Array.prototype.slice;
+  return function toArray (obj, skip) {
+    return slice.call(obj, skip || 0);
   };
 });
