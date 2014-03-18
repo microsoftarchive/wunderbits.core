@@ -1,7 +1,9 @@
 define([
   './WBClass',
-  './WBPromise'
-], function (WBClass, WBPromise) {
+  './WBPromise',
+
+  './lib/assert'
+], function (WBClass, WBPromise, assert) {
 
   'use strict';
 
@@ -84,6 +86,9 @@ define([
       var args = arrayRef.slice.call(arguments);
       var fn = args.shift();
       var context = args.shift();
+
+      assert.function(fn, method + ' accepts only functions');
+
       self.handlers.push({
         'type': method,
         'context': context,
