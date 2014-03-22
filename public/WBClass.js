@@ -61,6 +61,8 @@ define([
   function extendSelf (protoProps, staticProps) {
     /* jshint validthis:true */
 
+    var parent = this;
+
     protoProps = protoProps || {};
 
     // extract mixins, if any
@@ -68,7 +70,7 @@ define([
     delete protoProps.mixins;
 
     // create the derived class
-    var child = inherits(this, protoProps, staticProps);
+    var child = inherits(parent, protoProps, staticProps);
 
     // apply mixins to the derived class
     var mixin;
@@ -79,7 +81,7 @@ define([
     }
 
     // make the child class extensible
-    child.extend = extendSelf;
+    child.extend = parent.extend || extendSelf;
     return child;
   }
 
