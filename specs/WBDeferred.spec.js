@@ -79,6 +79,7 @@ describe('WBDeferred', function () {
 
   describe('should be chainable', function () {
 
+    var noop = function () {};
     var apiVerbs = [
       'resolve',
       'reject',
@@ -95,7 +96,7 @@ describe('WBDeferred', function () {
 
         var method = defer[name];
         expect(method).to.be.a('function', name);
-        var self = method.call(defer);
+        var self = method.call(defer, noop);
         expect(self).to.equal(defer);
       });
     });
