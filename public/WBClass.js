@@ -119,7 +119,7 @@ define([
     'initMixins': function () {
 
       var self = this;
-      var initializers = (self.initializers || []).slice(0);
+      var initializers = fromSuper.concat(self, 'initializers');
 
       var initializer;
       while (initializers.length) {

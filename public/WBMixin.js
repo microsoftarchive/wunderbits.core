@@ -56,8 +56,8 @@ define([
       // cache the mixin's initializer, to be applied later
       var initialize = behavior.initialize;
       if (typeof initialize === 'function') {
-        var initializers = proto.initializers = proto.initializers || [];
-        initializers.push(initialize);
+        (!proto.hasOwnProperty('initializers')) && (proto.initializers = []);
+        proto.initializers.push(initialize);
         delete behavior.initialize;
       }
 
@@ -68,8 +68,8 @@ define([
       extend(proto, behavior);
 
       // cache the properties, to be applied later
-      var props = proto.properties = proto.properties || {};
-      properties && extend(props, properties);
+      (!proto.hasOwnProperty('properties')) && (proto.properties = {});
+      properties && extend(proto.properties, properties);
 
       return klass;
     }
