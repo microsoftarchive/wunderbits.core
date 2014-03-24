@@ -3,12 +3,13 @@ define(function () {
   'use strict';
 
   function replacer (match) {
-    var r = Math.random() * 16 | 0;
-    var v = (match === 'x') ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
+    var rand = Math.random() * 16 | 0;
+    var chr = (match === 'x') ? rand : (rand & 0x3 | 0x8);
+    return chr.toString(16);
   }
 
-  return function createUID () {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, replacer);
+  return function createUID (prefix) {
+    var uid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, replacer);
+    return String(!prefix ? '' : prefix) + uid;
   };
 });
