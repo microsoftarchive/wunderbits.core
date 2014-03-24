@@ -90,7 +90,7 @@ define([
     var self = this;
 
     // Assign a unique identifier to the instance
-    self.uid = createUID();
+    self.uid = self.uid || createUID();
 
     // save options, make sure it's at least an empty object
     self.options = options || self.options;
