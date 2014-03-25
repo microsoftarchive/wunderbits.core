@@ -41,6 +41,7 @@ define([
 
           controllerInstance = new ControllerClass(self);
           self.controllers.push(controllerInstance);
+          controllerInstance.parent = self;
 
           self.trackImplementedSuperConstructors(controllerInstance);
         }
@@ -64,9 +65,6 @@ define([
     'destroyControllers': function () {
 
       var self = this;
-      var _super = self.constructor.__super__;
-
-      _super.onDestroy && _super.onDestroy.apply(self, arguments);
 
       // Loop and destroy
       var controller;
