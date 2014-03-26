@@ -2,7 +2,7 @@
 
 var WBMixin = require('../WBMixin');
 var WBDeferred = require('../WBDeferred');
-var When = require('../When');
+var when = require('../lib/when');
 var toArray = require('../lib/toArray');
 var forEach = require('../lib/forEach');
 var delay = require('../lib/delay');
@@ -18,7 +18,7 @@ var WBUtilsMixin = WBMixin.extend({
 
   'when': function () {
     var self = this;
-    return When.apply(self, arguments);
+    return when.apply(self, arguments);
   },
 
   'defer': function (fn) {

@@ -1,15 +1,11 @@
 'use strict';
 
-var WBEventEmitter = require('./WBEventEmitter');
-
-var BaseEmitter = WBEventEmitter.extend({
+var BaseEmitter = require('./WBEventEmitter').extend({
   'mixins': [
-    'WBDestroyableMixin',
-    'WBUtilsMixin',
-    'ObservableHashMixin'
-  ].map(function (name) {
-    return require('./mixins/' + name);
-  })
+    require('./mixins/WBDestroyableMixin'),
+    require('./mixins/WBUtilsMixin'),
+    require('./mixins/ObservableHashMixin')
+  ]
 });
 
 module.exports = BaseEmitter;

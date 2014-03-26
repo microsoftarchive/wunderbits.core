@@ -1,7 +1,7 @@
 'use strict';
 
-var WBDeferred = require('./WBDeferred');
-var toArray = require('./lib/toArray');
+var WBDeferred = require('../WBDeferred');
+var toArray = require('./toArray');
 
 function When () {
 
@@ -53,8 +53,5 @@ function When () {
 
   return main.promise();
 }
-
-// backward compatiblity
-When.when = When;
 
 module.exports = When;

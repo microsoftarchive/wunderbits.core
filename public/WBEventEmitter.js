@@ -1,14 +1,10 @@
 'use strict';
 
-var WBClass = require('./WBClass');
-
-var WBEventEmitter = WBClass.extend({
+var WBEventEmitter = require('./WBClass').extend({
   'mixins': [
-    'WBBindableMixin',
-    'WBEventsMixin'
-  ].map(function (name) {
-    return require('./mixins/' + name);
-  })
+    require('./mixins/WBBindableMixin'),
+    require('./mixins/WBEventsMixin')
+  ]
 });
 
 module.exports = WBEventEmitter;
