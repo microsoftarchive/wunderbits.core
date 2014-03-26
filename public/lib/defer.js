@@ -1,16 +1,13 @@
-define([
-  './toArray',
-  './delay'
-], function (
-  toArray, delay
-) {
+'use strict';
 
-  'use strict';
+var toArray = require('./toArray');
+var delay = require('./delay');
 
-  return function defer (fn) {
-    var args = toArray(arguments);
-    args[0] = 1;
-    args.unshift(fn);
-    return delay.apply(null, args);
-  };
-});
+function defer (fn) {
+  var args = toArray(arguments);
+  args[0] = 1;
+  args.unshift(fn);
+  return delay.apply(null, args);
+}
+
+module.exports = defer;

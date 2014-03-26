@@ -1,21 +1,18 @@
-define([
-  './toArray'
-], function (
-  toArray
-) {
+'use strict';
 
-  'use strict';
+var toArray = require('./toArray');
 
-  return function merge (object, source) {
-    var sources = toArray(arguments, 1);
-    while (sources.length) {
-      source = sources.shift();
-      for (var key in source) {
-        if (source.hasOwnProperty(key)) {
-          object[key] = source[key];
-        }
+function merge (object, source) {
+  var sources = toArray(arguments, 1);
+  while (sources.length) {
+    source = sources.shift();
+    for (var key in source) {
+      if (source.hasOwnProperty(key)) {
+        object[key] = source[key];
       }
     }
-    return object;
-  };
-});
+  }
+  return object;
+}
+
+module.exports = merge;

@@ -1,17 +1,14 @@
-define([
-  './toArray'
-], function (
-  toArray
-) {
+'use strict';
 
-  'use strict';
+var toArray = require('./toArray');
 
-  return function delay (fn, time, context) {
-    var args = toArray(arguments, 3);
-    return setTimeout(function () {
+function delay (fn, time, context) {
+  var args = toArray(arguments, 3);
+  return setTimeout(function () {
 
-      var destroyed = context && context.destroyed;
-      !destroyed && fn.apply(context, args);
-    }, time);
-  };
-});
+    var destroyed = context && context.destroyed;
+    !destroyed && fn.apply(context, args);
+  }, time);
+}
+
+module.exports = delay;
