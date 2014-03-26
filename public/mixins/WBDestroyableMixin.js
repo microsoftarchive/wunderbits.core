@@ -1,56 +1,55 @@
-define([
-  '../lib/forEach',
-  '../WBMixin'
-], function (forEach, WBMixin, undefined) {
+'use strict';
 
-  'use strict';
+var forEach = require('../lib/forEach');
+var WBMixin = require('../WBMixin');
 
-  function noop () {}
+function noop () {}
 
-  function Call (fn) {
+function Call (fn) {
+  var self = this;
+  (typeof fn === 'string') && (fn = self[fn]);
+  (typeof fn === 'function') && fn.call(self);
+}
+
+var cleanupMethods = ['unbind', 'unbindAll', 'onDestroy'];
+
+var WBDestroyableMixin = WBMixin.extend({
+
+  'destroy': function () {
+
     var self = this;
-    (typeof fn === 'string') && (fn = self[fn]);
-    (typeof fn === 'function') && fn.call(self);
-  }
 
-  var cleanupMethods = ['unbind', 'unbindAll', 'onDestroy'];
+    // clean up
+    forEach(cleanupMethods, Call, self);
 
-  return WBMixin.extend({
+    self.trigger('destroy');
 
-    'destroy': function () {
+    self.destroyObject(self);
 
-      var self = this;
+    self.destroyed = true;
+  },
 
-      // clean up
-      forEach(cleanupMethods, Call, self);
+  'destroyObject': function (object) {
 
-      self.trigger('destroy');
+    var self = this;
+    for (var key in object) {
+      self.destroyKey(key, object);
+    }
+  },
 
-      self.destroyObject(self);
+  'destroyKey': function (key, context) {
 
-      self.destroyed = true;
-    },
-
-    'destroyObject': function (object) {
-
-      var self = this;
-      for (var key in object) {
-        self.destroyKey(key, object);
+    if (context.hasOwnProperty(key) && key !== 'uid' && key !== 'cid') {
+      // make functions noop
+      if (typeof context[key] === 'function') {
+        context[key] = noop;
       }
-    },
-
-    'destroyKey': function (key, context) {
-
-      if (context.hasOwnProperty(key) && key !== 'uid' && key !== 'cid') {
-        // make functions noop
-        if (typeof context[key] === 'function') {
-          context[key] = noop;
-        }
-        // and others undefined
-        else {
-          context[key] = undefined;
-        }
+      // and others undefined
+      else {
+        context[key] = undefined;
       }
     }
-  });
+  }
 });
+
+module.exports = WBDestroyableMixin;
