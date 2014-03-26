@@ -1,9 +1,8 @@
-define(function () {
+'use strict';
 
-  'use strict';
+var slice = Array.prototype.slice;
+function toArray (obj, skip) {
+  return slice.call(obj, skip || 0);
+}
 
-  var slice = Array.prototype.slice;
-  return function toArray (obj, skip) {
-    return slice.call(obj, skip || 0);
-  };
-});
+module.exports = toArray;

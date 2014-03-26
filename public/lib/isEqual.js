@@ -1,9 +1,8 @@
-define(function () {
+'use strict';
 
-  'use strict';
+// TODO: implement deepEqual
+function isEqual (a, b) {
+  return a === b;
+}
 
-  // TODO: implement deepEqual
-  return function (a, b) {
-    return a === b;
-  };
-});
+module.exports = isEqual;

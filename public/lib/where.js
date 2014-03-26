@@ -1,20 +1,18 @@
-define([
-  './forEach'
-], function (forEach) {
+'use strict';
 
-  'use strict';
+var forEach = require('./forEach');
 
-  return function where (collection, properties) {
-    var matches = [];
-    forEach(collection, function (item) {
-      for (var key in properties) {
-        if (item[key] !== properties[key]) {
-          return;
-        }
-        matches.push(item);
+function where (collection, properties) {
+  var matches = [];
+  forEach(collection, function (item) {
+    for (var key in properties) {
+      if (item[key] !== properties[key]) {
+        return;
       }
-    });
-    return matches;
-  };
+      matches.push(item);
+    }
+  });
+  return matches;
+}
 
-});
+module.exports = where;
