@@ -2,28 +2,10 @@ describe('When', function () {
 
   'use strict';
 
-  var WBWhen, WBDeferred;
-
-  beforeEach(function (done) {
-    requirejs([
-      'When',
-      'WBDeferred'
-    ], function (When, deferred) {
-
-      WBWhen = When;
-      WBDeferred = deferred;
-      done();
-    });
-  });
+  var when = load('lib/when');
+  var WBDeferred = load('WBDeferred');
 
   describe('#when', function () {
-
-    var when;
-    beforeEach(function () {
-
-      when = WBWhen.when;
-
-    });
 
     it('should chain deferred methods', function (done) {
 

@@ -2,13 +2,7 @@ describe('forEach', function () {
 
   'use strict';
 
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/forEach'], function (forEach) {
-      topic = forEach;
-      done();
-    });
-  });
+  var topic = load('lib/forEach');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

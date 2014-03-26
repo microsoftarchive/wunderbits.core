@@ -2,13 +2,7 @@ describe('merge', function () {
 
   'use strict';
 
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/merge'], function (merge) {
-      topic = merge;
-      done();
-    });
-  });
+  var topic = load('lib/merge');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

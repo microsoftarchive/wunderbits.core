@@ -2,13 +2,7 @@ describe('createUID', function () {
 
   'use strict';
 
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/createUID'], function (createUID) {
-      topic = createUID;
-      done();
-    });
-  });
+  var topic = load('lib/createUID');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

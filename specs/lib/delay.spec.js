@@ -2,13 +2,7 @@ describe('lib/delay', function () {
 
   'use strict';
 
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/delay'], function (delay) {
-      topic = delay;
-      done();
-    });
-  });
+  var topic = load('lib/delay');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

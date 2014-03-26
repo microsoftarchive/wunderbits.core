@@ -2,40 +2,36 @@ describe('WBBindableMixin', function () {
 
   'use strict';
 
+  var createUID = load('lib/createUID');
+  var WBEventsMixin = load('mixins/WBEventsMixin');
+  var WBBindableMixin = load('mixins/WBBindableMixin');
+
   var topic, topic2, model, model2;
 
-  beforeEach(function (done) {
-    requirejs([
-      'lib/createUID',
-      'mixins/WBEventsMixin',
-      'mixins/WBBindableMixin'
-    ], function (createUID, WBEventsMixin, WBBindableMixin) {
+  beforeEach(function () {
 
-      model = {
-        'uid': createUID()
-      };
+    model = {
+      'uid': createUID()
+    };
 
-      model2 = {
-        'uid': createUID()
-      };
+    model2 = {
+      'uid': createUID()
+    };
 
-      topic = {
-        'uid': createUID()
-      };
+    topic = {
+      'uid': createUID()
+    };
 
-      topic2 = {
-        'uid': createUID()
-      };
+    topic2 = {
+      'uid': createUID()
+    };
 
-      WBEventsMixin.applyTo(model);
-      WBEventsMixin.applyTo(model2);
-      WBEventsMixin.applyTo(topic);
-      WBEventsMixin.applyTo(topic2);
-      WBBindableMixin.applyTo(topic);
-      WBBindableMixin.applyTo(topic2);
-
-      done();
-    });
+    WBEventsMixin.applyTo(model);
+    WBEventsMixin.applyTo(model2);
+    WBEventsMixin.applyTo(topic);
+    WBEventsMixin.applyTo(topic2);
+    WBBindableMixin.applyTo(topic);
+    WBBindableMixin.applyTo(topic2);
   });
 
   describe('#callbackFactory', function () {

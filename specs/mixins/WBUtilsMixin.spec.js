@@ -1,26 +1,20 @@
-describe('WBDeferrableMixin', function () {
+describe('WBUtilsMixin', function () {
 
   'use strict';
 
+  var WBUtilsMixin = load('mixins/WBUtilsMixin');
+
   var instance, context;
+  beforeEach(function () {
+    instance = {
+      'id': 'instanceId'
+    };
 
-  beforeEach(function (done) {
-    requirejs([
-      'mixins/WBUtilsMixin'
-    ], function (WBDeferrableMixin) {
+    context = {
+      'id': 'providedContext'
+    };
 
-      instance = {
-        'id': 'instanceId'
-      };
-
-      context = {
-        'id': 'providedContext'
-      };
-
-      WBDeferrableMixin.applyTo(instance);
-
-      done();
-    });
+    WBUtilsMixin.applyTo(instance);
   });
 
   describe('#deferred', function () {

@@ -2,17 +2,8 @@ describe('WBSingleton', function () {
 
   'use strict';
 
-  var Topic;
+  var Topic = load('WBSingleton');
   var noop = function () {};
-
-  beforeEach(function (done) {
-    requirejs([
-      'WBSingleton'
-    ], function (WBSingleton) {
-      Topic = WBSingleton;
-      done();
-    });
-  });
 
   describe('#initialize', function () {
 
