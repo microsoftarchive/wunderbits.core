@@ -2,7 +2,8 @@
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js"
+      "public/**/*.js",
+      "!public/mixins/WBBindableMixin.js"
     ],
     "options": {
       "jshintrc": "public/.jshintrc"
