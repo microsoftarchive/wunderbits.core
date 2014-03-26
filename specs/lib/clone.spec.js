@@ -2,6 +2,7 @@ describe('lib/clone', function () {
 
   'use strict';
 
+  var topic = load('lib/clone');
   var original = {
     'a': 5,
     'b': function () {},
@@ -15,14 +16,6 @@ describe('lib/clone', function () {
     'h': false,
     'j': [1, 2, 3]
   };
-
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/clone'], function (clone) {
-      topic = clone;
-      done();
-    });
-  });
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

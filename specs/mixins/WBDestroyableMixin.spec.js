@@ -2,27 +2,17 @@ describe('WBDestroyableMixin', function () {
 
   'use strict';
 
+  var WBClass = load('WBClass');
+  var WBEventsMixin = load('mixins/WBEventsMixin');
+  var WBDestroyableMixin = load('mixins/WBDestroyableMixin');
+
   var Klass;
-
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass',
-      'mixins/WBEventsMixin',
-      'mixins/WBDestroyableMixin'
-    ], function (
-      WBClass,
-      WBEventsMixin,
-      WBDestroyableMixin
-    ) {
-
-      Klass = WBClass.extend({
-        'mixins': [
-          WBEventsMixin,
-          WBDestroyableMixin
-        ]
-      });
-
-      done();
+  beforeEach(function () {
+    Klass = WBClass.extend({
+      'mixins': [
+        WBEventsMixin,
+        WBDestroyableMixin
+      ]
     });
   });
 

@@ -2,28 +2,24 @@ describe('WBClass/mixins', function () {
 
   'use strict';
 
+  var WBClass = load('WBClass');
+  var WBMixin = load('WBMixin');
+
   var ExtendedClass, Mixin, applySpy, MixinInit;
 
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass',
-      'WBMixin'
-    ], function (WBClass, WBMixin) {
+  beforeEach(function () {
 
-      MixinInit = sinon.spy();
+    MixinInit = sinon.spy();
 
-      Mixin = WBMixin.extend({
-        'initialize': MixinInit
-      });
+    Mixin = WBMixin.extend({
+      'initialize': MixinInit
+    });
 
-      applySpy = sinon.spy(Mixin, 'applyToClass');
+    applySpy = sinon.spy(Mixin, 'applyToClass');
 
-      ExtendedClass = WBClass.extend({
-        'foo': 'bar',
-        'mixins': [Mixin]
-      });
-
-      done();
+    ExtendedClass = WBClass.extend({
+      'foo': 'bar',
+      'mixins': [Mixin]
     });
   });
 

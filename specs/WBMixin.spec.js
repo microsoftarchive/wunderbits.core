@@ -2,16 +2,7 @@ describe('WBMixin', function () {
 
   'use strict';
 
-  var Topic;
-
-  beforeEach(function (done) {
-    requirejs([
-      'WBMixin'
-    ], function (Mixin) {
-      Topic = Mixin;
-      done();
-    });
-  });
+  var Topic = load('WBMixin');
 
   describe('#extend', function () {
 

@@ -2,17 +2,11 @@ describe('WBEventsMixin', function () {
 
   'use strict';
 
-  var topic, Topic;
+  var topic;
+  var Topic = load('mixins/WBEventsMixin');
 
-  beforeEach(function (done) {
-    requirejs([
-      'mixins/WBEventsMixin'
-    ], function (WBEventsMixin) {
-
-      Topic = WBEventsMixin;
-      topic = Topic.applyTo({});
-      done();
-    });
+  beforeEach(function () {
+    topic = Topic.applyTo({});
   });
 
   describe('#on', function () {

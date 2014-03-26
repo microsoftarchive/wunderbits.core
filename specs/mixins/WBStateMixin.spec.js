@@ -2,27 +2,17 @@ describe('StatefulMixin', function () {
 
   'use strict';
 
+  var WBClass = load('WBClass');
+  var WBEventsMixin = load('mixins/WBEventsMixin');
+  var WBStateMixin = load('mixins/WBStateMixin');
+
   var Klass;
-
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass',
-      'mixins/WBEventsMixin',
-      'mixins/WBStateMixin'
-    ], function (
-      WBClass,
-      WBEventsMixin,
-      WBStateMixin
-    ) {
-
-      Klass = WBClass.extend({
-        'mixins': [
-          WBEventsMixin,
-          WBStateMixin
-        ]
-      });
-
-      done();
+  beforeEach(function () {
+    Klass = WBClass.extend({
+      'mixins': [
+        WBEventsMixin,
+        WBStateMixin
+      ]
     });
   });
 

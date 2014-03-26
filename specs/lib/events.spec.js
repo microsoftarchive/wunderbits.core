@@ -2,15 +2,12 @@ describe('lib/events', function () {
 
   'use strict';
 
+  var WBClass = load('WBClass');
+  var events = load('lib/events');
+
   var topic;
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass',
-      'lib/events'
-    ], function (WBClass, events) {
-      topic = new (WBClass.extend(events))();
-      done();
-    });
+  beforeEach(function () {
+    topic = new (WBClass.extend(events))();
   });
 
   var validationErrors = {

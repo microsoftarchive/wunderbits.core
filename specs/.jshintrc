@@ -1,15 +1,15 @@
 {
   "predef": [
-    "requirejs",
+    "load",
     "describe",
     "xdescribe",
     "beforeEach",
     "afterEach",
     "it",
     "xit",
+    "setTimeout",
     "sinon",
-    "expect",
-    "setTimeout"
+    "expect"
   ],
 
   "asi": false,
@@ -25,6 +25,7 @@
   "jquery": false,
   "laxcomma": false,
   "newcap": true,
+  "node": true,
   "quotmark": "single",
   "strict": true,
   "trailing": false,

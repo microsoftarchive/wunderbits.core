@@ -2,36 +2,30 @@ describe('mergeFromSuper / concatFromSuper', function () {
 
   'use strict';
 
-  var mergeFromSuper, concatFromSuper;
+  var WBClass = load('WBClass');
+  var fromSuper = load('lib/fromSuper');
+
+  var mergeFromSuper = fromSuper.merge;
+  var concatFromSuper = fromSuper.concat;
+
   var BaseClass, ChildClass, GrandChildClass;
 
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass',
-      'lib/fromSuper'
-    ], function (WBClass, fromSuper) {
+  beforeEach(function () {
+    BaseClass = WBClass.extend({
+      'obj': {
+        'a': 42
+      },
+      'arr': [1, 2, 3]
+    });
 
-      mergeFromSuper = fromSuper.merge;
-      concatFromSuper = fromSuper.concat;
+    ChildClass = BaseClass.extend({
+      'obj': {
+        'b': 88
+      }
+    });
 
-      BaseClass = WBClass.extend({
-        'obj': {
-          'a': 42
-        },
-        'arr': [1, 2, 3]
-      });
-
-      ChildClass = BaseClass.extend({
-        'obj': {
-          'b': 88
-        }
-      });
-
-      GrandChildClass = ChildClass.extend({
-        'arr': ['a', 'b']
-      });
-
-      done();
+    GrandChildClass = ChildClass.extend({
+      'arr': ['a', 'b']
     });
   });
 

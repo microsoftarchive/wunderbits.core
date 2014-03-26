@@ -2,16 +2,8 @@ describe('WBClass', function () {
 
   'use strict';
 
-  var Topic;
-
-  beforeEach(function (done) {
-    requirejs([
-      'WBClass'
-    ], function (WBClass) {
-      Topic = WBClass;
-      done();
-    });
-  });
+  var Topic = load('WBClass');
+  var WBMixin = load('WBMixin');
 
   describe('class constructor', function () {
 
@@ -131,19 +123,14 @@ describe('WBClass', function () {
   describe('mixins', function () {
 
     var Mixin, spy;
-    beforeEach(function (done) {
-      requirejs([
-        'WBMixin'
-      ], function (WBMixin) {
 
-        spy = sinon.spy();
+    beforeEach(function () {
 
-        Mixin = WBMixin.extend({
-          'initialize': spy,
-          'foo': function () {}
-        });
+      spy = sinon.spy();
 
-        done();
+      Mixin = WBMixin.extend({
+        'initialize': spy,
+        'foo': function () {}
       });
     });
 

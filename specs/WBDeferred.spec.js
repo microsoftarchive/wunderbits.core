@@ -2,18 +2,11 @@ describe('WBDeferred', function () {
 
   'use strict';
 
-  var defer, WBDeferred;
+  var WBDeferred = load('WBDeferred');
 
-  beforeEach(function (done) {
-    requirejs([
-      'WBDeferred'
-    ], function (klass) {
-
-      WBDeferred = klass;
-      defer = new WBDeferred();
-
-      done();
-    });
+  var defer;
+  beforeEach(function () {
+    defer = new WBDeferred();
   });
 
   describe('instance', function () {

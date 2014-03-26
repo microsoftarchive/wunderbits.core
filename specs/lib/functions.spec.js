@@ -2,13 +2,7 @@ describe('functions', function () {
 
   'use strict';
 
-  var topic;
-  beforeEach(function (done) {
-    requirejs(['lib/functions'], function (functions) {
-      topic = functions;
-      done();
-    });
-  });
+  var topic = load('lib/functions');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');
