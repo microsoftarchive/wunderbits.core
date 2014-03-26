@@ -8,10 +8,10 @@ global.expect = chai.expect;
 chai.should();
 
 var oldRequire = require;
+var publicPath = process.env.TEST_COV ? '../public-coverage/' : '../public/';
 global.load = function (name) {
   try {
-    // console.log(name, path.join('../public', name));
-    return oldRequire(path.join('../public', name));
+    return oldRequire(path.join(publicPath, name));
   } catch (e) {
     return oldRequire.apply(this, arguments);
   }
