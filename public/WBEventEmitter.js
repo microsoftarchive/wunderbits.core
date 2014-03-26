@@ -1,18 +1,14 @@
-define([
+'use strict';
 
-  './WBClass',
-  './mixins/WBBindableMixin',
-  './mixins/WBEventsMixin'
+var WBClass = require('./WBClass');
 
-], function (WBClass, WBBindableMixin, WBEventsMixin) {
-
-  'use strict';
-
-  return WBClass.extend({
-
-    'mixins': [
-      WBBindableMixin,
-      WBEventsMixin
-    ]
-  });
+var WBEventEmitter = WBClass.extend({
+  'mixins': [
+    'WBBindableMixin',
+    'WBEventsMixin'
+  ].map(function (name) {
+    return require('./mixins/' + name);
+  })
 });
+
+module.exports = WBEventEmitter;
