@@ -1,17 +1,13 @@
 'use strict';
 
-var WBSingleton = require('./WBSingleton');
-
-var BaseSingleton = WBSingleton.extend({
+var BaseSingleton = require('./WBSingleton').extend({
   'mixins': [
-    'WBEventsMixin',
-    'WBBindableMixin',
-    'WBDestroyableMixin',
-    'WBUtilsMixin',
-    'ObservableHashMixin'
-  ].map(function (name) {
-    return require('./mixins/' + name);
-  })
+    require('./mixins/WBEventsMixin'),
+    require('./mixins/WBBindableMixin'),
+    require('./mixins/WBDestroyableMixin'),
+    require('./mixins/WBUtilsMixin'),
+    require('./mixins/ObservableHashMixin')
+  ]
 });
 
 module.exports = BaseSingleton;

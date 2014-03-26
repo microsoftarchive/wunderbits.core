@@ -1,6 +1,6 @@
 'use strict';
 
-var extend = require('./lib/extend');
+var extend = require('./extend');
 
 // Helper function to correctly set up the prototype chain, for subclasses.
 // Similar to `goog.inherits`, but uses a hash of prototype properties and

@@ -1,20 +1,18 @@
 'use strict';
 
 var WBClass = require('./WBClass');
-var WBDestroyableMixin = require('./mixins/WBDestroyableMixin');
 
+var WBDestroyableMixin = require('./mixins/WBDestroyableMixin');
 var originalDestroy = WBDestroyableMixin.Behavior.destroy;
 
 var WBStateModel = WBClass.extend({
 
   'mixins': [
-    'WBEventsMixin',
-    'WBStateMixin',
-    'WBBindableMixin',
-    'WBDestroyableMixin'
-  ].map(function (name) {
-    return require('./mixins/' + name);
-  }),
+    require('./mixins/WBEventsMixin'),
+    require('./mixins/WBStateMixin'),
+    require('./mixins/WBBindableMixin'),
+    WBDestroyableMixin
+  ],
 
   'initialize': function (attributes) {
 
