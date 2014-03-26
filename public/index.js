@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  'lib': require('./lib'),
   'BaseEventEmitter': require('./BaseEventEmitter'),
   'BaseSingleton': require('./BaseSingleton'),
   'WBClass': require('./WBClass'),
@@ -8,5 +9,6 @@ module.exports = {
   'WBEventEmitter': require('./WBEventEmitter'),
   'WBMixin': require('./WBMixin'),
   'WBSingleton': require('./WBSingleton'),
-  'WBStateModel': require('./WBStateModel')
+  'WBStateModel': require('./WBStateModel'),
+  'mixins': require('./mixins')
 };
