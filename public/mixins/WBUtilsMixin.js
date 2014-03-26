@@ -1,67 +1,58 @@
-define([
+'use strict';
 
-  '../WBMixin',
-  '../WBDeferred',
-  '../When',
+var WBMixin = require('../WBMixin');
+var WBDeferred = require('../WBDeferred');
+var When = require('../When');
+var toArray = require('../lib/toArray');
+var forEach = require('../lib/forEach');
+var delay = require('../lib/delay');
+var defer = require('../lib/defer');
+var functions = require('../lib/functions');
 
-  '../lib/toArray',
-  '../lib/forEach',
-  '../lib/delay',
-  '../lib/defer',
-  '../lib/functions'
+var WBUtilsMixin = WBMixin.extend({
 
-], function (
-  WBMixin, WBDeferred, When,
-  toArray, forEach, delay, defer, functions,
-  undefined
-) {
+  'deferred': function () {
+    var self = this;
+    return new WBDeferred(self);
+  },
 
-  'use strict';
+  'when': function () {
+    var self = this;
+    return When.apply(self, arguments);
+  },
 
-  return WBMixin.extend({
+  'defer': function (fn) {
+    var self = this;
+    var args = toArray(arguments);
+    // default context to self
+    args[1] = args[1] || this;
+    // support string names of functions on self
+    (typeof fn === 'string') && (args[0] = self[fn]);
+    return defer.apply(null, args);
+  },
 
-    'deferred': function () {
-      var self = this;
-      return new WBDeferred(self);
-    },
+  'delay': function (fn) {
+    var self = this;
+    var args = toArray(arguments);
+    // default context to self
+    args[2] = args[2] || self;
+    // support string names of functions on self
+    (typeof fn === 'string') && (args[0] = self[fn]);
+    return delay.apply(null, args);
+  },
 
-    'when': function () {
-      var self = this;
-      return When.apply(self, arguments);
-    },
+  'forEach': function (collection, fn, context) {
+    var self = this;
+    // default context to self
+    context = context || self;
+    // support string names of functions on self
+    (typeof fn === 'string') && (fn = self[fn]);
+    forEach(collection, fn, context);
+  },
 
-    'defer': function (fn) {
-      var self = this;
-      var args = toArray(arguments);
-      // default context to self
-      args[1] = args[1] || this;
-      // support string names of functions on self
-      (typeof fn === 'string') && (args[0] = self[fn]);
-      return defer.apply(null, args);
-    },
-
-    'delay': function (fn) {
-      var self = this;
-      var args = toArray(arguments);
-      // default context to self
-      args[2] = args[2] || self;
-      // support string names of functions on self
-      (typeof fn === 'string') && (args[0] = self[fn]);
-      return delay.apply(null, args);
-    },
-
-    'forEach': function (collection, fn, context) {
-      var self = this;
-      // default context to self
-      context = context || self;
-      // support string names of functions on self
-      (typeof fn === 'string') && (fn = self[fn]);
-      forEach(collection, fn, context);
-    },
-
-    'functions': function (obj) {
-      return functions(obj || this);
-    }
-  });
-
+  'functions': function (obj) {
+    return functions(obj || this);
+  }
 });
+
+module.exports = WBUtilsMixin;
