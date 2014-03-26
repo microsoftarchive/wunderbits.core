@@ -1,8 +1,11 @@
+var isNode = 'global' in this;
+var localGlobal = isNode ? global : window;
+
 (function () {
 
   'use strict';
 
-  var root = (typeof module !== 'undefined') ? module.exports : window;
+  var root = (typeof module !== 'undefined') ? module.exports : localGlobal;
   var define = root.define;
 
   function lookup (name) {
