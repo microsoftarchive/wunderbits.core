@@ -9,7 +9,8 @@
     "src": [
       "Gruntfile.js",
       "public/**/*.js",
-      "!public/mixins/WBBindableMixin.js"
+      "!public/mixins/WBBindableMixin.js",
+      "!public/lib/index.js"
     ]
   }
 }
