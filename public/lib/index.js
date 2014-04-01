@@ -4,6 +4,7 @@ module.exports = {
   'assert': require('./assert'),
   'clone': require('./clone'),
   'createUID': require('./createUID'),
+  'debounce': require('./debounce'),
   'defer': require('./defer'),
   'delay': require('./delay'),
   'events': require('./events'),
