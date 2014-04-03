@@ -10,7 +10,7 @@ all: lint test build
 
 install:
 	@npm install
-	@npm install -g gulp grunt
+	@npm install -g gulp grunt jscoverage
 
 build:
 	@gulp scripts
