@@ -4,7 +4,7 @@
   "description": "Core components of Wunderbits",
   "main": "public/index.js",
   "scripts": {
-    "test": "make lint specs"
+    "test": "make lint test"
   },
   "repository": {
     "type": "git",
