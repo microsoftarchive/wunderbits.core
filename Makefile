@@ -8,6 +8,10 @@ WATCH =
 
 all: lint test build
 
+install:
+	@npm install
+	@npm install -g gulp grunt
+
 build:
 	# Building
 	@gulp scripts
