@@ -1,29 +1,13 @@
-define([
+'use strict';
 
-  './WBSingleton',
-
-  './mixins/WBEventsMixin',
-  './mixins/WBBindableMixin',
-  './mixins/WBDestroyableMixin',
-  './mixins/WBUtilsMixin',
-  './mixins/ObservableHashMixin'
-
-], function (
-  WBSingleton,
-  WBEventsMixin, WBBindableMixin, WBDestroyableMixin,
-  WBUtilsMixin, ObservableHashMixin,
-  undefined
-) {
-
-  'use strict';
-
-  return WBSingleton.extend({
-    'mixins': [
-      WBEventsMixin,
-      WBBindableMixin,
-      WBDestroyableMixin,
-      WBUtilsMixin,
-      ObservableHashMixin
-    ]
-  });
+var BaseSingleton = require('./WBSingleton').extend({
+  'mixins': [
+    require('./mixins/WBEventsMixin'),
+    require('./mixins/WBBindableMixin'),
+    require('./mixins/WBDestroyableMixin'),
+    require('./mixins/WBUtilsMixin'),
+    require('./mixins/ObservableHashMixin')
+  ]
 });
+
+module.exports = BaseSingleton;

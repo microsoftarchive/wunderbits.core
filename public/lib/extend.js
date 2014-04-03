@@ -1,26 +1,25 @@
-define([
-  './toArray',
-  './assert',
-  './merge'
-], function (toArray, assert, merge) {
+'use strict';
 
-  'use strict';
+var toArray = require('./toArray');
+var merge = require('./merge');
+var assert = require('./assert');
 
-  return function extend () {
+function extend () {
 
-    // convert the argument list into an array
-    var args = toArray(arguments);
+  // convert the argument list into an array
+  var args = toArray(arguments);
 
-    // validate input
-    assert(args.length > 0, 'extend expect one or more objects');
+  // validate input
+  assert(args.length > 0, 'extend expect one or more objects');
 
-    // loop through the arguments
-    // & merging them recursively
-    var object = args.shift();
-    while (args.length) {
-      merge(object, args.shift());
-    }
+  // loop through the arguments
+  // & merging them recursively
+  var object = args.shift();
+  while (args.length) {
+    merge(object, args.shift());
+  }
 
-    return object;
-  };
-});
+  return object;
+}
+
+module.exports = extend;

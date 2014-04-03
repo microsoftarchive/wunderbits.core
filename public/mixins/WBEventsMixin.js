@@ -1,11 +1,8 @@
-define([
+'use strict';
 
-  '../WBMixin',
-  '../lib/events'
+var WBMixin = require('../WBMixin');
+var events = require('../lib/events');
 
-], function (WBMixin, events, undefined) {
+var WBEventsMixin = WBMixin.extend(events);
 
-  'use strict';
-
-  return WBMixin.extend(events);
-});
+module.exports = WBEventsMixin;

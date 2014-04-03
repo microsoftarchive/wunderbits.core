@@ -3,13 +3,14 @@
     "cyclomatic": 5,
     "halstead": 20,
     "maintainability": 100,
-    "errorsOnly": false
+    "errorsOnly": true
   },
   "public": {
     "src": [
       "Gruntfile.js",
       "public/**/*.js",
-      "!public/mixins/WBBindableMixin.js"
+      "!public/mixins/WBBindableMixin.js",
+      "!public/lib/index.js"
     ]
   }
 }

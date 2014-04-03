@@ -1,24 +1,11 @@
-define([
+'use strict';
 
-  './WBEventEmitter',
-
-  './mixins/WBDestroyableMixin',
-  './mixins/WBUtilsMixin',
-  './mixins/ObservableHashMixin'
-
-], function (
-  WBEventEmitter,
-  WBDestroyableMixin, WBUtilsMixin, ObservableHashMixin,
-  undefined
-) {
-
-  'use strict';
-
-  return WBEventEmitter.extend({
-    'mixins': [
-      WBDestroyableMixin,
-      WBUtilsMixin,
-      ObservableHashMixin
-    ]
-  });
+var BaseEmitter = require('./WBEventEmitter').extend({
+  'mixins': [
+    require('./mixins/WBDestroyableMixin'),
+    require('./mixins/WBUtilsMixin'),
+    require('./mixins/ObservableHashMixin')
+  ]
 });
+
+module.exports = BaseEmitter;

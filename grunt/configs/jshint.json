@@ -2,18 +2,20 @@
   "public": {
     "src": [
       "Gruntfile.js",
-      "public/**/*.js"
+      "Gulpfile.js",
+      "public/**/*.js",
+      "!public/mixins/WBBindableMixin.js"
     ],
     "options": {
-      "jshintrc": "public/.jshintrc"
+      "jshintrc": ".jshintrc"
     }
   },
   "specs": {
     "src": [
-      "specs/**/*.js"
+      "tests/**/*.js"
     ],
     "options": {
-      "jshintrc": "specs/.jshintrc"
+      "jshintrc": "tests/.jshintrc"
     }
   }
 }

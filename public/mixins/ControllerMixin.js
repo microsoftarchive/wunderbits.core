@@ -1,85 +1,78 @@
-define([
+'use strict';
 
-  'wunderbits/core/WBMixin',
-  'wunderbits/core/lib/fromSuper'
+var WBMixin = require('../WBMixin');
+var fromSuper = require('../lib/fromSuper');
 
-], function (
-  WBMixin,
-  fromSuper,
-  undefined
-) {
+var ControllerMixin = WBMixin.extend({
 
-  'use strict';
+  'initialize': function () {
 
-  return WBMixin.extend({
+    var self = this;
 
-    'initialize': function () {
+    self.controllers = [];
+    self.implemented = [];
 
-      var self = this;
+    self.implements = fromSuper.concat(self, 'implements');
+    self.createControllerInstances();
 
-      self.controllers = [];
-      self.implemented = [];
+    self.bindTo(self, 'destroy', 'destroyControllers');
+  },
 
-      self.implements = fromSuper.concat(self, 'implements');
-      self.createControllerInstances();
+  'createControllerInstances': function () {
 
-      self.bindTo(self, 'destroy', 'destroyControllers');
-    },
+    var self = this;
+    var ControllerClass, controllerInstance, i;
+    var Controllers = self.implements;
 
-    'createControllerInstances': function () {
+    for (i = Controllers.length; i--;) {
+      ControllerClass = Controllers[i];
 
-      var self = this;
-      var ControllerClass, controllerInstance, i;
-      var Controllers = self.implements;
+      // If we have already implemented a controller that inherits from
+      // this controller, we don't need another one...
+      if (self.implemented.indexOf(ControllerClass.toString()) < 0) {
 
-      for (i = Controllers.length; i--;) {
-        ControllerClass = Controllers[i];
+        controllerInstance = new ControllerClass(self);
+        self.controllers.push(controllerInstance);
+        controllerInstance.parent = self;
 
-        // If we have already implemented a controller that inherits from
-        // this controller, we don't need another one...
-        if (self.implemented.indexOf(ControllerClass.toString()) < 0) {
-
-          controllerInstance = new ControllerClass(self);
-          self.controllers.push(controllerInstance);
-          controllerInstance.parent = self;
-
-          self.trackImplementedSuperConstructors(controllerInstance);
-        }
+        self.trackImplementedSuperConstructors(controllerInstance);
       }
-
-      return self.implemented;
-    },
-
-    'trackImplementedSuperConstructors': function (Controller) {
-
-      var self = this;
-      var _super = Controller.__super__;
-      var superConstructor = _super && _super.constructor;
-
-      if (superConstructor) {
-        self.implemented.push(superConstructor.toString());
-        self.trackImplementedSuperConstructors(superConstructor);
-      }
-    },
-
-    'destroyControllers': function () {
-
-      var self = this;
-
-      // Loop and destroy
-      var controller;
-      var controllers = self.controllers;
-
-      for (var i = controllers.length; i--;) {
-
-        // A controller can exist multiple times in the list,
-        // since it's based on the event name,
-        // so make sure to only destroy each one once
-        controller = controllers[i];
-        controller.destroyed || controller.destroy();
-      }
-
-      delete self.controllers;
     }
-  });
+
+    return self.implemented;
+  },
+
+  'trackImplementedSuperConstructors': function (Controller) {
+
+    var self = this;
+    var _super = Controller.__super__;
+    var superConstructor = _super && _super.constructor;
+
+    if (superConstructor) {
+      self.implemented.push(superConstructor.toString());
+      self.trackImplementedSuperConstructors(superConstructor);
+    }
+  },
+
+  'destroyControllers': function () {
+
+    var self = this;
+
+    // Loop and destroy
+    var controller;
+    var controllers = self.controllers;
+
+    for (var i = controllers.length; i--;) {
+
+      // A controller can exist multiple times in the list,
+      // since it's based on the event name,
+      // so make sure to only destroy each one once
+      controller = controllers[i];
+      controller.destroyed || controller.destroy();
+    }
+
+    delete self.controllers;
+  }
 });
+
+module.exports = ControllerMixin;
