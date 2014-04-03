@@ -1,33 +1,38 @@
 UI = bdd
 REPORTER = dot
-REQUIRE = --require specs/helper.js
-SPECS = specs/**/*.spec.js
+REQUIRE = --require tests/helper.js
+TESTS = tests/**/*.spec.js
 BIN = ./node_modules/.bin/mocha
 LINT = ./node_modules/.bin/jshint
 WATCH =
 
-all: lint specs build
+all: lint test build
 
 build:
 	# Building
 	@gulp scripts
 
 lint:
-	# Linting
 	# $(LINT) public/ specs/ Gulpfile.js
 	@grunt lint
 
-specs:
-	# Specs
-	@$(BIN) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(SPECS)
+test:
+	@$(BIN) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(TESTS)
 
 watch:
-	make specs REPORTER=spec WATCH=--watch
+	make test REPORTER=spec WATCH=--watch
 
 coverage:
 	@jscoverage --no-highlight public public-coverage
-	@TEST_COV=1 make specs REPORTER=html-cov > coverage.html
+	@TEST_COV=1 make test REPORTER=html-cov > coverage.html
 	@rm -rf public-coverage
+
+publish:
+	@make test && npm publish && make tag
+
+tag:
+	@git tag "v$(shell node -e "var config = require('./package.json'); console.log(config.version);")"
+	@git push --tags
 
 # site: clean build coverage
 # 	@git clone .git build
@@ -44,4 +49,4 @@ coverage:
 # 	@cd build && git push origin gh-pages && cd ..
 # 	#git push origin gh-pages
 
-.PHONY: specs coverage lint
+.PHONY: test coverage lint
