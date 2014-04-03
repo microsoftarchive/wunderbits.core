@@ -29,9 +29,14 @@ define([
     'createControllerInstances': function () {
 
       var self = this;
-      var ControllerClass, controllerInstance, i;
-      var Controllers = self.implements;
 
+      var Controllers = self.implements;
+      if (typeof Controllers === 'function') {
+        Controllers = Controllers.call(self);
+      }
+      Controllers.reverse();
+
+      var ControllerClass, controllerInstance, i;
       for (i = Controllers.length; i--;) {
         ControllerClass = Controllers[i];
 
@@ -43,17 +48,17 @@ define([
           self.controllers.push(controllerInstance);
           controllerInstance.parent = self;
 
-          self.trackImplementedSuperConstructors(controllerInstance);
+          self.trackImplementedSuperConstructors(ControllerClass);
         }
       }
 
       return self.implemented;
     },
 
-    'trackImplementedSuperConstructors': function (Controller) {
+    'trackImplementedSuperConstructors': function (ControllerClass) {
 
       var self = this;
-      var _super = Controller.__super__;
+      var _super = ControllerClass.__super__;
       var superConstructor = _super && _super.constructor;
 
       if (superConstructor) {

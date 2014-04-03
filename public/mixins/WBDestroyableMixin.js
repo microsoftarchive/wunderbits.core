@@ -21,10 +21,10 @@ define([
 
       var self = this;
 
+      self.trigger('destroy');
+
       // clean up
       forEach(cleanupMethods, Call, self);
-
-      self.trigger('destroy');
 
       self.destroyObject(self);
 
