@@ -4,6 +4,9 @@ REQUIRE = --require tests/helper.js
 TESTS = tests/**/*.spec.js
 BIN = ./node_modules/.bin/mocha
 LINT = ./node_modules/.bin/jshint
+GULP = ./node_modules/.bin/gulp
+GRUNT = ./node_modules/.bin/grunt
+JSCOVERAGE = ./node_modules/.bin/jscoverage
 WATCH =
 
 all: lint test build
@@ -13,10 +16,10 @@ install:
 	@npm install -g gulp grunt jscoverage
 
 build:
-	@gulp scripts
+	@$(GULP) scripts
 
 lint:
-	@grunt lint
+	@$(GRUNT) lint
 
 test:
 	@$(BIN) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(TESTS)
@@ -25,7 +28,7 @@ watch:
 	make test REPORTER=spec WATCH=--watch
 
 coverage:
-	@jscoverage --no-highlight public public-coverage
+	@$(JSCOVERAGE) --no-highlight public public-coverage
 	@TEST_COV=1 make test REPORTER=html-cov > coverage.html
 	@rm -rf public-coverage
 

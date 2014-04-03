@@ -30,5 +30,11 @@
     "mocha": "^1.18.2",
     "sinon-chai": "^2.5.0",
     "chai": "^1.9.1"
+  },
+  "dependencies": {
+    "istanbul": "^0.2.7",
+    "gulp": "^3.6.0",
+    "jscoverage": "^0.3.8",
+    "grunt-cli": "^0.1.13"
   }
 }
