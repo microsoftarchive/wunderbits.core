@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  'ControllerMixin': require('./ControllerMixin'),
+  'ControllableMixin': require('./ControllableMixin'),
   'ObservableHashMixin': require('./ObservableHashMixin'),
   'WBBindableMixin': require('./WBBindableMixin'),
   'WBDestroyableMixin': require('./WBDestroyableMixin'),

@@ -3,7 +3,7 @@
 var WBMixin = require('../WBMixin');
 var fromSuper = require('../lib/fromSuper');
 
-var ControllerMixin = WBMixin.extend({
+var ControllableMixin = WBMixin.extend({
 
   'initialize': function () {
 
@@ -21,9 +21,14 @@ var ControllerMixin = WBMixin.extend({
   'createControllerInstances': function () {
 
     var self = this;
-    var ControllerClass, controllerInstance, i;
-    var Controllers = self.implements;
 
+    var Controllers = self.implements;
+    if (typeof Controllers === 'function') {
+      Controllers = Controllers.call(self);
+    }
+    Controllers.reverse();
+
+    var ControllerClass, controllerInstance, i;
     for (i = Controllers.length; i--;) {
       ControllerClass = Controllers[i];
 
@@ -35,7 +40,7 @@ var ControllerMixin = WBMixin.extend({
         self.controllers.push(controllerInstance);
         controllerInstance.parent = self;
 
-        self.trackImplementedSuperConstructors(controllerInstance);
+        self.trackImplementedSuperConstructors(ControllerClass);
       }
     }
 
@@ -75,4 +80,4 @@ var ControllerMixin = WBMixin.extend({
   }
 });
 
-module.exports = ControllerMixin;
+module.exports = ControllableMixin;
