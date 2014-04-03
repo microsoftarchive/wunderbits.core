@@ -53,4 +53,4 @@ tag:
 # 	@cd build && git push origin gh-pages && cd ..
 # 	#git push origin gh-pages
 
-.PHONY: test coverage lint
+.PHONY: all install build lint test watch coverage publish tag
