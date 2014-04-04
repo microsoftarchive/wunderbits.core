@@ -23,7 +23,7 @@ define([
       self.implements = fromSuper.concat(self, 'implements');
       self.createControllerInstances();
 
-      self.bindTo(self, 'destroy', 'destroyControllers');
+      self.bindOnceTo(self, 'destroy', 'destroyControllers');
     },
 
     'createControllerInstances': function () {
@@ -75,16 +75,13 @@ define([
       var controller;
       var controllers = self.controllers;
 
-      for (var i = controllers.length; i--;) {
-
+      while (controllers.length) {
         // A controller can exist multiple times in the list,
         // since it's based on the event name,
         // so make sure to only destroy each one once
-        controller = controllers[i];
+        controller = controllers.shift();
         controller.destroyed || controller.destroy();
       }
-
-      delete self.controllers;
     }
   });
 });
