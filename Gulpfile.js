@@ -10,4 +10,22 @@ gulp.task('scripts', cjs.scripts(gulp, {
   'name': 'wunderbits.core'
 }));
 
-// require('./gulp/tasks/specs')(gulp);
+gulp.task('server', cjs.server(gulp, {
+  'port': 5010,
+  'baseDir': process.cwd(),
+  'files': require('./karma/files')
+}));
+
+gulp.task('tests', cjs.tests(gulp, {
+  'name': 'tests',
+  'pattern': 'tests/**/*.spec.js',
+  'baseDir': process.cwd(),
+  'destDir': 'build'
+}));
+
+gulp.task('watch', function () {
+  gulp.watch([
+    'tests/**/*.spec.js',
+    'public/**/*.js'
+  ], ['tests']);
+});
