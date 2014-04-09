@@ -63,9 +63,14 @@ describe('WBDestroyableMixin', function () {
       instance.z = function () {};
       instance.destroy();
 
-      expect(instance.z).to.be.a('function');
-      expect(instance.z.name).to.equal('noop');
-      expect(instance.z.length).to.equal(0);
+      var z = instance.z;
+      expect(z).to.be.a('function');
+      expect(z.length).to.equal(0);
+
+      // IE doesn't support function names
+      if (z.name) {
+        expect(z.name).to.equal('noop');
+      }
     });
 
     it('should mark instance as destroyed', function () {
