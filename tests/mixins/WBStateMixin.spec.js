@@ -2,9 +2,9 @@ describe('StatefulMixin', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var WBEventsMixin = load('mixins/WBEventsMixin');
-  var WBStateMixin = load('mixins/WBStateMixin');
+  var WBClass = require('WBClass');
+  var WBEventsMixin = require('mixins/WBEventsMixin');
+  var WBStateMixin = require('mixins/WBStateMixin');
 
   var Klass;
   beforeEach(function () {

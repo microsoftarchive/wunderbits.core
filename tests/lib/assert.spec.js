@@ -2,7 +2,7 @@ describe('lib/assert', function () {
 
   'use strict';
 
-  var topic = load('lib/assert');
+  var topic = require('lib/assert');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

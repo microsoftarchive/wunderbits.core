@@ -2,8 +2,8 @@ describe('WBClass/mixins', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var WBMixin = load('WBMixin');
+  var WBClass = require('WBClass');
+  var WBMixin = require('WBMixin');
 
   var ExtendedClass, Mixin, applySpy, MixinInit;
 

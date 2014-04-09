@@ -2,8 +2,8 @@ describe('lib/events', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var events = load('lib/events');
+  var WBClass = require('WBClass');
+  var events = require('lib/events');
 
   var topic;
   beforeEach(function () {

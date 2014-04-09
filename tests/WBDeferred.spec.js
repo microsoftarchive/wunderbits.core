@@ -2,7 +2,7 @@ describe('WBDeferred', function () {
 
   'use strict';
 
-  var WBDeferred = load('WBDeferred');
+  var WBDeferred = require('WBDeferred');
 
   var defer;
   beforeEach(function () {

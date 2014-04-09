@@ -2,7 +2,7 @@ describe('WBUtilsMixin', function () {
 
   'use strict';
 
-  var WBUtilsMixin = load('mixins/WBUtilsMixin');
+  var WBUtilsMixin = require('mixins/WBUtilsMixin');
 
   var instance, context;
   beforeEach(function () {

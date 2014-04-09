@@ -2,9 +2,9 @@ describe('WBDestroyableMixin', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var WBEventsMixin = load('mixins/WBEventsMixin');
-  var WBDestroyableMixin = load('mixins/WBDestroyableMixin');
+  var WBClass = require('WBClass');
+  var WBEventsMixin = require('mixins/WBEventsMixin');
+  var WBDestroyableMixin = require('mixins/WBDestroyableMixin');
 
   var Klass;
   beforeEach(function () {

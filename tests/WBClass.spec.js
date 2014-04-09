@@ -2,8 +2,8 @@ describe('WBClass', function () {
 
   'use strict';
 
-  var Topic = load('WBClass');
-  var WBMixin = load('WBMixin');
+  var Topic = require('WBClass');
+  var WBMixin = require('WBMixin');
 
   describe('class constructor', function () {
 

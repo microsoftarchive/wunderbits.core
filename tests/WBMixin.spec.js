@@ -2,7 +2,7 @@ describe('WBMixin', function () {
 
   'use strict';
 
-  var Topic = load('WBMixin');
+  var Topic = require('WBMixin');
 
   describe('#extend', function () {
 

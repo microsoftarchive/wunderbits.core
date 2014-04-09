@@ -2,8 +2,8 @@ describe('mergeFromSuper / concatFromSuper', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var fromSuper = load('lib/fromSuper');
+  var WBClass = require('WBClass');
+  var fromSuper = require('lib/fromSuper');
 
   var mergeFromSuper = fromSuper.merge;
   var concatFromSuper = fromSuper.concat;

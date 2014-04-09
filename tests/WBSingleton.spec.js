@@ -2,7 +2,7 @@ describe('WBSingleton', function () {
 
   'use strict';
 
-  var Topic = load('WBSingleton');
+  var Topic = require('WBSingleton');
   var noop = function () {};
 
   describe('#initialize', function () {
