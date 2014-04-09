@@ -2,7 +2,7 @@ describe('merge', function () {
 
   'use strict';
 
-  var topic = load('lib/merge');
+  var topic = require('lib/merge');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

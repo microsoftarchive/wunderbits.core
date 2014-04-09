@@ -2,8 +2,8 @@ describe('ControllableMixin', function () {
 
   'use strict';
 
-  var EventEmitter = load('BaseEventEmitter');
-  var ControllableMixin = load('mixins/ControllableMixin');
+  var EventEmitter = require('BaseEventEmitter');
+  var ControllableMixin = require('mixins/ControllableMixin');
 
   var Topic;
   beforeEach (function () {

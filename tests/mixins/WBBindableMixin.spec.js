@@ -2,9 +2,9 @@ describe('WBBindableMixin', function () {
 
   'use strict';
 
-  var createUID = load('lib/createUID');
-  var WBEventsMixin = load('mixins/WBEventsMixin');
-  var WBBindableMixin = load('mixins/WBBindableMixin');
+  var createUID = require('lib/createUID');
+  var WBEventsMixin = require('mixins/WBEventsMixin');
+  var WBBindableMixin = require('mixins/WBBindableMixin');
 
   var topic, topic2, model, model2;
 

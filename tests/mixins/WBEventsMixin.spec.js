@@ -3,7 +3,7 @@ describe('WBEventsMixin', function () {
   'use strict';
 
   var topic;
-  var Topic = load('mixins/WBEventsMixin');
+  var Topic = require('mixins/WBEventsMixin');
 
   beforeEach(function () {
     topic = Topic.applyTo({});

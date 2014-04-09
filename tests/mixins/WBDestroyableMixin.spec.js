@@ -2,9 +2,9 @@ describe('WBDestroyableMixin', function () {
 
   'use strict';
 
-  var WBClass = load('WBClass');
-  var WBEventsMixin = load('mixins/WBEventsMixin');
-  var WBDestroyableMixin = load('mixins/WBDestroyableMixin');
+  var WBClass = require('WBClass');
+  var WBEventsMixin = require('mixins/WBEventsMixin');
+  var WBDestroyableMixin = require('mixins/WBDestroyableMixin');
 
   var Klass;
   beforeEach(function () {
@@ -63,9 +63,14 @@ describe('WBDestroyableMixin', function () {
       instance.z = function () {};
       instance.destroy();
 
-      expect(instance.z).to.be.a('function');
-      expect(instance.z.name).to.equal('noop');
-      expect(instance.z.length).to.equal(0);
+      var z = instance.z;
+      expect(z).to.be.a('function');
+      expect(z.length).to.equal(0);
+
+      // IE doesn't support function names
+      if (z.name) {
+        expect(z.name).to.equal('noop');
+      }
     });
 
     it('should mark instance as destroyed', function () {

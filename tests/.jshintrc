@@ -9,7 +9,8 @@
     "xit",
     "setTimeout",
     "sinon",
-    "expect"
+    "expect",
+    "window"
   ],
 
   "asi": false,

@@ -1,19 +1,23 @@
 UI = bdd
 REPORTER = dot
 REQUIRE = --require tests/helper.js
-TESTS = tests/**/*.spec.js
-BIN = ./node_modules/.bin/mocha
+RUNNER = ./node_modules/.bin/_mocha
+DEBUGGER = node --debug ./node_modules/.bin/_mocha
 LINT = ./node_modules/.bin/jshint
+WATCH =
+KARMA = ./node_modules/karma/bin/karma
+TESTS=tests/**/*.spec.js
+ISTANBUL = ./node_modules/istanbul/lib/cli.js
 GULP = ./node_modules/.bin/gulp
 GRUNT = ./node_modules/.bin/grunt
-JSCOVERAGE = ./node_modules/.bin/jscoverage
-WATCH =
+
+red=`tput setaf 1`
+normal=`tput sgr0`
 
 all: lint test build
 
 install:
-	@npm install
-	@npm install -g gulp grunt jscoverage
+	@npm install --loglevel error
 
 build:
 	@$(GULP) scripts
@@ -22,15 +26,16 @@ lint:
 	@$(GRUNT) lint
 
 test:
-	@$(BIN) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(TESTS)
+	@NODE_PATH=$(shell pwd)/public $(RUNNER) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(TESTS)
+
+watch-node:
+	@make unit REPORTER=spec WATCH=--watch
 
 watch:
-	make test REPORTER=spec WATCH=--watch
+	@$(GULP) tests watch
 
 coverage:
-	@$(JSCOVERAGE) --no-highlight public public-coverage
-	@TEST_COV=1 make test REPORTER=html-cov > coverage.html
-	@rm -rf public-coverage
+	@NODE_PATH=$(shell pwd)/public $(ISTANBUL) cover $(RUNNER) $(REQUIRE) tests/unit/**/*.spec.js
 
 publish:
 	@make test && npm publish && make tag
@@ -54,4 +59,20 @@ site: clean build coverage
 	@cd build && git push origin gh-pages && cd ..
 	#git push origin gh-pages
 
-.PHONY: build coverage
+clean:
+	@rm -f build/*.js
+
+karma:
+	@$(GULP) tests
+	@$(KARMA) start karma/conf.js
+
+server:
+	@$(GULP) tests watch server
+
+start: install server
+
+documentation:
+	rm -rf ./docs/*
+	./node_modules/.bin/jsdoc -c ./jsdoc.conf.json
+
+.PHONY: coverage build karma

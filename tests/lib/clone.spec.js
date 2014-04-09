@@ -2,7 +2,7 @@ describe('lib/clone', function () {
 
   'use strict';
 
-  var topic = load('lib/clone');
+  var topic = require('lib/clone');
   var original = {
     'a': 5,
     'b': function () {},

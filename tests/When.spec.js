@@ -2,8 +2,8 @@ describe('When', function () {
 
   'use strict';
 
-  var when = load('lib/when');
-  var WBDeferred = load('WBDeferred');
+  var when = require('lib/when');
+  var WBDeferred = require('WBDeferred');
 
   describe('#when', function () {
 

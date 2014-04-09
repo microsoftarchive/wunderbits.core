@@ -2,7 +2,7 @@ describe('lib/debounce', function () {
 
   'use strict';
 
-  var topic = load('lib/debounce');
+  var topic = require('lib/debounce');
   var fn = function () {
     count++;
   };

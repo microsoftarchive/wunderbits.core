@@ -2,7 +2,7 @@ describe('functions', function () {
 
   'use strict';
 
-  var topic = load('lib/functions');
+  var topic = require('lib/functions');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');

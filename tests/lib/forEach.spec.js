@@ -2,7 +2,7 @@ describe('forEach', function () {
 
   'use strict';
 
-  var topic = load('lib/forEach');
+  var topic = require('lib/forEach');
 
   it('should be a function', function () {
     expect(topic).to.be.a('function');
