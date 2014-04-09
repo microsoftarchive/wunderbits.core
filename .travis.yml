@@ -10,12 +10,9 @@ env:
   - secure: NYXJWRqwbQRXnAnNR2rWum9lTHfZcfK0tz5uc+c7OWfpR8g5Cx/wBNTryX9coccEKQH2dtFAsszydKAXKzd6LgV12De8DlUCU4drWAyZvhbSL01Qlb8wPSXOQAjVoRGQDMW3Pag6iblPczDxDIHUT4MpDKf4pE4xrTTZ5m81m4A=
 
 notifications:
-  hipchat:
+  slack:
     rooms:
-      secure: FLIsh91rd5To6Ss7zq5iid8UmW3sxwotHiqp2SUrdCPnOYgiC9aRSSRhO2/Q56s4FiwlrG0UWfpVDgcIDt23k+zMg9VRxY30/HA7hYJ3afwycvJz+fatvwhDKcTsL9+SsglxxcxcCgpU9GE1ucOJwZhO8+x70jaC8tcklNuinO0=
-    template:
-      - '%{message}: %{repository}#(%{branch}) ( <a href="%{build_url}">Details</a> / <a href="%{compare_url}">Diff</a>) '
-    format: html
+      secure: Cvxn5nMV5MJpdFMzHgI7wm9shYiZI3DhuEH/3HBqbAdg2hiie2H7g/wnfo2btGgJT5BpT8PvaSj2UHAhGOzOTm5UyfkqIYsWxiQlUUECSjVgdifVVVbhL7M7No2Q8+4A2xVIYDgvvnzQ2oH09viZc4B7eXzZ7EUJsnDBfC4JDD0=
 
 git:
   depth: 1
