@@ -1,16 +1,31 @@
 language: node_js
 node_js:
-  - "0.10"
+- 0.10
+
+env:
+  matrix:
+  - TRAVIS=true
+  global:
+  - secure: JoYCcwaMcEfJmjgh40njEsKPd/vPFnvMx20hakikMdNAXCav8o0bq+k8GSX8TteaYeBpM8udSWk25VJ5SE/Jh2XaP61NY0PAfHU7MK9+c+NDfSteQs6MF7l4aZT++lMo+SanO17b500tm2cHhB+XjRNshz+UrtNPRrGd7Q+4eVA=
+  - secure: NYXJWRqwbQRXnAnNR2rWum9lTHfZcfK0tz5uc+c7OWfpR8g5Cx/wBNTryX9coccEKQH2dtFAsszydKAXKzd6LgV12De8DlUCU4drWAyZvhbSL01Qlb8wPSXOQAjVoRGQDMW3Pag6iblPczDxDIHUT4MpDKf4pE4xrTTZ5m81m4A=
+
+notifications:
+  hipchat:
+    rooms:
+      secure: FLIsh91rd5To6Ss7zq5iid8UmW3sxwotHiqp2SUrdCPnOYgiC9aRSSRhO2/Q56s4FiwlrG0UWfpVDgcIDt23k+zMg9VRxY30/HA7hYJ3afwycvJz+fatvwhDKcTsL9+SsglxxcxcCgpU9GE1ucOJwZhO8+x70jaC8tcklNuinO0=
+    template:
+      - '%{message}: %{repository}#(%{branch}) ( <a href="%{build_url}">Details</a> / <a href="%{compare_url}">Diff</a>) '
+    format: html
 
 git:
   depth: 1
+  submodules: false
 
 before_install:
-  # - npm install -g --quiet --production --registry http://registry.npmjs.eu/ grunt-cli
-  - npm install -g --quiet --production grunt-cli
+- npm install -g --quiet --production grunt-cli
 
 install:
-  - npm install --loglevel error --development
+- npm install --loglevel error --development
 
 script:
-  - npm test
+- make lint test karma

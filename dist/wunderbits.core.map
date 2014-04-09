@@ -2,7 +2,7 @@
   "version": 3,
   "file": "wunderbits.core",
   "sources": [
-    "../gulp-cjs/node_modules/browserify/node_modules/browser-pack/_prelude.js",
+    "wunderbits.core/node_modules/gulp-cjs/node_modules/browserify/node_modules/browser-pack/_prelude.js",
     "wunderbits.core/public/BaseEventEmitter.js",
     "wunderbits.core/public/BaseSingleton.js",
     "wunderbits.core/public/WBClass.js",
