@@ -7,7 +7,8 @@ var Files = require('./files');
 
 var BrowsersToTest = ENV.TRAVIS ? Object.keys(SupportedBrowsers) : [
   'Firefox',
-  'Chrome'
+  'Chrome',
+  'Safari'
 ];
 
 module.exports = function (config) {
