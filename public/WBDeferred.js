@@ -19,12 +19,15 @@ var stateNames = {
 
 var proto = {
 
-  'constructor': function (context) {
+  'properties': {
+    '_state': states.pending,
+    '_args': [],
+    'handlers': []
+  },
+
+  'initialize': function (context) {
     var self = this;
     self._context = context;
-    self._state = states.pending;
-    self._args = [];
-    self.handlers = [];
   },
 
   'state': function () {
