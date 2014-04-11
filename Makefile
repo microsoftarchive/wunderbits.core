@@ -5,11 +5,11 @@ RUNNER = ./node_modules/.bin/_mocha
 DEBUGGER = node --debug ./node_modules/.bin/_mocha
 LINT = ./node_modules/.bin/jshint
 WATCH =
+TESTS = $(shell find tests -name "*.spec.js")
 KARMA = ./node_modules/karma/bin/karma
-TESTS=tests/**/*.spec.js
+GULP = ./node_modules/gulp/bin/gulp.js
+GRUNT = ./node_modules/grunt-cli/bin/grunt
 ISTANBUL = ./node_modules/istanbul/lib/cli.js
-GULP = ./node_modules/.bin/gulp
-GRUNT = ./node_modules/.bin/grunt
 
 red=`tput setaf 1`
 normal=`tput sgr0`
@@ -29,13 +29,17 @@ test:
 	@NODE_PATH=$(shell pwd)/public $(RUNNER) --ui $(UI) --reporter $(REPORTER) $(REQUIRE) $(WATCH) $(TESTS)
 
 watch-node:
-	@make unit REPORTER=spec WATCH=--watch
+	@make test REPORTER=spec WATCH=--watch
+
+debug:
+	@echo "Start ${red}node-inspector${normal} if not running already"
+	@make test WATCH=--watch RUNNER="$(DEBUGGER)"
 
 watch:
 	@$(GULP) tests watch
 
 coverage:
-	@NODE_PATH=$(shell pwd)/public $(ISTANBUL) cover $(RUNNER) $(REQUIRE) tests/unit/**/*.spec.js
+	@NODE_PATH=$(shell pwd)/public $(ISTANBUL) cover $(RUNNER) $(REQUIRE) $(TESTS)
 
 publish:
 	@make test && npm publish && make tag
