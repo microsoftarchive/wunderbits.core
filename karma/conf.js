@@ -22,6 +22,7 @@ module.exports = function (config) {
     ],
     'files': Files,
     'reporters': ['dots'],
+    'browserNoActivityTimeout': 60000,
     'captureTimeout': 60000,
     'port': 9876,
     'colors': true,
