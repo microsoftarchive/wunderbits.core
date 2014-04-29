@@ -26,9 +26,10 @@ var ControllableMixin = WBMixin.extend({
     if (typeof Controllers === 'function') {
       Controllers = Controllers.call(self);
     }
-    Controllers.reverse();
 
     var ControllerClass, controllerInstance, i;
+
+    // the order in which the controllers are implemented is important!
     for (i = Controllers.length; i--;) {
       ControllerClass = Controllers[i];
 
