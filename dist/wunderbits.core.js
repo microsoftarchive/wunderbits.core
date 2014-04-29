@@ -630,7 +630,7 @@ function cloneArray (arr, isDeep) {
 }
 
 function cloneDate (date) {
-  return new Date(date);
+  return new Date(date.getTime());
 }
 
 function cloneObject (source, isDeep) {
