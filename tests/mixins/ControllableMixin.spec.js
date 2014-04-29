@@ -31,7 +31,7 @@ describe('ControllableMixin', function () {
       var presenter = new PresenterClass2();
 
       expect(presenter.controllers.length).to.equal(1);
-      expect(presenter.controllers[0].constructor.toString()).to.equal(ControllerClass3.toString());
+      expect(presenter.controllers[0].constructor).to.equal(ControllerClass3);
     });
   });
 
