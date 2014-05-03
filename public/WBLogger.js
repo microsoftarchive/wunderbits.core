@@ -40,29 +40,12 @@ var WBLoggerPrototype = {
   }
 };
 
-// this matches the list of chrome console methods
-// https://developers.google.com/chrome-developer-tools/docs/console-api
-var consoleMethods = [
-  'assert',
-  'clear',
-  'count',
-  'debug',
-  'dir',
-  'dirxml',
-  'error',
-  'group',
-  'groupCollapsed',
-  'groupEnd',
-  'info',
-  'log',
-  'profile',
-  'profileEnd',
-  'time',
-  'timeEnd',
-  'timeStamp',
-  'trace',
-  'warn'
-];
+var consoleMethods = [];
+for (var consoleProp in Console) {
+  if (typeof Console[consoleProp] === 'function') {
+    consoleMethods.push(consoleProp);
+  }
+}
 
 consoleMethods.forEach(function (method) {
 
