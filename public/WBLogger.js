@@ -3,6 +3,7 @@
 var Console = global.console;
 var WBClass = require('./WBClass');
 var assert = require('./lib/assert');
+var functions = require('./lib/functions');
 
 var WBLoggerPrototype = {
 
@@ -14,14 +15,12 @@ var WBLoggerPrototype = {
     assert.string(namespace, 'WBLogger namespace must be a string');
 
     var namespaceMap = WBLogger.namespaces;
-
     // if a cached namespaced logger already exists, simply return it
     if (namespaceMap[namespace] instanceof WBLogger) {
       return namespaceMap[namespace];
     }
 
     self.namespace = namespace;
-
     namespaceMap[namespace] = self;
 
     WBClass.call(self);
@@ -32,22 +31,12 @@ var WBLoggerPrototype = {
 
   'shouldRun': function () {
 
-    var self = this;
-
-    var shouldRun = WBLogger.pattern && WBLogger.pattern.test(self.namespace);
-
+    var shouldRun = WBLogger.pattern && WBLogger.pattern.test(this.namespace);
     return !!(shouldRun && Console);
   }
 };
 
-var consoleMethods = [];
-for (var consoleProp in Console) {
-  if (typeof Console[consoleProp] === 'function') {
-    consoleMethods.push(consoleProp);
-  }
-}
-
-consoleMethods.forEach(function (method) {
+functions(Console).forEach(function (method) {
 
   WBLoggerPrototype[method] = function () {
 
