@@ -15,21 +15,18 @@ var WBLoggerPrototype = {
 
     var namespaceMap = WBLogger.namespaces;
 
-    // if the namespaced logger already exists, use it
+    // if a cached namespaced logger already exists, simply return it
     if (namespaceMap[namespace] instanceof WBLogger) {
       return namespaceMap[namespace];
     }
 
-    // save the namespace
     self.namespace = namespace;
 
-    // cache the instance
     namespaceMap[namespace] = self;
 
-    // call the base constructor
     WBClass.call(self);
 
-    // force GC ?
+    // forces GC of potentially large object immediately
     namespaceMap = null;
   },
 
@@ -75,19 +72,15 @@ consoleMethods.forEach(function (method) {
   };
 });
 
-// Extend WBClass
 var WBLogger = WBClass.extend(WBLoggerPrototype);
 
-// cache all the namespaced instances for better memory management
 WBLogger.namespaces = {};
 
-// allow flushing of this cache
 WBLogger.release = function () {
 
   WBLogger.namespaces = {};
 };
 
-// changes current regex test pattern for enabling loggers
 WBLogger.log = function (regexPattern) {
 
   WBLogger.pattern = new RegExp(regexPattern);
