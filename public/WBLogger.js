@@ -11,11 +11,10 @@ var WBLoggerPrototype = {
 
     var self = this;
 
-    // assert(self.constructor !== WBLogger, 'can\'t initialize WBLogger');
-    assert.string(namespace, 'WBLogger namespace must be a string');
+    assert.string(namespace, 'namespace must be a string');
 
-    var namespaceMap = WBLogger.namespaces;
     // if a cached namespaced logger already exists, simply return it
+    var namespaceMap = WBLogger.namespaces;
     if (namespaceMap[namespace] instanceof WBLogger) {
       return namespaceMap[namespace];
     }
@@ -55,6 +54,7 @@ WBLogger.release = function () {
 
 WBLogger.log = function (regexPatternString) {
 
+  assert.string(regexPatternString, 'regexPatternString must be a string');
   regexPatternString = regexPatternString === '*' ? '.?' : regexPatternString;
   WBLogger.pattern = new RegExp(regexPatternString);
 };
