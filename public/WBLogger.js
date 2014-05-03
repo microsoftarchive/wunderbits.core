@@ -53,9 +53,10 @@ WBLogger.release = function () {
   WBLogger.namespaces = {};
 };
 
-WBLogger.log = function (regexPattern) {
+WBLogger.log = function (regexPatternString) {
 
-  WBLogger.pattern = new RegExp(regexPattern);
+  regexPatternString = regexPatternString === '*' ? '.?' : regexPatternString;
+  WBLogger.pattern = new RegExp(regexPatternString);
 };
 
 module.exports = global.WBLogger = WBLogger;
