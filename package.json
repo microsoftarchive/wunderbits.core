@@ -1,6 +1,6 @@
 {
   "name": "wunderbits.core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Core components of Wunderbits",
   "main": "public/index.js",
   "scripts": {
