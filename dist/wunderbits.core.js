@@ -604,7 +604,7 @@ var types = [
 
 function typecheck (type) {
   assert[type] = function (o, message) {
-    assert(typeof o === type, message);
+    assert(typeof o === type, message + ' (' + JSON.stringify(o) + ')');
   };
 }
 
@@ -613,6 +613,7 @@ while (types.length) {
 }
 
 module.exports = assert;
+
 },{}],12:[function(_dereq_,module,exports){
 'use strict';
 
