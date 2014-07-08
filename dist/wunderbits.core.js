@@ -604,7 +604,7 @@ var types = [
 
 function typecheck (type) {
   assert[type] = function (o, message) {
-    assert(typeof o === type, message + ' (' + JSON.stringify(o) + ')');
+    assert(typeof o === type, message);
   };
 }
 
