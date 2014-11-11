@@ -1495,7 +1495,6 @@ module.exports = ObservableHashMixin;
 'use strict';
 
 var WBMixin = _dereq_('../WBMixin');
-// var assert = require('../lib/assert');
 var createUID = _dereq_('../lib/createUID');
 
 var WBBindableMixin = WBMixin.extend({
@@ -1509,27 +1508,31 @@ var WBBindableMixin = WBMixin.extend({
   // only callback and context
   'callbackFactory': function  (callback, context) {
 
+    var self = this;
     var bindCallback;
 
-    var forString = function stringCallback () {
-      context[callback].apply(context, arguments);
-    };
-
-    var forFunction = function functionCallback () {
-      callback.apply(context, arguments);
-    };
-
     if (typeof callback === 'string') {
-      bindCallback = forString;
-      // cancel alternate closure immediately
-      forFunction = null;
+      bindCallback = self.stringCallbackFactory(callback, context);
     }
     else {
-      bindCallback = forFunction;
-      forString = null;
+      bindCallback = self.functionCallbackFactory(callback, context);
     }
 
     return bindCallback;
+  },
+
+  'stringCallbackFactory': function (callback, context) {
+
+    return function stringCallback () {
+      context[callback].apply(context, arguments);
+    };
+  },
+
+  'functionCallbackFactory': function (callback, context) {
+
+    return function functionCallback () {
+      callback.apply(context, arguments);
+    };
   },
 
   'bindTo': function (target, event, callback, context) {
@@ -1538,28 +1541,28 @@ var WBBindableMixin = WBMixin.extend({
     self.checkBindingArgs.apply(self, arguments);
 
     // default to self if context not provided
-    context = context || self;
+    var ctx = context || self;
 
     // if this binding already made, return it
-    var bound = self.isAlreadyBound(target, event, callback, context);
+    var bound = self.isAlreadyBound(target, event, callback, ctx);
     if (bound) {
       return bound;
     }
 
-
     var callbackFunc, args;
-
     // if a jquery object
-    if (target.constructor && target.constructor.fn && target.constructor.fn.on === target.on) {
+    if (self.isTargetJquery(target)) {
       // jquery does not take context in .on()
       // cannot assume on takes context as a param for bindable object
-      // create a callback which will apply the original callback in the correct context
-      callbackFunc = self.callbackFactory(callback, context);
+      // create a callback which will apply the original callback
+      // in the correct context
+      callbackFunc = self.callbackFactory(callback, ctx);
       args = [event, callbackFunc];
-    } else {
+    }
+    else {
       // Backbone accepts context when binding, simply pass it on
-      callbackFunc = (typeof callback === 'string') ? context[callback] : callback;
-      args = [event, callbackFunc, context];
+      callbackFunc = (typeof callback === 'string') ? ctx[callback] : callback;
+      args = [event, callbackFunc, ctx];
     }
 
     // create binding on target
@@ -1571,13 +1574,19 @@ var WBBindableMixin = WBMixin.extend({
       'event': event,
       'originalCallback': callback,
       'callback': callbackFunc,
-      'context': context
+      'context': ctx
     };
 
     self._bindings[binding.uid] = binding;
     self.addToNamedBindings(event, binding);
 
     return binding;
+  },
+
+  'isTargetJquery': function (target) {
+
+    var constructor = target.constructor;
+    return constructor && constructor.fn && constructor.fn.on === target.on;
   },
 
   'bindOnceTo': function (target, event, callback, context) {
@@ -1592,7 +1601,6 @@ var WBBindableMixin = WBMixin.extend({
     if (bound) {
       return bound;
     }
-
 
     // this is a wrapper
     var onceBinding = function () {
