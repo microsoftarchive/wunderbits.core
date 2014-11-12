@@ -1010,22 +1010,23 @@ var toArray = _dereq_('./toArray');
 var merge = _dereq_('./merge');
 var assert = _dereq_('./assert');
 
+function extendObject (object, sources) {
+
+  // loop through the sources
+  // merging them recursively
+  while (sources.length) {
+    merge(object, sources.shift());
+  }
+  return object;
+}
+
 function extend () {
 
   // convert the argument list into an array
   var args = toArray(arguments);
-
   // validate input
   assert(args.length > 0, 'extend expect one or more objects');
-
-  // loop through the arguments
-  // & merging them recursively
-  var object = args.shift();
-  while (args.length) {
-    merge(object, args.shift());
-  }
-
-  return object;
+  return extendObject(args.shift(), args);
 }
 
 module.exports = extend;
@@ -1212,16 +1213,31 @@ module.exports = isEqual;
 
 var toArray = _dereq_('./toArray');
 
-function merge (object, source) {
-  var sources = toArray(arguments, 1);
-  while (sources.length) {
-    source = sources.shift();
-    for (var key in source) {
-      if (source.hasOwnProperty(key)) {
-        object[key] = source[key];
-      }
+function mergeKeys (object, source) {
+
+  Object.keys(source).forEach(function mergeKey (key) {
+
+    if (source.hasOwnProperty(key)) {
+      object[key] = source[key];
     }
+  });
+}
+
+function mergeSources (object, sources) {
+
+  sources.forEach(function mergeSource (source) {
+
+    source && mergeKeys(object, source);
+  });
+}
+
+function merge (object) { // object, source
+
+  var sources = toArray(arguments, 1);
+  if (object && sources.length) {
+    mergeSources(object, sources);
   }
+
   return object;
 }
 
