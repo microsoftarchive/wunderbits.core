@@ -593,10 +593,13 @@ assert.class = function (klass, message) {
   assert(proto && proto.constructor === klass, message);
 };
 
+assert.number = function (value, message) {
+  assert(typeof value === 'number' && !isNaN(value), message);
+};
+
 var types = [
   'undefined',
   'boolean',
-  'number',
   'string',
   'function',
   'object'

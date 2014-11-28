@@ -18,6 +18,20 @@ describe('lib/assert', function () {
     }).to.throw(Error);
   });
 
+  it('should test numbers', function () {
+    expect(function () {
+      topic.number('123');
+    }).to.throw(Error);
+
+    expect(function () {
+      topic.number(parseInt('123', 10));
+    }).to.not.throw(Error);
+
+    expect(function () {
+      topic.number(123);
+    }).to.not.throw(Error);
+  });
+
   describe('should test empty', function () {
 
     it('array', function () {
@@ -48,5 +62,4 @@ describe('lib/assert', function () {
       topic.array({});
     }).to.throw(Error);
   });
-
 });
