@@ -1216,12 +1216,13 @@ module.exports = isEqual;
 var toArray = _dereq_('./toArray');
 
 function merge (object, source) {
+  var localSource;
   var sources = toArray(arguments, 1);
   while (sources.length) {
-    source = sources.shift();
-    for (var key in source) {
-      if (source.hasOwnProperty(key)) {
-        object[key] = source[key];
+    localSource = sources.shift();
+    for (var key in localSource) {
+      if (localSource.hasOwnProperty(key)) {
+        object[key] = localSource[key];
       }
     }
   }
@@ -1251,13 +1252,12 @@ function getAllocatedArray (arrLength) {
 
 function toArray (arrayLikeObj, skip) {
 
-  skip = skip || 0;
-
+  var localSkip = skip || 0;
   var length = arrayLikeObj.length;
-  var arr = getAllocatedArray(length - skip);
+  var arr = getAllocatedArray(length - localSkip);
 
-  for (var i = skip; i < length; i++) {
-    arr[i - skip] = arrayLikeObj[i];
+  for (var i = localSkip; i < length; i++) {
+    arr[i - localSkip] = arrayLikeObj[i];
   }
 
   return arr;

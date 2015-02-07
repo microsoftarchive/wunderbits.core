@@ -3,12 +3,13 @@
 var toArray = require('./toArray');
 
 function merge (object, source) {
+  var localSource;
   var sources = toArray(arguments, 1);
   while (sources.length) {
-    source = sources.shift();
-    for (var key in source) {
-      if (source.hasOwnProperty(key)) {
-        object[key] = source[key];
+    localSource = sources.shift();
+    for (var key in localSource) {
+      if (localSource.hasOwnProperty(key)) {
+        object[key] = localSource[key];
       }
     }
   }

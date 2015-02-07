@@ -8,13 +8,12 @@ function getAllocatedArray (arrLength) {
 
 function toArray (arrayLikeObj, skip) {
 
-  skip = skip || 0;
-
+  var localSkip = skip || 0;
   var length = arrayLikeObj.length;
-  var arr = getAllocatedArray(length - skip);
+  var arr = getAllocatedArray(length - localSkip);
 
-  for (var i = skip; i < length; i++) {
-    arr[i - skip] = arrayLikeObj[i];
+  for (var i = localSkip; i < length; i++) {
+    arr[i - localSkip] = arrayLikeObj[i];
   }
 
   return arr;
