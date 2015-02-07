@@ -1215,7 +1215,7 @@ module.exports = isEqual;
 
 var toArray = _dereq_('./toArray');
 
-function merge (object, source) {
+function merge (object) {
   var localSource;
   var sources = toArray(arguments, 1);
   while (sources.length) {

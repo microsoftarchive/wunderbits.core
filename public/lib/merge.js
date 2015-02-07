@@ -2,7 +2,7 @@
 
 var toArray = require('./toArray');
 
-function merge (object, source) {
+function merge (object) {
   var localSource;
   var sources = toArray(arguments, 1);
   while (sources.length) {
