@@ -832,10 +832,10 @@ var events = {
     }
 
     // if no events are passed, unbind all events with this callback
-    events = events || Object.keys(self._events);
+    var localEvents = events || Object.keys(self._events);
 
     // loop through the events & bind them
-    self.iterate(events, function (name) {
+    self.iterate(localEvents, function (name) {
       self.unbind(name, callback, context);
     });
 
@@ -923,11 +923,12 @@ var events = {
     // call sub-event handlers
     var current = [];
     var fragments = name.split(':');
+    var subName;
     while (fragments.length) {
       current.push(fragments.shift());
-      name = current.join(':');
-      if (name in events) {
-        self.triggerSection(name, fragments, params);
+      subName = current.join(':');
+      if (subName in events) {
+        self.triggerSection(subName, fragments, params);
       }
     }
   },
@@ -951,15 +952,16 @@ var events = {
   'iterate': function (events, iterator) {
 
     var self = this;
+    var localEvents = events;
 
-    if (typeof events === 'string') {
-      events = events.split(eventSplitter);
+    if (typeof localEvents === 'string') {
+      localEvents = localEvents.split(eventSplitter);
     } else {
-      assert.array(events);
+      assert.array(localEvents);
     }
 
-    while (events.length) {
-      iterator.call(self, events.shift());
+    while (localEvents.length) {
+      iterator.call(self, localEvents.shift());
     }
   },
 
