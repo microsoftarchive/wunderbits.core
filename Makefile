@@ -19,7 +19,7 @@ all: lint test build
 install:
 	@npm install --loglevel error
 
-build:
+build: lint test
 	@$(GULP) scripts
 
 lint:
