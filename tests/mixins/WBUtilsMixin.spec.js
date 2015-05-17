@@ -144,10 +144,10 @@ describe('WBUtilsMixin', function () {
   describe('#delay', function () {
     it('should execute the function after the said delay', function(done) {
 
-      var time = (new Date).getTime();
+      var time = (new Date()).getTime();
       var callback = function() {
 
-        var timeDiff = (new Date).getTime() - time;
+        var timeDiff = (new Date()).getTime() - time;
         expect(timeDiff).to.be.within(10, 15);
         done();
       };
