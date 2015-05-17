@@ -142,14 +142,72 @@ describe('WBUtilsMixin', function () {
   });
 
   describe('#delay', function () {
-    it('should execute the function after the said delay');
-    it('should resolve a function name string to the function on self');
-    it('should default to self for context, if no context is passed');
+    it('should execute the function after the said delay', function(done) {
+
+      var time = (new Date).getTime();
+      var callback = function() {
+
+        var timeDiff = (new Date).getTime() - time;
+        expect(timeDiff).to.be.within(10, 15);
+        done();
+      };
+
+      instance.delay(callback, 10, context);
+    });
+
+    it('should resolve a function name string to the function on self', function(done) {
+
+      instance.callback = function() {
+        done();
+      };
+
+      instance.delay('callback', 1, context);
+    });
+
+    it('should default to self for context, if no context is passed', function(done) {
+
+      var callback = function() {
+
+        expect(this.id).to.equal('instanceId');
+        done();
+      };
+
+      instance.delay(callback, 1);
+    });
   });
 
   describe('#defer', function () {
-    it('should execute the function in the next event loop');
-    it('should resolve a function name string to the function on self');
-    it('should default to self for context, if no context is passed');
+    it('should execute the function in the next event loop', function(done) {
+
+      var primaryExecutionCompleted  = false;
+      var callback = function() {
+
+        expect(primaryExecutionCompleted).to.be.true;
+        done();
+      };
+
+      instance.defer(callback, context);
+      primaryExecutionCompleted = true;
+    });
+
+    it('should resolve a function name string to the function on self', function(done) {
+
+      instance.callback = function() {
+        done();
+      };
+
+      instance.defer('callback', context);
+    });
+
+    it('should default to self for context, if no context is passed', function(done) {
+
+      var callback = function() {
+
+        expect(this.id).to.equal('instanceId');
+        done();
+      };
+
+      instance.defer(callback);
+    });
   });
 });
