@@ -86,6 +86,12 @@ describe('WBClass', function () {
     it('should inherit static methods from parent', function () {
       expect(ThirdClass.baz).to.be.equal('fooz');
     });
+
+    it('should have unique class ids', function () {
+      expect(ExtendedClass.classId).to.be.ok;
+      expect(ThirdClass.classId).to.be.ok;
+      expect(ThirdClass.classId).to.not.equal(ExtendedClass.classId);
+    });
   });
 
   describe('class initialization', function () {

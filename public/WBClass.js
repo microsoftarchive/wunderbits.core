@@ -24,6 +24,7 @@ function extendSelf (protoProps, staticProps) {
 
   // create the derived class
   var child = inherits(parent, protoProps, staticProps);
+  child.classId = createUID();
 
   // apply mixins to the derived class
   var mixin;
