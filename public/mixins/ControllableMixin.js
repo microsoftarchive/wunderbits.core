@@ -35,7 +35,7 @@ var ControllableMixin = WBMixin.extend({
 
       // If we have already implemented a controller that inherits from
       // this controller, we don't need another one...
-      if (self.implemented.indexOf(ControllerClass.toString()) < 0) {
+      if (self.implemented.indexOf(ControllerClass.classId) < 0) {
 
         controllerInstance = new ControllerClass(self);
         self.controllers.push(controllerInstance);
@@ -55,7 +55,7 @@ var ControllableMixin = WBMixin.extend({
     var superConstructor = _super && _super.constructor;
 
     if (superConstructor) {
-      self.implemented.push(superConstructor.toString());
+      self.implemented.push(superConstructor.classId);
       self.trackImplementedSuperConstructors(superConstructor);
     }
   },

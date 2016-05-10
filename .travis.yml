@@ -5,14 +5,6 @@ node_js:
 env:
   matrix:
   - TRAVIS=true
-  global:
-  - secure: JoYCcwaMcEfJmjgh40njEsKPd/vPFnvMx20hakikMdNAXCav8o0bq+k8GSX8TteaYeBpM8udSWk25VJ5SE/Jh2XaP61NY0PAfHU7MK9+c+NDfSteQs6MF7l4aZT++lMo+SanO17b500tm2cHhB+XjRNshz+UrtNPRrGd7Q+4eVA=
-  - secure: NYXJWRqwbQRXnAnNR2rWum9lTHfZcfK0tz5uc+c7OWfpR8g5Cx/wBNTryX9coccEKQH2dtFAsszydKAXKzd6LgV12De8DlUCU4drWAyZvhbSL01Qlb8wPSXOQAjVoRGQDMW3Pag6iblPczDxDIHUT4MpDKf4pE4xrTTZ5m81m4A=
-
-notifications:
-  slack:
-    rooms:
-      secure: Cvxn5nMV5MJpdFMzHgI7wm9shYiZI3DhuEH/3HBqbAdg2hiie2H7g/wnfo2btGgJT5BpT8PvaSj2UHAhGOzOTm5UyfkqIYsWxiQlUUECSjVgdifVVVbhL7M7No2Q8+4A2xVIYDgvvnzQ2oH09viZc4B7eXzZ7EUJsnDBfC4JDD0=
 
 git:
   depth: 1
@@ -25,4 +17,4 @@ install:
 - npm install --loglevel error --development
 
 script:
-- make lint test karma
+- make lint test
