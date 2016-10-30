@@ -810,7 +810,7 @@ var events = {
 
       // if this was a published event, do an immediate trigger
       var cache = self._cache;
-      if (cache[name]) {
+      if (cache && cache[name]) {
         callback.apply(context || self, cache[name]);
       }
     });
